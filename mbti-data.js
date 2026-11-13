@@ -9814,54 +9814,6 @@ const MBTI_DATA = {
       ]
     },
     {
-      "dimension": "OCEAN_E",
-      "text": "我在人群中感到精力充沛",
-      "leftChar": "E+",
-      "rightChar": "E-",
-      "options": [
-        {
-          "text": "完全符合",
-          "weight": 2
-        },
-        {
-          "text": "比较符合",
-          "weight": 1
-        },
-        {
-          "text": "不太符合",
-          "weight": -1
-        },
-        {
-          "text": "完全不符合",
-          "weight": -2
-        }
-      ]
-    },
-    {
-      "dimension": "OCEAN_O_C",
-      "text": "我既想创新又想精确",
-      "leftChar": "O+C+",
-      "rightChar": "-",
-      "options": [
-        {
-          "text": "完全符合",
-          "weight": 2
-        },
-        {
-          "text": "比较符合",
-          "weight": 1
-        },
-        {
-          "text": "不太符合",
-          "weight": -1
-        },
-        {
-          "text": "完全不符合",
-          "weight": -2
-        }
-      ]
-    },
-    {
       "dimension": "OCEAN_O",
       "text": "我常常主动接触完全陌生的领域",
       "leftChar": "O+",
