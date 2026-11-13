@@ -380,6 +380,8 @@ window.toggleMusic = function() {
     });
 
     currentIndex = 0;
+    _advancing = false;
+    _finished = false;
     dimScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
     dimCounts = { EI: 0, SN: 0, TF: 0, JP: 0 };
     answerHistory = [];
@@ -445,6 +447,7 @@ window.toggleMusic = function() {
       ? { weight: a.weight, dimension: a.dimension, origIdx: (a.origIdx === undefined ? null : a.origIdx) }
       : null);
     currentIndex = Math.min(d.index, qs.length - 1);
+    _finished = false;
     dimScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
     dimCounts = { EI: 0, SN: 0, TF: 0, JP: 0 };
     answerHistory.forEach(a => {
@@ -577,10 +580,11 @@ window.toggleMusic = function() {
 
   // ===== 选择选项 =====
   let _advancing = false;   // 220ms 切题动画期间上锁，防止连点跳过题目
+  let _finished = false;    // 已交卷：避免最后一题的残留按钮再被点到，触发 undefined 报错
   window.selectOption = function(btn) {
-    if (_advancing) return;
-    const weight = parseInt(btn.dataset.weight, 10);
+    if (_advancing || _finished) return;
     const q = testQuestions[currentIndex];
+    if (!q) return;
 
     // 如果这题之前已经选过（返回过），先撤掉旧答案
     if (answerHistory[currentIndex]) {
@@ -607,6 +611,7 @@ window.toggleMusic = function() {
         saveProgress();
         renderQuestion();
       } else {
+        _finished = true;
         showResult();
       }
     }, 220);
