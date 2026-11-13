@@ -112,16 +112,36 @@ const Music = (function() {
     }
   }
 
-  // 解封：任意用户手势（点击/触摸/按键/滚轮/滚动）都算
-  const UNLOCK_EVENTS = ['click','touchstart','touchend','pointerdown','mousedown','keydown','wheel','scroll','touchmove'];
+  // 解封：只绑"能授予用户手势权限"的事件（滚轮/滚动在 Chrome 里不算，绑了反而会让音乐被中途掐停）
+  const UNLOCK_EVENTS = ['click','touchend','pointerdown','mousedown','keydown'];
   function _bindUnlock() {
     const unlock = () => {
       _unmute();
+      const hint = document.getElementById('musicHint');
+      if (hint) hint.remove();
       UNLOCK_EVENTS.forEach(t => document.removeEventListener(t, unlock, true));
     };
     UNLOCK_EVENTS.forEach(t =>
       document.addEventListener(t, unlock, { capture: true, passive: true })
     );
+    _showHint();
+  }
+
+  // 被拦截时给一句轻提示：滚动不会解锁，必须真实点一下
+  function _showHint() {
+    if (document.getElementById('musicHint')) return;
+    const el = document.createElement('div');
+    el.id = 'musicHint';
+    el.textContent = '♪ 轻触屏幕，开启音乐';
+    el.style.cssText = 'position:fixed;left:50%;bottom:96px;transform:translateX(-50%);padding:9px 18px;'
+      + 'border-radius:999px;background:rgba(18,18,24,.86);color:#f5f5f7;font-size:13px;letter-spacing:.4px;'
+      + 'z-index:99999;pointer-events:none;opacity:0;transition:opacity .45s;white-space:nowrap;';
+    document.body.appendChild(el);
+    requestAnimationFrame(() => { el.style.opacity = '1'; });
+    setTimeout(() => {
+      el.style.opacity = '0';
+      setTimeout(() => { if (el.parentNode) el.remove(); }, 600);
+    }, 7000);
   }
 
   function init() {
