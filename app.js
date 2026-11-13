@@ -1503,13 +1503,13 @@ window.toggleMusic = function() {
       return (readLocal()[code] || 0);
     }
 
-    async function getAll(onEach) {
+    async function getAll(onEach, force) {
       const codes = Object.keys(MBTI_DATA.personalities);
       const out = {};
       if (STATIC_MODE) {
         const base = await _readBaseline();
         const total = (c, delta) => (Number(base[c]) || 0) + (Number(delta) || 0);
-        const deltas = await _readAllDeltas(false, onEach ? (c, v) => onEach(c, total(c, v)) : null);
+        const deltas = await _readAllDeltas(force === true, onEach ? (c, v) => onEach(c, total(c, v)) : null);
         for (const c of codes) out[c] = total(c, deltas[c]);
         _saveTotalsCache(out);
         return out;
@@ -1560,7 +1560,7 @@ window.toggleMusic = function() {
         if (!nodes[code]) return;
         setCountText(nodes[code], total);
         filled++;
-      });
+      }, isRetry === true);   // 重试时强制绕过 5 分钟缓存，真正再拉一次
       if (remote) {
         Object.keys(nodes).forEach(c => {
           if (typeof remote[c] === 'number') setCountText(nodes[c], remote[c]);
