@@ -351,11 +351,156 @@ window.toggleMusic = function() {
     dimScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
     dimCounts = { EI: 0, SN: 0, TF: 0, JP: 0 };
     answerHistory = [];
+    clearProgress();
+    renderHomeState();
     showPage('test');
     renderQuestion();
   };
 
-  window.goHome = function() { showPage('home'); };
+  window.goHome = function() {
+    showPage('home');
+    renderHomeState();
+  };
+
+  // ===== 断点续测 + 本地历史 =====
+  const PROGRESS_KEY = 'mbti_progress_v1';
+  const HISTORY_KEY = 'mbti_history_v1';
+
+  function readProgress() {
+    try {
+      const d = JSON.parse(localStorage.getItem(PROGRESS_KEY) || 'null');
+      if (!d || !Array.isArray(d.ids) || !Array.isArray(d.orders) || !Array.isArray(d.answers)) return null;
+      const total = (MODE_CONFIG[d.mode] && MODE_CONFIG[d.mode].total) || d.ids.length;
+      const answered = d.answers.filter(Boolean).length;
+      if (!(d.index > 0) || d.index >= total || answered < 1) return null;
+      d.total = total;
+      d.answered = answered;
+      return d;
+    } catch(e) { return null; }
+  }
+
+  function saveProgress() {
+    try {
+      if (!testQuestions.length) return;
+      if (currentIndex >= testQuestions.length) return;
+      if (!answerHistory.filter(Boolean).length) return;
+      const data = {
+        mode: currentMode,
+        ids: testQuestions.map(q => ALL.indexOf(q)),
+        orders: shuffledOptions,
+        answers: answerHistory.map(a => a ? { weight: a.weight, dimension: a.dimension, origIdx: a.origIdx } : null),
+        index: currentIndex,
+        ts: Date.now()
+      };
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+    } catch(e) {}
+  }
+
+  function clearProgress() {
+    try { localStorage.removeItem(PROGRESS_KEY); } catch(e) {}
+  }
+
+  window.resumeTest = function() {
+    const d = readProgress();
+    if (!d) { renderHomeState(); return; }
+    const qs = d.ids.map(i => ALL[i]);
+    if (!qs.length || qs.some(q => !q)) { clearProgress(); renderHomeState(); return; }
+
+    currentMode = d.mode;
+    testQuestions = qs;
+    shuffledOptions = d.orders.map(o => (Array.isArray(o) && o.length === 4) ? o : [0, 1, 2, 3]);
+    answerHistory = d.answers.map(a => (a && typeof a.weight === 'number')
+      ? { weight: a.weight, dimension: a.dimension, origIdx: (a.origIdx === undefined ? null : a.origIdx) }
+      : null);
+    currentIndex = Math.min(d.index, qs.length - 1);
+    dimScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+    dimCounts = { EI: 0, SN: 0, TF: 0, JP: 0 };
+    answerHistory.forEach(a => {
+      if (!a) return;
+      dimScores[a.dimension] = (dimScores[a.dimension] || 0) + a.weight;
+      dimCounts[a.dimension] = (dimCounts[a.dimension] || 0) + 1;
+    });
+
+    showPage('test');
+    renderQuestion(true);
+  };
+
+  window.discardProgress = function() {
+    clearProgress();
+    renderHomeState();
+  };
+
+  function readHistory() {
+    try {
+      const arr = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+      return Array.isArray(arr) ? arr.filter(x => x && x.code) : [];
+    } catch(e) { return []; }
+  }
+
+  function pushHistory(code, name) {
+    try {
+      const list = readHistory().filter(x => x.code !== code);
+      list.unshift({ code, name, mode: currentMode, ts: Date.now() });
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 20)));
+    } catch(e) {}
+  }
+
+  function timeAgo(ts) {
+    if (!ts) return '';
+    const diff = Math.max(0, Date.now() - ts);
+    if (diff < 60000) return '刚刚';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
+    return Math.floor(diff / 86400000) + ' 天前';
+  }
+
+  // 首页的「继续上次测试」+「我测过的类型」
+  function renderHomeState() {
+    const slot = document.getElementById('resumeSlot');
+    if (slot) {
+      const d = readProgress();
+      if (!d) {
+        slot.innerHTML = '';
+      } else {
+        const pct = Math.max(4, Math.round(d.answered / d.total * 100));
+        const modeName = (MODE_CONFIG[d.mode] && MODE_CONFIG[d.mode].name) || '测试';
+        slot.innerHTML = `
+          <div class="resume-card">
+            <div class="resume-main">
+              <div class="resume-title">⏳ 上次的测试还没做完</div>
+              <div class="resume-meta">${modeName}模式 · 已答 ${d.answered}/${d.total} 题 · ${timeAgo(d.ts)}</div>
+              <div class="resume-bar"><div class="resume-fill" style="width:${pct}%"></div></div>
+            </div>
+            <div class="resume-actions">
+              <button class="resume-go" onclick="resumeTest()">继续</button>
+              <button class="resume-drop" onclick="discardProgress()" aria-label="放弃这次测试">✕</button>
+            </div>
+          </div>`;
+      }
+    }
+
+    const hs = document.getElementById('historySlot');
+    if (hs) {
+      const list = readHistory();
+      if (!list.length) {
+        hs.innerHTML = '';
+      } else {
+        hs.innerHTML = `
+          <div class="history-section">
+            <div class="history-title">🕘 我测过的类型</div>
+            <div class="history-chips">
+              ${list.map(x => {
+                const p = MBTI_DATA.personalities[x.code] || {};
+                return `<button class="history-chip" style="--hero:${p.heroColor || '#667eea'}" onclick="showPersonalityDetail('${x.code}')">
+                  <span class="hc-code">${x.code}</span>
+                  <span class="hc-name">${p.name || ''}</span>
+                </button>`;
+              }).join('')}
+            </div>
+          </div>`;
+      }
+    }
+  }
 
   // ===== 渲染问题 =====
   function renderQuestion(fromPrev) {
@@ -423,6 +568,7 @@ window.toggleMusic = function() {
     setTimeout(() => {
       currentIndex++;
       if (currentIndex < testQuestions.length) {
+        saveProgress();
         renderQuestion();
       } else {
         showResult();
@@ -434,6 +580,7 @@ window.toggleMusic = function() {
   window.prevQuestion = function() {
     if (currentIndex === 0) return;
     currentIndex--;
+    saveProgress();
     renderQuestion(true);  // true 表示从返回进入
   };
 
@@ -783,7 +930,7 @@ window.toggleMusic = function() {
 
       <div class="share-row">
         <button class="btn-action primary" onclick="window.startTest('${currentMode}')">🔄 再测一次</button>
-        <button class="btn-action" onclick="shareResult('${lookupCode}', '${p.name}')">📤 分享结果</button>
+        <button class="btn-action" onclick="shareResult('${lookupCode}', '${p.name.replace(/'/g, "\\'")}')">📷 生成分享图</button>
       </div>
     `;
 
@@ -814,16 +961,316 @@ window.toggleMusic = function() {
 
     // ===== 测完 +1 计数 =====
     try { Counter.hit(lookupCode); } catch(e) {}
+
+    // 完成测试：清掉断点、写入历史
+    clearProgress();
+    pushHistory(lookupCode, p.name);
   }
-  window.shareResult = function(code, name) {
-    const text = `我是 MBTI ${code} ${name}！来测测你的人格类型吧！`;
-    if (navigator.share) {
-      navigator.share({ title: `MBTI 测试结果 - ${code} ${name}`, text, url: window.location.href })
-        .catch(() => copyToClipboard(text));
-    } else {
-      copyToClipboard(text);
+  // ===== 结果分享图（Canvas 1080×1440）=====
+  let _shareBlob = null;
+  let _shareCode = '';
+  let _shareName = '';
+
+  function _hexAlpha(hex, a) {
+    const h = String(hex || '#667eea').replace('#', '');
+    const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+    const n = parseInt(full.slice(0, 6), 16);
+    if (!Number.isFinite(n)) return `rgba(102,126,234,${a})`;
+    return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+  }
+
+  function _roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function _wrapText(ctx, text, maxWidth, maxLines) {
+    const lines = [];
+    let line = '';
+    for (const ch of String(text || '')) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = ch;
+        if (lines.length === maxLines) break;
+      } else {
+        line = test;
+      }
     }
+    if (lines.length < maxLines && line) lines.push(line);
+    if (lines.length === maxLines) {
+      const last = lines[maxLines - 1];
+      if (ctx.measureText(last).width > maxWidth - 20) {
+        lines[maxLines - 1] = last.slice(0, -1) + '…';
+      }
+    }
+    return lines;
+  }
+
+  function buildShareCard(code) {
+    const p = MBTI_DATA.personalities[code] || {};
+    const W = 1080, H = 1440;
+    const cv = document.createElement('canvas');
+    cv.width = W;
+    cv.height = H;
+    const ctx = cv.getContext('2d');
+    const hero = p.heroColor || '#667eea';
+    const font = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
+
+    // 背景
+    const bg = ctx.createLinearGradient(0, 0, W * 0.35, H);
+    bg.addColorStop(0, '#191932');
+    bg.addColorStop(0.55, '#141d38');
+    bg.addColorStop(1, '#0b0b14');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // 主色光晕
+    const glow = ctx.createRadialGradient(W / 2, 380, 0, W / 2, 380, 640);
+    glow.addColorStop(0, _hexAlpha(hero, 0.55));
+    glow.addColorStop(0.55, _hexAlpha(hero, 0.14));
+    glow.addColorStop(1, _hexAlpha(hero, 0));
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, 1050);
+
+    ctx.textAlign = 'center';
+
+    // 顶部品牌
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.font = `500 28px ${font}`;
+    ctx.fillText('MBTI 40 型人格测试', W / 2, 96);
+
+    // 图标
+    ctx.font = '92px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+    ctx.fillText(p.heroIcon || '✨', W / 2, 236);
+
+    // 人格代码（自动缩字号，长代码不溢出）
+    const codeText = String(code);
+    let codeSize = 148;
+    ctx.font = `900 ${codeSize}px ${font}`;
+    while (ctx.measureText(codeText).width > W - 150 && codeSize > 46) {
+      codeSize -= 4;
+      ctx.font = `900 ${codeSize}px ${font}`;
+    }
+    const codeGrad = ctx.createLinearGradient(W / 2 - 320, 300, W / 2 + 320, 470);
+    codeGrad.addColorStop(0, '#ffffff');
+    codeGrad.addColorStop(0.62, _hexAlpha(hero, 1));
+    codeGrad.addColorStop(1, '#c9b6ff');
+    ctx.fillStyle = codeGrad;
+    ctx.fillText(codeText, W / 2, 400);
+
+    // 名称
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `700 52px ${font}`;
+    ctx.fillText(p.name || '人格类型', W / 2, 480);
+
+    // 标语
+    ctx.fillStyle = 'rgba(255,255,255,0.66)';
+    ctx.font = `italic 30px ${font}`;
+    const tagLines = _wrapText(ctx, `“${p.tagline || ''}”`, W - 240, 2);
+    tagLines.forEach((l, i) => ctx.fillText(l, W / 2, 540 + i * 44));
+
+    // 分隔线
+    const lineY = 632;
+    const divider = ctx.createLinearGradient(140, 0, W - 140, 0);
+    divider.addColorStop(0, 'rgba(255,255,255,0)');
+    divider.addColorStop(0.5, 'rgba(255,255,255,0.22)');
+    divider.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.strokeStyle = divider;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(140, lineY);
+    ctx.lineTo(W - 140, lineY);
+    ctx.stroke();
+
+    // 维度条
+    const dimDefs = [
+      { code: 'EI', l: 'E', r: 'I' },
+      { code: 'SN', l: 'S', r: 'N' },
+      { code: 'TF', l: 'T', r: 'F' },
+      { code: 'JP', l: 'J', r: 'P' }
+    ];
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = `600 26px ${font}`;
+    ctx.textAlign = 'left';
+    ctx.fillText('性格维度分布', 140, 700);
+
+    let rowY = 748;
+    dimDefs.forEach(d => {
+      const pref = (typeof dimPreference === 'function') ? dimPreference(d.code) : 0.5;
+      const pct = Math.round(pref * 100);
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `800 34px ${font}`;
+      ctx.fillText(d.l, 140, rowY + 26);
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = 'rgba(255,255,255,0.42)';
+      ctx.fillText(d.r, W - 140, rowY + 26);
+
+      const barX = 200, barW = W - 400, barH = 16, barY = rowY + 10;
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      _roundRect(ctx, barX, barY, barW, barH, barH / 2);
+      ctx.fill();
+
+      const fillW = Math.max(barH, barW * (pct / 100));
+      const barGrad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
+      barGrad.addColorStop(0, _hexAlpha(hero, 0.95));
+      barGrad.addColorStop(1, 'rgba(201,182,255,0.9)');
+      ctx.fillStyle = barGrad;
+      _roundRect(ctx, barX, barY, fillW, barH, barH / 2);
+      ctx.fill();
+
+      // 百分比
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = `600 22px ${font}`;
+      ctx.textAlign = pct >= 50 ? 'right' : 'left';
+      ctx.fillText(pct + '%', barX + barW + 26, rowY + 26);
+
+      rowY += 82;
+    });
+
+    // 人口占比
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = `500 28px ${font}`;
+    ctx.fillText(`👥 全球人口占比 ${p.population || '~5%'}`, W / 2, 1120);
+
+    // 底部分隔
+    const line2 = ctx.createLinearGradient(140, 0, W - 140, 0);
+    line2.addColorStop(0, 'rgba(255,255,255,0)');
+    line2.addColorStop(0.5, 'rgba(255,255,255,0.16)');
+    line2.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.strokeStyle = line2;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(140, 1196);
+    ctx.lineTo(W - 140, 1196);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = `700 40px ${font}`;
+    ctx.fillText('来测测你是什么人格', W / 2, 1282);
+    ctx.fillStyle = 'rgba(160,178,255,0.85)';
+    ctx.font = `600 30px ${font}`;
+    ctx.fillText('kwdaj.github.io/mbti-40', W / 2, 1340);
+    ctx.fillStyle = 'rgba(255,255,255,0.28)';
+    ctx.font = `400 24px ${font}`;
+    ctx.fillText('40 种人格 · 478 道题库 · 三重测评体系', W / 2, 1388);
+
+    // 边框
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 4;
+    _roundRect(ctx, 24, 24, W - 48, H - 48, 40);
+    ctx.stroke();
+
+    return cv;
+  }
+
+  function _canvasToBlob(cv) {
+    return new Promise(resolve => {
+      try {
+        if (cv.toBlob) cv.toBlob(b => resolve(b), 'image/png');
+        else resolve(null);
+      } catch(e) { resolve(null); }
+    });
+  }
+
+  function closeShareCard() {
+    const modal = document.getElementById('shareModal');
+    if (modal) modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.closeShareCard = closeShareCard;
+
+  window.shareResult = function(code, name) {
+    _shareCode = code;
+    _shareName = name;
+    _shareBlob = null;
+
+    const modal = document.getElementById('shareModal');
+    const box = document.getElementById('sharePreview');
+    const tip = document.getElementById('shareTip');
+    if (!modal || !box) {
+      copyToClipboard(`我是 MBTI ${code} ${name}！来测测你的人格类型吧！${location.origin}${location.pathname}`);
+      return;
+    }
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    box.innerHTML = '<div class="share-loading">正在生成分享图…</div>';
+    if (tip) tip.textContent = '';
+    const sysBtn = document.getElementById('shareSystemBtn');
+    if (sysBtn) sysBtn.style.display = 'none';
+
+    const cv = buildShareCard(code);
+    _canvasToBlob(cv).then(blob => {
+      _shareBlob = blob;
+      box.innerHTML = '';
+      const img = document.createElement('img');
+      img.className = 'share-img';
+      img.alt = `MBTI ${code} ${name} 分享图`;
+      img.src = cv.toDataURL('image/png');
+      box.appendChild(img);
+
+      if (tip) tip.textContent = '长按图片可直接保存 · 或点下方按钮';
+      if (sysBtn && blob && navigator.canShare) {
+        try {
+          const f = new File([blob], `MBTI-${code}.png`, { type: 'image/png' });
+          sysBtn.style.display = navigator.canShare({ files: [f] }) ? '' : 'none';
+        } catch(e) {}
+      }
+    }).catch(() => {
+      box.innerHTML = '<div class="share-loading">生成失败，请重试</div>';
+    });
   };
+
+  // 分享弹层按钮
+  function bindShareButtons() {
+    const saveBtn = document.getElementById('shareSaveBtn');
+    if (saveBtn) saveBtn.addEventListener('click', () => {
+      if (!_shareBlob) { alert('图片还在生成，请稍等一下'); return; }
+      const url = URL.createObjectURL(_shareBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `MBTI-${_shareCode}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    });
+
+    const copyBtn = document.getElementById('shareCopyBtn');
+    if (copyBtn) copyBtn.addEventListener('click', () => {
+      copyToClipboard(`我是 MBTI ${_shareCode} ${_shareName}！来测测你的人格类型吧！\n${location.origin}${location.pathname}`);
+    });
+
+    const sysBtn = document.getElementById('shareSystemBtn');
+    if (sysBtn) sysBtn.addEventListener('click', async () => {
+      if (!_shareBlob || !navigator.share) return;
+      try {
+        const f = new File([_shareBlob], `MBTI-${_shareCode}.png`, { type: 'image/png' });
+        await navigator.share({
+          files: [f],
+          title: `MBTI ${_shareCode} ${_shareName}`,
+          text: `我是 MBTI ${_shareCode} ${_shareName}！来测测你的人格类型吧！`
+        });
+      } catch(e) {}
+    });
+
+    const modal = document.getElementById('shareModal');
+    if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeShareCard(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeShareCard(); });
+  }
+
+  // 供本地校验分享图用（不影响正常流程）
+  window.__buildShareCard = buildShareCard;
 
   function copyToClipboard(text) {
     const ta = document.createElement('textarea');
@@ -841,19 +1288,32 @@ window.toggleMusic = function() {
   const Counter = (function() {
     const LS_KEY = 'mbti_site_counts_v1';
     const CFG_KEY = 'mbti_counter_config_v1';
+    const DELTA_CACHE_KEY = 'mbti_deltas_cache_v1';
+    const PENDING_KEY = 'mbti_hit_pending_v1';
+    const HIT_DAY_KEY = 'mbti_last_hit_day_v1';
 
     // 静态托管（GitHub Pages）模式：历史基线文件 + abacus 免费计数增量
     const STATIC_MODE = /(^|\.)github\.io$/i.test(location.hostname);
     const ABACUS = 'https://abacus.jasoncameron.dev';
     const NS = 'mbti40-live';
     const BASE_FILE = 'counts-baseline.json';
+    const CACHE_TTL = 5 * 60 * 1000;   // 5 分钟内复用，避免频繁请求被限流
+    const MAX_CONCURRENCY = 3;         // 限并发，40 个 key 一次性打出去很容易失败
 
     let _baseline = null;
     let _deltas = null;
     let _deltasAt = 0;
+    let _pendingFlushing = false;
 
     function readLocal() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch(e) { return {}; } }
-    function writeLocal(obj) { localStorage.setItem(LS_KEY, JSON.stringify(obj)); }
+    function writeLocal(obj) { try { localStorage.setItem(LS_KEY, JSON.stringify(obj)); } catch(e) {} }
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // 本地日期 YYYY-MM-DD，用于「每设备每天每人格 +1」去重
+    function localDay() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
 
     async function _readBaseline() {
       if (_baseline) return _baseline;
@@ -865,22 +1325,85 @@ window.toggleMusic = function() {
     }
 
     // 读取某人格自上线静态站以来的新增次数
-    async function _readDelta(code) {
+    // 返回数字=成功；返回 null=读取失败（调用方必须回退缓存，绝不能当 0）
+    async function _readDelta(code, attempts) {
+      const tries = attempts || 3;
+      for (let i = 0; i < tries; i++) {
+        try {
+          const r = await fetch(ABACUS + '/get/' + NS + '/' + encodeURIComponent(code), { cache: 'no-store' });
+          if (r.status === 404) return 0;          // key 未定义 = 还没人测过
+          if (!r.ok) throw new Error('http ' + r.status);
+          const j = await r.json();
+          const v = Number(j && j.value);
+          return Number.isFinite(v) ? v : 0;
+        } catch(e) {
+          if (i === tries - 1) return null;
+          await sleep(180 * (i + 1) + Math.random() * 160);
+        }
+      }
+      return null;
+    }
+
+    // 上一次成功拉到的增量（跨会话缓存），网络抖动时用它兜底
+    function _loadDeltaCache() {
+      if (_deltas) return;
       try {
-        const r = await fetch(ABACUS + '/get/' + NS + '/' + encodeURIComponent(code), { cache: 'no-store' });
-        if (!r.ok) return 0;
-        const j = await r.json();
-        return Number(j && j.value) || 0;
-      } catch(e) { return 0; }
+        const c = JSON.parse(localStorage.getItem(DELTA_CACHE_KEY) || 'null');
+        if (c && c.deltas && typeof c.deltas === 'object' && Date.now() - (c.ts || 0) < 7 * 864e5) {
+          _deltas = c.deltas;
+          _deltasAt = c.ts || 0;
+        }
+      } catch(e) {}
+    }
+
+    function _saveDeltaCache() {
+      try {
+        localStorage.setItem(DELTA_CACHE_KEY, JSON.stringify({ deltas: _deltas || {}, ts: _deltasAt || Date.now() }));
+      } catch(e) {}
+    }
+
+    // 并发受限的 map
+    async function _mapLimit(items, limit, fn) {
+      const out = new Array(items.length);
+      let cursor = 0;
+      const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+        while (cursor < items.length) {
+          const idx = cursor++;
+          out[idx] = await fn(items[idx], idx);
+        }
+      });
+      await Promise.all(workers);
+      return out;
     }
 
     async function _readAllDeltas(force) {
-      if (!force && _deltas && Date.now() - _deltasAt < 60000) return _deltas;
+      _loadDeltaCache();
+      if (!force && _deltas && Date.now() - _deltasAt < CACHE_TTL) return _deltas;
+
       const codes = Object.keys(MBTI_DATA.personalities);
-      const entries = await Promise.all(codes.map(async c => [c, await _readDelta(c)]));
-      _deltas = {};
-      entries.forEach(([c, v]) => { _deltas[c] = v; });
-      _deltasAt = Date.now();
+      const prev = _deltas || {};
+      const values = await _mapLimit(codes, MAX_CONCURRENCY, c => _readDelta(c));
+
+      const next = {};
+      let okCount = 0;
+      codes.forEach((c, i) => {
+        const v = values[i];
+        if (v === null) {
+          next[c] = Number(prev[c]) || 0;   // 失败 → 保留上次的值，绝不归零
+        } else {
+          next[c] = v;
+          okCount++;
+        }
+      });
+
+      if (okCount > 0) {
+        _deltas = next;
+        _deltasAt = Date.now();
+        _saveDeltaCache();
+      } else if (!_deltas) {
+        _deltas = next;
+        _deltasAt = Date.now();
+      }
       return _deltas;
     }
 
@@ -897,20 +1420,75 @@ window.toggleMusic = function() {
       }
     }
 
+    function _readPending() {
+      try {
+        const arr = JSON.parse(localStorage.getItem(PENDING_KEY) || '[]');
+        return Array.isArray(arr) ? arr : [];
+      } catch(e) { return []; }
+    }
+    function _writePending(arr) {
+      try { localStorage.setItem(PENDING_KEY, JSON.stringify(arr.slice(-40))); } catch(e) {}
+    }
+
+    // 上报一次 +1，带重试；返回是否成功
+    async function _sendHit(code) {
+      for (let i = 0; i < 3; i++) {
+        try {
+          const r = await fetch(ABACUS + '/hit/' + NS + '/' + encodeURIComponent(code));
+          if (r.ok) {
+            const j = await r.json();
+            const v = Number(j && j.value);
+            if (Number.isFinite(v)) {
+              _deltas = _deltas || {};
+              _deltas[code] = v;
+              _deltasAt = Date.now();
+              _saveDeltaCache();
+            }
+            return true;
+          }
+          if (r.status === 404) return true;
+          throw new Error('http ' + r.status);
+        } catch(e) {
+          if (i === 2) return false;
+          await sleep(200 * (i + 1) + Math.random() * 150);
+        }
+      }
+      return false;
+    }
+
+    // 补发之前失败的上报（下次打开站点时自动执行）
+    async function flushPending() {
+      if (_pendingFlushing || !STATIC_MODE) return;
+      const queue = _readPending();
+      if (!queue.length) return;
+      _pendingFlushing = true;
+      const rest = [];
+      for (const code of queue) {
+        const ok = await _sendHit(code);
+        if (!ok) rest.push(code);
+        await sleep(80);
+      }
+      _writePending(rest);
+      _pendingFlushing = false;
+    }
+
     async function hit(code) {
+      // 每设备每天每人格只 +1，防止刷新 / 重复点击刷量
+      let day = {};
+      try { day = JSON.parse(localStorage.getItem(HIT_DAY_KEY) || '{}'); } catch(e) { day = {}; }
+      const today = localDay();
+      if (day[code] === today) return;
+      day[code] = today;
+      try { localStorage.setItem(HIT_DAY_KEY, JSON.stringify(day)); } catch(e) {}
+
       // 本地先写（防远程挂了也不丢）
       const d = readLocal();
       d[code] = (d[code] || 0) + 1;
       writeLocal(d);
 
       if (STATIC_MODE) {
-        try {
-          const r = await fetch(ABACUS + '/hit/' + NS + '/' + encodeURIComponent(code));
-          if (r.ok) {
-            const j = await r.json();
-            if (_deltas && typeof (Number(j && j.value)) === 'number') _deltas[code] = Number(j.value) || _deltas[code] || 0;
-          }
-        } catch(e) {}
+        const ok = await _sendHit(code);
+        if (!ok) _writePending(_readPending().concat([code]));
         return;
       }
 
@@ -923,7 +1501,14 @@ window.toggleMusic = function() {
     async function get(code) {
       if (STATIC_MODE) {
         const base = await _readBaseline();
-        const delta = await _readDelta(code);
+        _loadDeltaCache();
+        let delta = await _readDelta(code);
+        if (delta === null) {
+          delta = Number((_deltas && _deltas[code])) || 0;
+        } else {
+          _deltas = _deltas || {};
+          _deltas[code] = delta;
+        }
         return (Number(base[code]) || 0) + delta;
       }
       const data = await _readCloud();
@@ -966,19 +1551,28 @@ window.toggleMusic = function() {
       localStorage.setItem(CFG_KEY, JSON.stringify(Object.assign(readConfig(), cfg)));
     }
 
-    return { hit, get, getAll, resetLocal, resetCloud, readConfig, writeConfig };
+    return { hit, get, getAll, flushPending, resetLocal, resetCloud, readConfig, writeConfig };
   })();
 
   // 刷新首页预览卡片上的计数
   async function refreshPreviewCounts() {
     try {
-      let counts = {};
+      // 顺带补发上次失败的上报，不阻塞渲染
+      try { Counter.flushPending(); } catch(e) {}
+
+      let counts = null;
       try {
         const remote = await Counter.getAll();
-        if (remote && typeof remote === 'object') counts = remote;
+        if (remote && typeof remote === 'object' && Object.keys(remote).length) counts = remote;
       } catch(e) {
-        // 云端接口读不到就跳过，保持初始的 0
-        console.info('[Counter] cloud api unreachable, showing local zeros');
+        console.info('[Counter] remote unreachable, keep current numbers');
+      }
+      // 拉取失败时保持原样，不要把已有数字刷成 0
+      if (!counts) {
+        document.querySelectorAll('.preview-count').forEach(b => {
+          if (!b.textContent || b.textContent === '🌐 0') b.textContent = '🌐 --';
+        });
+        return;
       }
 
       const items = document.querySelectorAll('.preview-count');
@@ -1061,6 +1655,8 @@ window.toggleMusic = function() {
     refreshPreviewCounts();
     Music._currentMode = 'muted';
     Music.init();
+    renderHomeState();
+    bindShareButtons();
 
     const footer = document.createElement('footer');
     footer.id = 'siteFooter';
