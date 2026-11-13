@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="MBTI 40型人格测试 - 大五+九型+MBTI 三重人格体系">
+<title>MBTI 40型人格测试 · v24</title>
+<link rel="stylesheet" href="styles.css?v=19">
+</head>
+<body>
+<!-- 全局音乐控件 -->
+<button id="musicBtn" class="music-btn" onclick="toggleMusic()" aria-label="音乐">
+  <svg id="musicIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+  </svg>
+  <div id="musicBars" class="music-bars hidden">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</button>
+
+<div id="app">
+  <!-- 首页 -->
+  <section id="home" class="page active">
+    <div class="bg-gradient"></div>
+    <div class="content">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke="url(#grad)" stroke-width="3"/>
+            <path d="M50 20 L65 45 L80 50 L65 55 L50 80 L35 55 L20 50 L35 45 Z" fill="url(#grad)"/>
+            <defs>
+              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h1 class="title">
+          <span class="letter" style="animation-delay:0.05s">M</span><span class="letter" style="animation-delay:0.18s">B</span><span class="letter" style="animation-delay:0.31s">T</span><span class="letter" style="animation-delay:0.44s">I</span>
+        </h1>
+        <p class="subtitle">40 型人格测试 · 全球共享</p>
+      </div>
+      <div class="intro-card">
+        <p>探索你的性格密码，发现真正的自己</p>
+        <p class="intro-detail">覆盖四个维度 478 道题库 · 三重体系：MBTI 16标准 + 大五 OCEAN + 九型人格</p>
+      </div>
+
+      <!-- 难度选择 -->
+      <div class="mode-select">
+        <div class="mode-title">选择测试模式</div>
+        <div class="mode-options">
+          <button class="mode-card" onclick="startTest('quick')">
+            <div class="mode-icon">⚡</div>
+            <div class="mode-name">快速</div>
+            <div class="mode-count">36 题</div>
+            <div class="mode-time">约 5 分钟</div>
+          </button>
+          <button class="mode-card selected" onclick="startTest('normal')">
+            <div class="mode-badge">推荐</div>
+            <div class="mode-icon">🎯</div>
+            <div class="mode-name">进阶</div>
+            <div class="mode-count">52 题</div>
+            <div class="mode-time">约 8 分钟</div>
+          </button>
+          <button class="mode-card" onclick="startTest('precise')">
+            <div class="mode-icon">🔬</div>
+            <div class="mode-name">精准</div>
+            <div class="mode-count">68 题</div>
+            <div class="mode-time">约 10 分钟</div>
+          </button>
+          <button class="mode-card" onclick="startTest('supreme')">
+            <div class="mode-badge">最全面</div>
+            <div class="mode-icon">👑</div>
+            <div class="mode-name">至尊</div>
+            <div class="mode-count">96 题</div>
+            <div class="mode-time">约 15 分钟</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="persona-preview">
+        <div class="preview-title">40 种人格类型</div>
+        <div class="preview-grid" id="previewGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 测试页面 -->
+  <section id="test" class="page">
+    <div class="test-header">
+      <button class="btn-back" onclick="goHome()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">1 / 36</span>
+      </div>
+    </div>
+    <div class="test-content">
+      <div class="question-area" id="questionArea">
+        <h2 class="question-text" id="questionText"></h2>
+        <p class="question-dimension" id="questionDimension"></p>
+      </div>
+      <div class="options-area" id="optionsArea"></div>
+      <button id="prevBtn" class="prev-question-btn" onclick="prevQuestion()" style="display:none;">
+        ← 返回上一题
+      </button>
+    </div>
+  </section>
+
+  <!-- 结果页面 -->
+  <section id="result" class="page">
+    <div class="result-header">
+      <button class="btn-back" onclick="goHome()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">测试结果</span>
+    </div>
+    <div class="result-content" id="resultContent"></div>
+  </section>
+</div>
+
+<div id="personalityModal" class="personality-modal">
+  <div class="pm-sheet">
+    <div id="personalityModalBody"></div>
+  </div>
+</div>
+
+<script src="mbti-data.js?v=19"></script>
+<script src="app.js?v=19"></script>
+</body>
+</html>
