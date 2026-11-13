@@ -1487,7 +1487,7 @@ const MBTI_DATA = {
     },
     {
       "dimension": "SN",
-      "text": "你最受不了哪种人：",
+      "text": "你最受不了哪种情况：",
       "leftChar": "S",
       "rightChar": "N",
       "options": [
