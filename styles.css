@@ -773,9 +773,9 @@ body {
 /* ===== 响应式适配 ===== */
 @media (min-width: 600px) {
   .title { font-size: 4.5rem; }
-  .preview-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.55rem; }
-  .preview-item .name { font-size: 0.65rem; }
-  .preview-item .code { font-size: 0.95rem; }
+  .preview-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; }
+  .preview-item .name { font-size: 0.6rem; }
+  .preview-item .code { font-size: 0.8rem; }
   .question-text { font-size: 1.6rem; }
   .result-code { font-size: 5rem; }
   .result-name { font-size: 1.5rem; }
@@ -783,7 +783,10 @@ body {
 
 @media (min-width: 900px) {
   .title { font-size: 5rem; }
-  .content { padding: 3rem 2rem 4rem; }
+  .content { max-width: 1120px; padding: 3rem 2rem 4rem; }
+  .preview-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.5rem; }
+  .preview-item .code { font-size: 0.72rem; }
+  .preview-item .name { font-size: 0.55rem; }
   .question-text { font-size: 1.8rem; }
   .result-code { font-size: 6rem; }
 }
