@@ -1222,6 +1222,1206 @@ const MBTI_DATA = {
       ]
     },
     {
+      "dimension": "EI",
+      "text": "手机静音了一整天，晚上打开时你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "先翻一遍群消息，顺手回几句",
+          "weight": 2
+        },
+        {
+          "text": "看到有人找我就回",
+          "weight": 1
+        },
+        {
+          "text": "只看重要的，其余略过",
+          "weight": -1
+        },
+        {
+          "text": "觉得清净挺好，能拖就拖",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "家里要来客人，你的心情是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "有点期待，正好热闹一下",
+          "weight": 2
+        },
+        {
+          "text": "提前收拾好，挺欢迎",
+          "weight": 1
+        },
+        {
+          "text": "有点麻烦，但能应付",
+          "weight": -1
+        },
+        {
+          "text": "希望他们改天再来",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "同事在群里发起下班活动，你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "马上接话，还能帮忙组局",
+          "weight": 2
+        },
+        {
+          "text": "感兴趣就参加",
+          "weight": 1
+        },
+        {
+          "text": "看别人去不去",
+          "weight": -1
+        },
+        {
+          "text": "一般不参加",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意用哪种方式汇报工作：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "开会当面讲，边讲边讨论",
+          "weight": 2
+        },
+        {
+          "text": "会上讲，会后还能聊两句",
+          "weight": 1
+        },
+        {
+          "text": "写成文档，清楚就行",
+          "weight": -1
+        },
+        {
+          "text": "发邮件，尽量少解释",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "在陌生城市迷路时，你更倾向：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "直接问路人",
+          "weight": 2
+        },
+        {
+          "text": "找个人确认一下方向",
+          "weight": 1
+        },
+        {
+          "text": "自己看地图再试试",
+          "weight": -1
+        },
+        {
+          "text": "宁可多绕，也不开口",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "哪种场合让你更自在：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "人多的活动现场",
+          "weight": 2
+        },
+        {
+          "text": "有几个熟人的饭局",
+          "weight": 1
+        },
+        {
+          "text": "安静的书店或咖啡馆",
+          "weight": -1
+        },
+        {
+          "text": "只有自己的房间",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "到一个新环境，你通常先：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和身边的人搭话",
+          "weight": 2
+        },
+        {
+          "text": "观察谁比较好接近",
+          "weight": 1
+        },
+        {
+          "text": "先做自己的事",
+          "weight": -1
+        },
+        {
+          "text": "希望别有人来找我",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "朋友聚会时，你通常是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "话题中心，能带动气氛",
+          "weight": 2
+        },
+        {
+          "text": "参与得挺多",
+          "weight": 1
+        },
+        {
+          "text": "听多说少",
+          "weight": -1
+        },
+        {
+          "text": "只和身边一两个人聊",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢的过生日方式是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "叫上一大群朋友热闹一场",
+          "weight": 2
+        },
+        {
+          "text": "和几个好朋友吃个饭",
+          "weight": 1
+        },
+        {
+          "text": "和家人简单过",
+          "weight": -1
+        },
+        {
+          "text": "自己安静待一天",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "一整天会议排满，结束后你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "还想找人复盘几句",
+          "weight": 2
+        },
+        {
+          "text": "缓一缓就能继续",
+          "weight": 1
+        },
+        {
+          "text": "只想安静一会儿",
+          "weight": -1
+        },
+        {
+          "text": "谁都不想见",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更常主动联系别人，还是等别人联系你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "基本我主动",
+          "weight": 2
+        },
+        {
+          "text": "想到就联系",
+          "weight": 1
+        },
+        {
+          "text": "多数时候等对方",
+          "weight": -1
+        },
+        {
+          "text": "很少主动",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "排队时你更常：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和旁边的人聊起来",
+          "weight": 2
+        },
+        {
+          "text": "偶尔搭两句",
+          "weight": 1
+        },
+        {
+          "text": "安静等自己的",
+          "weight": -1
+        },
+        {
+          "text": "希望没人跟我说话",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意坐哪种工位：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "挨着大家，随时能说上话",
+          "weight": 2
+        },
+        {
+          "text": "团队区里，稍有点间隔",
+          "weight": 1
+        },
+        {
+          "text": "靠边安静一点",
+          "weight": -1
+        },
+        {
+          "text": "独立的隔间",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "周末两天完全没人约你，你会：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "主动找人出去",
+          "weight": 2
+        },
+        {
+          "text": "问问有没有人想聚",
+          "weight": 1
+        },
+        {
+          "text": "正好自己安排",
+          "weight": -1
+        },
+        {
+          "text": "非常满意这种状态",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "在饭桌上，你更常是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "张罗点菜、照顾话题",
+          "weight": 2
+        },
+        {
+          "text": "参与聊，偶尔出主意",
+          "weight": 1
+        },
+        {
+          "text": "多吃少说",
+          "weight": -1
+        },
+        {
+          "text": "吃完就想走",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢的旅行同伴是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "一群人，热闹",
+          "weight": 2
+        },
+        {
+          "text": "三五个熟人",
+          "weight": 1
+        },
+        {
+          "text": "一个合拍的人",
+          "weight": -1
+        },
+        {
+          "text": "一个人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "遇到开心的事，你第一反应是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "马上告诉别人",
+          "weight": 2
+        },
+        {
+          "text": "和身边人分享",
+          "weight": 1
+        },
+        {
+          "text": "自己先回味",
+          "weight": -1
+        },
+        {
+          "text": "心里知道就好",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "需要在一个大群里发言时，你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "很自然，还会接着说",
+          "weight": 2
+        },
+        {
+          "text": "想好就发",
+          "weight": 1
+        },
+        {
+          "text": "能不发就不发",
+          "weight": -1
+        },
+        {
+          "text": "很抗拒",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意如何度过通勤：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和同事一路聊",
+          "weight": 2
+        },
+        {
+          "text": "听点东西，偶尔回消息",
+          "weight": 1
+        },
+        {
+          "text": "刷手机，不被打扰",
+          "weight": -1
+        },
+        {
+          "text": "闭眼休息，不想说话",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "别人临时来找你聊天，你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "正好，来聊",
+          "weight": 2
+        },
+        {
+          "text": "看手上忙不忙",
+          "weight": 1
+        },
+        {
+          "text": "简单应付几句",
+          "weight": -1
+        },
+        {
+          "text": "心里希望他快点走",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更容易在哪种状态下想出办法：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和人聊着聊着就清楚了",
+          "weight": 2
+        },
+        {
+          "text": "讨论一下就有思路",
+          "weight": 1
+        },
+        {
+          "text": "一个人安静想",
+          "weight": -1
+        },
+        {
+          "text": "完全独处时才想得透",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意加入哪种社团：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "人多的兴趣社群",
+          "weight": 2
+        },
+        {
+          "text": "定期聚的活动小组",
+          "weight": 1
+        },
+        {
+          "text": "线上为主的小圈子",
+          "weight": -1
+        },
+        {
+          "text": "自己默默研究就行",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "一天里你最怕：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "一个人待着没话说",
+          "weight": 2
+        },
+        {
+          "text": "整天没人联系",
+          "weight": 1
+        },
+        {
+          "text": "被人频繁打断",
+          "weight": -1
+        },
+        {
+          "text": "一直被围着说话",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢哪种聚餐：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "十几个人热热闹闹",
+          "weight": 2
+        },
+        {
+          "text": "六七个朋友",
+          "weight": 1
+        },
+        {
+          "text": "三四个人",
+          "weight": -1
+        },
+        {
+          "text": "两个人安静吃",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "别人在朋友圈发了动态，你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "常评论，还能聊起来",
+          "weight": 2
+        },
+        {
+          "text": "偶尔点个赞",
+          "weight": 1
+        },
+        {
+          "text": "基本只看不发",
+          "weight": -1
+        },
+        {
+          "text": "很少刷，也不互动",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "面对一个完全陌生的集体，你更像：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "先开口破冰的那个人",
+          "weight": 2
+        },
+        {
+          "text": "会主动认识几个人",
+          "weight": 1
+        },
+        {
+          "text": "等别人来搭话",
+          "weight": -1
+        },
+        {
+          "text": "尽量不引人注意",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意怎么学新东西：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "找个人一起学，边学边讲",
+          "weight": 2
+        },
+        {
+          "text": "参加有讨论的课程",
+          "weight": 1
+        },
+        {
+          "text": "自己看资料",
+          "weight": -1
+        },
+        {
+          "text": "一个人慢慢琢磨",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢的工作方式是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "频繁和人对齐",
+          "weight": 2
+        },
+        {
+          "text": "定期同步一下",
+          "weight": 1
+        },
+        {
+          "text": "交代清楚后各自做",
+          "weight": -1
+        },
+        {
+          "text": "全程不用沟通最好",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "周末你更可能：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "约人出去一天",
+          "weight": 2
+        },
+        {
+          "text": "见一两个朋友",
+          "weight": 1
+        },
+        {
+          "text": "在家附近转转",
+          "weight": -1
+        },
+        {
+          "text": "一整天不出门",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你在哪种情况下更来劲：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "现场有人互动",
+          "weight": 2
+        },
+        {
+          "text": "有人一起做事",
+          "weight": 1
+        },
+        {
+          "text": "自己一个人推进",
+          "weight": -1
+        },
+        {
+          "text": "关起门来不被打扰",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "别人夸你时，你更希望：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "当面说出来",
+          "weight": 2
+        },
+        {
+          "text": "私下告诉你",
+          "weight": 1
+        },
+        {
+          "text": "简单点就好",
+          "weight": -1
+        },
+        {
+          "text": "不太需要这种反馈",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意把烦恼：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "找人一顿倾诉",
+          "weight": 2
+        },
+        {
+          "text": "和信任的人聊聊",
+          "weight": 1
+        },
+        {
+          "text": "自己先消化",
+          "weight": -1
+        },
+        {
+          "text": "谁都不说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "哪种周末安排更吸引你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "音乐节、市集这类热闹场",
+          "weight": 2
+        },
+        {
+          "text": "朋友家的聚会",
+          "weight": 1
+        },
+        {
+          "text": "图书馆或展览",
+          "weight": -1
+        },
+        {
+          "text": "家里躺一天",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢的室友是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "爱聊天、常在客厅待着",
+          "weight": 2
+        },
+        {
+          "text": "偶尔一起吃饭聊天",
+          "weight": 1
+        },
+        {
+          "text": "各过各的，礼貌就好",
+          "weight": -1
+        },
+        {
+          "text": "最好几乎不碰面",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意在哪儿工作：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "咖啡馆、共享空间",
+          "weight": 2
+        },
+        {
+          "text": "团队办公室",
+          "weight": 1
+        },
+        {
+          "text": "安静的独立办公室",
+          "weight": -1
+        },
+        {
+          "text": "家里，锁上门",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "谁更容易让你恢复状态：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "一群朋友",
+          "weight": 2
+        },
+        {
+          "text": "一个懂我的朋友",
+          "weight": 1
+        },
+        {
+          "text": "我自己",
+          "weight": -1
+        },
+        {
+          "text": "谁都别来",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意参加哪种培训：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "分组讨论、上台演练",
+          "weight": 2
+        },
+        {
+          "text": "有小互动的课",
+          "weight": 1
+        },
+        {
+          "text": "讲为主，少互动",
+          "weight": -1
+        },
+        {
+          "text": "自己看录播",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "有人说要给你介绍对象，你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "挺乐意，见见也好",
+          "weight": 2
+        },
+        {
+          "text": "可以先聊聊",
+          "weight": 1
+        },
+        {
+          "text": "有点抗拒",
+          "weight": -1
+        },
+        {
+          "text": "直接拒绝",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢的消息回复节奏是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "一来一回聊很久",
+          "weight": 2
+        },
+        {
+          "text": "有事就回",
+          "weight": 1
+        },
+        {
+          "text": "攒着一起回",
+          "weight": -1
+        },
+        {
+          "text": "能不回就不回",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "聚会上有人提议玩游戏，你：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "第一个报名",
+          "weight": 2
+        },
+        {
+          "text": "有人拉我就上",
+          "weight": 1
+        },
+        {
+          "text": "看别人玩",
+          "weight": -1
+        },
+        {
+          "text": "找借口躲开",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意在哪种环境里反思：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和朋友边聊边想",
+          "weight": 2
+        },
+        {
+          "text": "有人陪着说说话",
+          "weight": 1
+        },
+        {
+          "text": "自己走走",
+          "weight": -1
+        },
+        {
+          "text": "独处，谁也别打扰",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更喜欢的假期长度是：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "短一点，能多出去几趟",
+          "weight": 2
+        },
+        {
+          "text": "刚好够见几个人",
+          "weight": 1
+        },
+        {
+          "text": "长一点，能休息",
+          "weight": -1
+        },
+        {
+          "text": "越长越好，最好不出门",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "别人问你意见时，你更常：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "边想边说，说着就清楚了",
+          "weight": 2
+        },
+        {
+          "text": "说几句再看看对方反应",
+          "weight": 1
+        },
+        {
+          "text": "想清楚再说",
+          "weight": -1
+        },
+        {
+          "text": "只说结论，不多解释",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意把生日会办成：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "大型派对",
+          "weight": 2
+        },
+        {
+          "text": "朋友聚餐",
+          "weight": 1
+        },
+        {
+          "text": "小范围吃饭",
+          "weight": -1
+        },
+        {
+          "text": "不办，自己过",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你在等电梯时更常：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和同事聊两句",
+          "weight": 2
+        },
+        {
+          "text": "点头打招呼",
+          "weight": 1
+        },
+        {
+          "text": "看手机",
+          "weight": -1
+        },
+        {
+          "text": "站远一点，不想说话",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更享受哪种成就感：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "一群人因为你聚在一起",
+          "weight": 2
+        },
+        {
+          "text": "帮大家把气氛带起来",
+          "weight": 1
+        },
+        {
+          "text": "自己安静做完一件事",
+          "weight": -1
+        },
+        {
+          "text": "没人打扰地完成一件难事",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意怎么过跨年：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "和很多人一起倒数",
+          "weight": 2
+        },
+        {
+          "text": "和几个朋友吃饭",
+          "weight": 1
+        },
+        {
+          "text": "和家人待着",
+          "weight": -1
+        },
+        {
+          "text": "自己一个人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更怕哪一种：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "一整天没人说话",
+          "weight": 2
+        },
+        {
+          "text": "周末没人约",
+          "weight": 1
+        },
+        {
+          "text": "被人一直拉着聊",
+          "weight": -1
+        },
+        {
+          "text": "连续几天都在应酬",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你更愿意做哪种志愿者：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "现场引导、接待",
+          "weight": 2
+        },
+        {
+          "text": "活动组织",
+          "weight": 1
+        },
+        {
+          "text": "幕后整理资料",
+          "weight": -1
+        },
+        {
+          "text": "线上远程支持",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "EI",
+      "text": "你觉得哪种状态更像自己：",
+      "leftChar": "E",
+      "rightChar": "I",
+      "options": [
+        {
+          "text": "总在人群里，越忙越有劲",
+          "weight": 2
+        },
+        {
+          "text": "喜欢热闹，也需要缓一缓",
+          "weight": 1
+        },
+        {
+          "text": "大多数时候自己待着",
+          "weight": -1
+        },
+        {
+          "text": "独处时才最像自己",
+          "weight": -2
+        }
+      ]
+    },
+    {
       "dimension": "SN",
       "text": "学一个新软件时，你更倾向：",
       "leftChar": "S",
@@ -2417,6 +3617,1206 @@ const MBTI_DATA = {
         },
         {
           "text": "想清楚还能怎么活",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更相信哪种说法：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "眼见为实",
+          "weight": 2
+        },
+        {
+          "text": "有例子才算数",
+          "weight": 1
+        },
+        {
+          "text": "要看背后的道理",
+          "weight": -1
+        },
+        {
+          "text": "感觉对了就行",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "别人跟你描述一个地方，你更想先知道：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "在哪儿、怎么去、多远",
+          "weight": 2
+        },
+        {
+          "text": "周边有什么、方不方便",
+          "weight": 1
+        },
+        {
+          "text": "大概是个什么氛围",
+          "weight": -1
+        },
+        {
+          "text": "它给人的整体印象",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的说明书是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "一步一步配图",
+          "weight": 2
+        },
+        {
+          "text": "分条列清楚",
+          "weight": 1
+        },
+        {
+          "text": "讲清背后的原理",
+          "weight": -1
+        },
+        {
+          "text": "只给思路，自己摸索",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "买东西时你更看重：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "参数和实际体验",
+          "weight": 2
+        },
+        {
+          "text": "用过的人怎么说",
+          "weight": 1
+        },
+        {
+          "text": "设计背后的想法",
+          "weight": -1
+        },
+        {
+          "text": "它代表的生活方式",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更常注意到别人的：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "穿了什么、拿了什么",
+          "weight": 2
+        },
+        {
+          "text": "做了什么具体的事",
+          "weight": 1
+        },
+        {
+          "text": "说话背后的意思",
+          "weight": -1
+        },
+        {
+          "text": "这个人给我的感觉",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的电影类型是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "纪实、传记",
+          "weight": 2
+        },
+        {
+          "text": "生活流的故事",
+          "weight": 1
+        },
+        {
+          "text": "有隐喻的文艺片",
+          "weight": -1
+        },
+        {
+          "text": "思辨性强的科幻",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "接手一件事，你更想先拿到：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "明确的步骤和要求",
+          "weight": 2
+        },
+        {
+          "text": "以往的做法",
+          "weight": 1
+        },
+        {
+          "text": "目标和大方向",
+          "weight": -1
+        },
+        {
+          "text": "自由发挥的空间",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更怕哪种情况：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "说得漂亮却做不出来",
+          "weight": 2
+        },
+        {
+          "text": "方案太虚、没法执行",
+          "weight": 1
+        },
+        {
+          "text": "只盯着细节看不到方向",
+          "weight": -1
+        },
+        {
+          "text": "想法太多落不了地",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意听哪种分享：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "亲身经历的细节",
+          "weight": 2
+        },
+        {
+          "text": "具体的操作方法",
+          "weight": 1
+        },
+        {
+          "text": "背后的思考",
+          "weight": -1
+        },
+        {
+          "text": "对未来的判断",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你的记忆更偏向：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "画面和细节",
+          "weight": 2
+        },
+        {
+          "text": "事情的前后经过",
+          "weight": 1
+        },
+        {
+          "text": "结论和要点",
+          "weight": -1
+        },
+        {
+          "text": "当时的感受",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的上司是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "要求具体、说得清楚",
+          "weight": 2
+        },
+        {
+          "text": "经验丰富、能带你",
+          "weight": 1
+        },
+        {
+          "text": "有想法、能给方向",
+          "weight": -1
+        },
+        {
+          "text": "放手让你自己搞",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "遇到一个新问题，你首先：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "找有没有现成办法",
+          "weight": 2
+        },
+        {
+          "text": "看别人怎么解决的",
+          "weight": 1
+        },
+        {
+          "text": "分析问题的结构",
+          "weight": -1
+        },
+        {
+          "text": "猜它可能的原因",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意读的报道是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "现场采访、事实清楚",
+          "weight": 2
+        },
+        {
+          "text": "数据翔实的",
+          "weight": 1
+        },
+        {
+          "text": "有观点的评论",
+          "weight": -1
+        },
+        {
+          "text": "提出新问题的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更相信哪种计划：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "排到每天做什么",
+          "weight": 2
+        },
+        {
+          "text": "列出关键节点",
+          "weight": 1
+        },
+        {
+          "text": "定好大方向",
+          "weight": -1
+        },
+        {
+          "text": "跟着感觉走",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更擅长记：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "人名、数字、日期",
+          "weight": 2
+        },
+        {
+          "text": "具体做过的事",
+          "weight": 1
+        },
+        {
+          "text": "概念和关系",
+          "weight": -1
+        },
+        {
+          "text": "整体印象",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "别人讲一个道理，你更想：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "要一个具体例子",
+          "weight": 2
+        },
+        {
+          "text": "看他怎么证明",
+          "weight": 1
+        },
+        {
+          "text": "顺着往下推",
+          "weight": -1
+        },
+        {
+          "text": "想想它还能解释什么",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意做的事是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "把流程跑顺",
+          "weight": 2
+        },
+        {
+          "text": "把细节做对",
+          "weight": 1
+        },
+        {
+          "text": "把方向想清楚",
+          "weight": -1
+        },
+        {
+          "text": "把可能性打开",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的课堂是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "讲练结合、当堂消化",
+          "weight": 2
+        },
+        {
+          "text": "案例教学",
+          "weight": 1
+        },
+        {
+          "text": "讨论式",
+          "weight": -1
+        },
+        {
+          "text": "开放式、没有标准答案",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你判断一个人靠不靠谱，主要看：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "他说的事有没有做到",
+          "weight": 2
+        },
+        {
+          "text": "过往的实际表现",
+          "weight": 1
+        },
+        {
+          "text": "他的思路清不清楚",
+          "weight": -1
+        },
+        {
+          "text": "我的直觉",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的休息是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "出去走走、看看具体的东西",
+          "weight": 2
+        },
+        {
+          "text": "做点手上的活",
+          "weight": 1
+        },
+        {
+          "text": "想点事情",
+          "weight": -1
+        },
+        {
+          "text": "发呆放空",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更关心的新闻是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "身边发生的事",
+          "weight": 2
+        },
+        {
+          "text": "具体的民生政策",
+          "weight": 1
+        },
+        {
+          "text": "趋势和分析",
+          "weight": -1
+        },
+        {
+          "text": "长远的走向",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "学一门手艺，你更愿意：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "从基础动作练起",
+          "weight": 2
+        },
+        {
+          "text": "跟着师傅一步步做",
+          "weight": 1
+        },
+        {
+          "text": "先弄懂原理",
+          "weight": -1
+        },
+        {
+          "text": "自己摸索着试",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意相信的经验是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "自己亲身经历过的",
+          "weight": 2
+        },
+        {
+          "text": "身边人验证过的",
+          "weight": 1
+        },
+        {
+          "text": "逻辑上说得通的",
+          "weight": -1
+        },
+        {
+          "text": "直觉告诉我的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢哪种问题：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "有标准答案的",
+          "weight": 2
+        },
+        {
+          "text": "能算出结果的",
+          "weight": 1
+        },
+        {
+          "text": "值得讨论的",
+          "weight": -1
+        },
+        {
+          "text": "没有答案的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意怎么布置房间：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "实用、够用就好",
+          "weight": 2
+        },
+        {
+          "text": "舒服、方便为主",
+          "weight": 1
+        },
+        {
+          "text": "有整体风格",
+          "weight": -1
+        },
+        {
+          "text": "能表达我的想法",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更容易被哪种细节打动：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "做工和用料",
+          "weight": 2
+        },
+        {
+          "text": "用起来顺手",
+          "weight": 1
+        },
+        {
+          "text": "设计得巧妙",
+          "weight": -1
+        },
+        {
+          "text": "背后的用意",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的聊天内容是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "最近发生的事",
+          "weight": 2
+        },
+        {
+          "text": "具体的人和事",
+          "weight": 1
+        },
+        {
+          "text": "观点和看法",
+          "weight": -1
+        },
+        {
+          "text": "假设和想象",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意做哪种工作：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "有明确标准的",
+          "weight": 2
+        },
+        {
+          "text": "靠经验积累的",
+          "weight": 1
+        },
+        {
+          "text": "需要判断方向的",
+          "weight": -1
+        },
+        {
+          "text": "需要不断想象的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "别人说“这事有戏”，你会：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "问清楚具体情况",
+          "weight": 2
+        },
+        {
+          "text": "看有没有先例",
+          "weight": 1
+        },
+        {
+          "text": "分析可行性",
+          "weight": -1
+        },
+        {
+          "text": "先想象它能成什么样",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更认可哪种判断：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "试过才知道",
+          "weight": 2
+        },
+        {
+          "text": "数据说话",
+          "weight": 1
+        },
+        {
+          "text": "逻辑推得通",
+          "weight": -1
+        },
+        {
+          "text": "感觉对",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意把精力放在：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "把眼前的事做扎实",
+          "weight": 2
+        },
+        {
+          "text": "积累实际经验",
+          "weight": 1
+        },
+        {
+          "text": "琢磨方法和原理",
+          "weight": -1
+        },
+        {
+          "text": "构想新的可能",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的假期是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "去一个具体的地方玩",
+          "weight": 2
+        },
+        {
+          "text": "把想做的事做完",
+          "weight": 1
+        },
+        {
+          "text": "随便走走看看",
+          "weight": -1
+        },
+        {
+          "text": "在家想事情",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更容易记住别人的：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "长相和声音",
+          "weight": 2
+        },
+        {
+          "text": "做过的事",
+          "weight": 1
+        },
+        {
+          "text": "说过的话",
+          "weight": -1
+        },
+        {
+          "text": "给我的感觉",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意学：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "一门能立刻用的技能",
+          "weight": 2
+        },
+        {
+          "text": "一套成熟的方法",
+          "weight": 1
+        },
+        {
+          "text": "一个新领域的框架",
+          "weight": -1
+        },
+        {
+          "text": "一些还没答案的问题",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更在意的评价是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "做事靠得住",
+          "weight": 2
+        },
+        {
+          "text": "细节没出错",
+          "weight": 1
+        },
+        {
+          "text": "想得够深",
+          "weight": -1
+        },
+        {
+          "text": "看得够远",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更习惯怎么处理资料：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "按类归档、标好标签",
+          "weight": 2
+        },
+        {
+          "text": "先摘出重点",
+          "weight": 1
+        },
+        {
+          "text": "理出结构",
+          "weight": -1
+        },
+        {
+          "text": "记个大概就够",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的合作对象是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "踏实执行的",
+          "weight": 2
+        },
+        {
+          "text": "经验丰富的",
+          "weight": 1
+        },
+        {
+          "text": "思路清楚的",
+          "weight": -1
+        },
+        {
+          "text": "敢想敢试的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意相信哪种未来：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "看得见、摸得着的",
+          "weight": 2
+        },
+        {
+          "text": "按现有趋势推得的",
+          "weight": 1
+        },
+        {
+          "text": "理论上成立的",
+          "weight": -1
+        },
+        {
+          "text": "感觉会发生的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更容易被什么打断思路：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "具体的事务",
+          "weight": 2
+        },
+        {
+          "text": "临时的安排",
+          "weight": 1
+        },
+        {
+          "text": "突然的联想",
+          "weight": -1
+        },
+        {
+          "text": "新的想法",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意在哪种公司工作：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "业务清晰、流程成熟",
+          "weight": 2
+        },
+        {
+          "text": "有稳定客户",
+          "weight": 1
+        },
+        {
+          "text": "正在转型的",
+          "weight": -1
+        },
+        {
+          "text": "还在探索方向的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的表达方式是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "分点、可操作",
+          "weight": 2
+        },
+        {
+          "text": "配图、直观",
+          "weight": 1
+        },
+        {
+          "text": "有逻辑框架",
+          "weight": -1
+        },
+        {
+          "text": "有启发性",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意听谁的：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "做过这件事的人",
+          "weight": 2
+        },
+        {
+          "text": "有数据的人",
+          "weight": 1
+        },
+        {
+          "text": "能讲清逻辑的人",
+          "weight": -1
+        },
+        {
+          "text": "看得远的人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "周末你更愿意：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "把该办的事办完",
+          "weight": 2
+        },
+        {
+          "text": "和家人朋友聚一聚",
+          "weight": 1
+        },
+        {
+          "text": "去没去过的地方",
+          "weight": -1
+        },
+        {
+          "text": "在家想事情",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更常根据什么做判断：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "手上的信息",
+          "weight": 2
+        },
+        {
+          "text": "过往的经验",
+          "weight": 1
+        },
+        {
+          "text": "事情的规律",
+          "weight": -1
+        },
+        {
+          "text": "整体的感觉",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意相信哪种解释：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "能对上细节的",
+          "weight": 2
+        },
+        {
+          "text": "有案例支持的",
+          "weight": 1
+        },
+        {
+          "text": "逻辑自洽的",
+          "weight": -1
+        },
+        {
+          "text": "听起来有道理的直觉",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更喜欢的讲述方式是：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "按时间顺序讲清",
+          "weight": 2
+        },
+        {
+          "text": "把要点列出来",
+          "weight": 1
+        },
+        {
+          "text": "讲清前因后果",
+          "weight": -1
+        },
+        {
+          "text": "留下想象空间",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "什么最容易说服你：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "亲手试过",
+          "weight": 2
+        },
+        {
+          "text": "看到别人做成",
+          "weight": 1
+        },
+        {
+          "text": "逻辑说得通",
+          "weight": -1
+        },
+        {
+          "text": "心里觉得对",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更愿意把一件复杂的事：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "拆成具体步骤",
+          "weight": 2
+        },
+        {
+          "text": "分解成清单",
+          "weight": 1
+        },
+        {
+          "text": "画成结构图",
+          "weight": -1
+        },
+        {
+          "text": "先想它的本质",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "你更怕哪种评价：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "不切实际",
+          "weight": 2
+        },
+        {
+          "text": "只会空想",
+          "weight": 1
+        },
+        {
+          "text": "太死板",
+          "weight": -1
+        },
+        {
+          "text": "想得太多",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "SN",
+      "text": "如果只能选一种能力，你更想要：",
+      "leftChar": "S",
+      "rightChar": "N",
+      "options": [
+        {
+          "text": "把事做成的执行力",
+          "weight": 2
+        },
+        {
+          "text": "扎实的专业能力",
+          "weight": 1
+        },
+        {
+          "text": "看清趋势的判断力",
+          "weight": -1
+        },
+        {
+          "text": "想到别人想不到的",
           "weight": -2
         }
       ]
@@ -3622,6 +6022,1206 @@ const MBTI_DATA = {
       ]
     },
     {
+      "dimension": "TF",
+      "text": "朋友跟你吐槽老板，你更先说：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "他哪里做得不对",
+          "weight": 2
+        },
+        {
+          "text": "这事该怎么处理",
+          "weight": 1
+        },
+        {
+          "text": "你听着就难受吧",
+          "weight": -1
+        },
+        {
+          "text": "别往心里去，我陪你",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更看重同事的：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "专业能力",
+          "weight": 2
+        },
+        {
+          "text": "责任心",
+          "weight": 1
+        },
+        {
+          "text": "待人是否和气",
+          "weight": -1
+        },
+        {
+          "text": "是否有同理心",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "讨论方案时，你更常：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "指出漏洞",
+          "weight": 2
+        },
+        {
+          "text": "比较哪个更有效",
+          "weight": 1
+        },
+        {
+          "text": "问大家能不能接受",
+          "weight": -1
+        },
+        {
+          "text": "先照顾提出者的情绪",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意听哪种批评：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "直接点出问题",
+          "weight": 2
+        },
+        {
+          "text": "说明具体哪里错",
+          "weight": 1
+        },
+        {
+          "text": "说得温和一点",
+          "weight": -1
+        },
+        {
+          "text": "先肯定再提",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "别人请你评价他的作品，你：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "说实话，指出问题",
+          "weight": 2
+        },
+        {
+          "text": "讲清哪里可以改",
+          "weight": 1
+        },
+        {
+          "text": "先说好的地方",
+          "weight": -1
+        },
+        {
+          "text": "尽量多鼓励",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更受不了别人：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "逻辑混乱",
+          "weight": 2
+        },
+        {
+          "text": "做事没效率",
+          "weight": 1
+        },
+        {
+          "text": "说话不留情面",
+          "weight": -1
+        },
+        {
+          "text": "完全不体谅人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "做错了事，你更先想：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "哪里出了错",
+          "weight": 2
+        },
+        {
+          "text": "怎么补救",
+          "weight": 1
+        },
+        {
+          "text": "会不会影响别人",
+          "weight": -1
+        },
+        {
+          "text": "别人会怎么看我",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更容易被哪种理由打动：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "数据显示有效",
+          "weight": 2
+        },
+        {
+          "text": "成本更低",
+          "weight": 1
+        },
+        {
+          "text": "大家都能接受",
+          "weight": -1
+        },
+        {
+          "text": "确实有人需要",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意当哪种家长：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "立规矩、讲原则",
+          "weight": 2
+        },
+        {
+          "text": "要求明确、说到做到",
+          "weight": 1
+        },
+        {
+          "text": "多沟通、多理解",
+          "weight": -1
+        },
+        {
+          "text": "尽量顺着孩子",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "团队要淘汰一个人，你更看重：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "数据和绩效",
+          "weight": 2
+        },
+        {
+          "text": "是否胜任",
+          "weight": 1
+        },
+        {
+          "text": "他的处境",
+          "weight": -1
+        },
+        {
+          "text": "大家的感受",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "别人跟你道歉，你更在意：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "他是否真认识到问题",
+          "weight": 2
+        },
+        {
+          "text": "他会不会再犯",
+          "weight": 1
+        },
+        {
+          "text": "他的态度诚不诚恳",
+          "weight": -1
+        },
+        {
+          "text": "他是不是真的难过",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意被人称为：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "有原则的人",
+          "weight": 2
+        },
+        {
+          "text": "靠得住的人",
+          "weight": 1
+        },
+        {
+          "text": "好相处的人",
+          "weight": -1
+        },
+        {
+          "text": "很温暖的人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "遇到两难选择，你更常：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "列出利弊",
+          "weight": 2
+        },
+        {
+          "text": "分清主次",
+          "weight": 1
+        },
+        {
+          "text": "问问身边人",
+          "weight": -1
+        },
+        {
+          "text": "听内心的声音",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更不喜欢哪种氛围：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "吵架、讲不通",
+          "weight": 2
+        },
+        {
+          "text": "低效、反复",
+          "weight": 1
+        },
+        {
+          "text": "冷冰冰、没人情味",
+          "weight": -1
+        },
+        {
+          "text": "面和心不和",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "别人夸你“很理性”，你：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "挺受用",
+          "weight": 2
+        },
+        {
+          "text": "觉得是实话",
+          "weight": 1
+        },
+        {
+          "text": "希望也能被说温暖",
+          "weight": -1
+        },
+        {
+          "text": "更想被说贴心",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "朋友做了让你不舒服的事，你：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "直接说清楚",
+          "weight": 2
+        },
+        {
+          "text": "找机会讲明白",
+          "weight": 1
+        },
+        {
+          "text": "先忍一下",
+          "weight": -1
+        },
+        {
+          "text": "不想破坏关系，就算了",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更看重一场谈判的：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "条件是否公平",
+          "weight": 2
+        },
+        {
+          "text": "结果是否有利",
+          "weight": 1
+        },
+        {
+          "text": "过程顺不顺",
+          "weight": -1
+        },
+        {
+          "text": "双方是否都舒服",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更怕自己变成：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "糊涂、不讲逻辑的人",
+          "weight": 2
+        },
+        {
+          "text": "低效、拖沓的人",
+          "weight": 1
+        },
+        {
+          "text": "冷漠、不近人情的人",
+          "weight": -1
+        },
+        {
+          "text": "自私、不顾别人的人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更认同哪种说法：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "理性胜过情绪",
+          "weight": 2
+        },
+        {
+          "text": "数据胜过感觉",
+          "weight": 1
+        },
+        {
+          "text": "人情也很重要",
+          "weight": -1
+        },
+        {
+          "text": "感受才是真的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "安慰一个失败的朋友，你更常：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "帮他复盘原因",
+          "weight": 2
+        },
+        {
+          "text": "告诉他下一步怎么做",
+          "weight": 1
+        },
+        {
+          "text": "陪他把情绪说出来",
+          "weight": -1
+        },
+        {
+          "text": "什么都不说，抱着他",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "分配奖金时，你更看重：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "贡献多少",
+          "weight": 2
+        },
+        {
+          "text": "绩效排名",
+          "weight": 1
+        },
+        {
+          "text": "谁更需要",
+          "weight": -1
+        },
+        {
+          "text": "团队和气",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更容易记住一个人的：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "观点是否有道理",
+          "weight": 2
+        },
+        {
+          "text": "做事是否靠谱",
+          "weight": 1
+        },
+        {
+          "text": "待人是否周到",
+          "weight": -1
+        },
+        {
+          "text": "是否让人舒服",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "有人在你面前哭，你第一反应是：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "发生什么了",
+          "weight": 2
+        },
+        {
+          "text": "需要我做什么",
+          "weight": 1
+        },
+        {
+          "text": "先安抚他",
+          "weight": -1
+        },
+        {
+          "text": "心里也跟着难受",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意选择哪种伴侣：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "讲道理、能沟通",
+          "weight": 2
+        },
+        {
+          "text": "靠谱、有担当",
+          "weight": 1
+        },
+        {
+          "text": "体贴、会照顾人",
+          "weight": -1
+        },
+        {
+          "text": "懂我、接得住情绪",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更不喜欢听：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "没逻辑的抱怨",
+          "weight": 2
+        },
+        {
+          "text": "没有依据的结论",
+          "weight": 1
+        },
+        {
+          "text": "冷漠的评判",
+          "weight": -1
+        },
+        {
+          "text": "伤人的玩笑",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "团队有人提出一个不成熟的方案，你：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "直接说问题在哪",
+          "weight": 2
+        },
+        {
+          "text": "给出更可行的做法",
+          "weight": 1
+        },
+        {
+          "text": "先肯定他的用心",
+          "weight": -1
+        },
+        {
+          "text": "私下提醒他",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更欣赏一个人的：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "判断力",
+          "weight": 2
+        },
+        {
+          "text": "执行力",
+          "weight": 1
+        },
+        {
+          "text": "善意",
+          "weight": -1
+        },
+        {
+          "text": "共情力",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意在哪种团队里工作：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "标准清楚、赏罚分明",
+          "weight": 2
+        },
+        {
+          "text": "目标明确、效率高",
+          "weight": 1
+        },
+        {
+          "text": "互相支持、气氛好",
+          "weight": -1
+        },
+        {
+          "text": "彼此照顾、有温度",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更在意自己说的话：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "是否准确",
+          "weight": 2
+        },
+        {
+          "text": "是否有用",
+          "weight": 1
+        },
+        {
+          "text": "是否得体",
+          "weight": -1
+        },
+        {
+          "text": "是否伤人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "面对一个哭闹的小孩，你更先：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "弄清他想干什么",
+          "weight": 2
+        },
+        {
+          "text": "想办法解决问题",
+          "weight": 1
+        },
+        {
+          "text": "哄他、安抚他",
+          "weight": -1
+        },
+        {
+          "text": "先抱起来再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更不喜欢哪种领导：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "讲不清道理",
+          "weight": 2
+        },
+        {
+          "text": "决策反复",
+          "weight": 1
+        },
+        {
+          "text": "对人冷漠",
+          "weight": -1
+        },
+        {
+          "text": "不顾下属感受",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意相信哪种承诺：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "写进合同的",
+          "weight": 2
+        },
+        {
+          "text": "有明确时间表的",
+          "weight": 1
+        },
+        {
+          "text": "说得真诚的",
+          "weight": -1
+        },
+        {
+          "text": "让我觉得安心的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意听哪种建议：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "直接指出问题",
+          "weight": 2
+        },
+        {
+          "text": "给出具体做法",
+          "weight": 1
+        },
+        {
+          "text": "先问我怎么想",
+          "weight": -1
+        },
+        {
+          "text": "先共情再建议",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "别人做了让你感动的事，你会：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "记住这件事",
+          "weight": 2
+        },
+        {
+          "text": "想着怎么回报",
+          "weight": 1
+        },
+        {
+          "text": "当面说出来",
+          "weight": -1
+        },
+        {
+          "text": "心里暖很久",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意怎样处理冲突：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "摆事实讲道理",
+          "weight": 2
+        },
+        {
+          "text": "把问题说清楚",
+          "weight": 1
+        },
+        {
+          "text": "找个双方都接受的办法",
+          "weight": -1
+        },
+        {
+          "text": "先安抚情绪再谈",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更在意的失误是：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "判断错了",
+          "weight": 2
+        },
+        {
+          "text": "做事出了偏差",
+          "weight": 1
+        },
+        {
+          "text": "让人难堪了",
+          "weight": -1
+        },
+        {
+          "text": "伤了谁的心",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意被评价为：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "头脑清楚",
+          "weight": 2
+        },
+        {
+          "text": "做事靠谱",
+          "weight": 1
+        },
+        {
+          "text": "待人友善",
+          "weight": -1
+        },
+        {
+          "text": "很有人情味",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "朋友征求你对感情的建议，你：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "分析这段关系合不合适",
+          "weight": 2
+        },
+        {
+          "text": "讲清利弊",
+          "weight": 1
+        },
+        {
+          "text": "先问他自己的感受",
+          "weight": -1
+        },
+        {
+          "text": "支持他怎么选都行",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更受不了哪种场面：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "有人睁眼说瞎话",
+          "weight": 2
+        },
+        {
+          "text": "一群人低效扯皮",
+          "weight": 1
+        },
+        {
+          "text": "气氛冷到冰点",
+          "weight": -1
+        },
+        {
+          "text": "有人被当众难堪",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你做决定时更依赖：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "分析和推演",
+          "weight": 2
+        },
+        {
+          "text": "经验和事实",
+          "weight": 1
+        },
+        {
+          "text": "别人的意见",
+          "weight": -1
+        },
+        {
+          "text": "自己的感受",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意相信哪种人：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "说到做到的",
+          "weight": 2
+        },
+        {
+          "text": "讲道理的",
+          "weight": 1
+        },
+        {
+          "text": "对人和气的",
+          "weight": -1
+        },
+        {
+          "text": "心里装着别人的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更不喜欢自己：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "感情用事",
+          "weight": 2
+        },
+        {
+          "text": "优柔寡断",
+          "weight": 1
+        },
+        {
+          "text": "太不讲情面",
+          "weight": -1
+        },
+        {
+          "text": "太冷硬",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "开会时有人跑题，你更可能：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "直接打断",
+          "weight": 2
+        },
+        {
+          "text": "提醒回到主题",
+          "weight": 1
+        },
+        {
+          "text": "等他说完",
+          "weight": -1
+        },
+        {
+          "text": "担心他尴尬",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更看重一段合作里的：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "分工是否清楚",
+          "weight": 2
+        },
+        {
+          "text": "效率高不高",
+          "weight": 1
+        },
+        {
+          "text": "沟通顺不顺",
+          "weight": -1
+        },
+        {
+          "text": "彼此是否信任",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更愿意收到的礼物是：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "实用的",
+          "weight": 2
+        },
+        {
+          "text": "有品质的",
+          "weight": 1
+        },
+        {
+          "text": "我喜欢的",
+          "weight": -1
+        },
+        {
+          "text": "有心意的",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "别人对你提出要求，你更常：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "先判断合不合理",
+          "weight": 2
+        },
+        {
+          "text": "看能不能做到",
+          "weight": 1
+        },
+        {
+          "text": "不太好意思拒绝",
+          "weight": -1
+        },
+        {
+          "text": "几乎都会答应",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更希望朋友怎么跟你说话：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "有话直说",
+          "weight": 2
+        },
+        {
+          "text": "讲事实",
+          "weight": 1
+        },
+        {
+          "text": "温和一点",
+          "weight": -1
+        },
+        {
+          "text": "多体谅我",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你更擅长的角色是：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "出主意、做判断",
+          "weight": 2
+        },
+        {
+          "text": "把事推进",
+          "weight": 1
+        },
+        {
+          "text": "协调关系",
+          "weight": -1
+        },
+        {
+          "text": "照顾大家的情绪",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "你最不想被人说成：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "太冷、不讲情面",
+          "weight": 2
+        },
+        {
+          "text": "只认道理、不留余地",
+          "weight": 1
+        },
+        {
+          "text": "有点距离感、不好接近",
+          "weight": -1
+        },
+        {
+          "text": "不近人情、不顾别人",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "TF",
+      "text": "如果只能选一个，你更愿意被记住为：",
+      "leftChar": "T",
+      "rightChar": "F",
+      "options": [
+        {
+          "text": "公正的人",
+          "weight": 2
+        },
+        {
+          "text": "有能力的人",
+          "weight": 1
+        },
+        {
+          "text": "善良的人",
+          "weight": -1
+        },
+        {
+          "text": "温柔的人",
+          "weight": -2
+        }
+      ]
+    },
+    {
       "dimension": "JP",
       "text": "出门旅行之前，你：",
       "leftChar": "J",
@@ -4817,6 +8417,1206 @@ const MBTI_DATA = {
         },
         {
           "text": "完全随心，不做计划",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更喜欢的日程表是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "每小时都有安排",
+          "weight": 2
+        },
+        {
+          "text": "大致排好顺序",
+          "weight": 1
+        },
+        {
+          "text": "只记几个必须的",
+          "weight": -1
+        },
+        {
+          "text": "基本不记",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "出门前你会：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "确认带齐所有东西",
+          "weight": 2
+        },
+        {
+          "text": "大概检查一下",
+          "weight": 1
+        },
+        {
+          "text": "想到什么拿什么",
+          "weight": -1
+        },
+        {
+          "text": "到地方再买",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "别人问你明天做什么，你：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "马上能说出来",
+          "weight": 2
+        },
+        {
+          "text": "大致有安排",
+          "weight": 1
+        },
+        {
+          "text": "到时候再看",
+          "weight": -1
+        },
+        {
+          "text": "完全不知道",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "对一项工作任务，你更希望：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "有明确的截止时间",
+          "weight": 2
+        },
+        {
+          "text": "有清晰的交付标准",
+          "weight": 1
+        },
+        {
+          "text": "能自己安排节奏",
+          "weight": -1
+        },
+        {
+          "text": "随时可以改方向",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你的包通常：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "东西分区放好",
+          "weight": 2
+        },
+        {
+          "text": "大致有点秩序",
+          "weight": 1
+        },
+        {
+          "text": "塞得乱但找得到",
+          "weight": -1
+        },
+        {
+          "text": "什么都往里扔",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "面对一个新计划，你更先：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "排好时间表",
+          "weight": 2
+        },
+        {
+          "text": "定出几个节点",
+          "weight": 1
+        },
+        {
+          "text": "想想要做什么",
+          "weight": -1
+        },
+        {
+          "text": "先干起来再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你最受不了别人怎样：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "总迟到",
+          "weight": 2
+        },
+        {
+          "text": "答应的事做不到",
+          "weight": 1
+        },
+        {
+          "text": "临时改计划",
+          "weight": -1
+        },
+        {
+          "text": "想一出是一出",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "一件事结束，你更常：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "立刻归档收尾",
+          "weight": 2
+        },
+        {
+          "text": "确认无误再结束",
+          "weight": 1
+        },
+        {
+          "text": "先放一放",
+          "weight": -1
+        },
+        {
+          "text": "很少真正收尾",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "对临时加班，你的感受是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "打乱计划，很不爽",
+          "weight": 2
+        },
+        {
+          "text": "能接受，重新排一下",
+          "weight": 1
+        },
+        {
+          "text": "问题不大",
+          "weight": -1
+        },
+        {
+          "text": "无所谓，本来也没安排",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你会提前多久准备一次汇报：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "至少一周",
+          "weight": 2
+        },
+        {
+          "text": "提前几天",
+          "weight": 1
+        },
+        {
+          "text": "前一晚",
+          "weight": -1
+        },
+        {
+          "text": "临场发挥",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你的购物车通常：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "加进去就尽快买",
+          "weight": 2
+        },
+        {
+          "text": "想清楚再下单",
+          "weight": 1
+        },
+        {
+          "text": "放很久才决定",
+          "weight": -1
+        },
+        {
+          "text": "越攒越多",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "别人打乱你的节奏，你：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "很在意，想恢复原样",
+          "weight": 2
+        },
+        {
+          "text": "有点烦，会重新安排",
+          "weight": 1
+        },
+        {
+          "text": "调整一下就好",
+          "weight": -1
+        },
+        {
+          "text": "顺势就变了",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎么处理证件和票据：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "分类收进文件夹",
+          "weight": 2
+        },
+        {
+          "text": "统一放一个地方",
+          "weight": 1
+        },
+        {
+          "text": "随手一放",
+          "weight": -1
+        },
+        {
+          "text": "用到再找",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "面对一个模糊的要求，你：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "先问清楚再动手",
+          "weight": 2
+        },
+        {
+          "text": "自己列个方案确认",
+          "weight": 1
+        },
+        {
+          "text": "先做着看",
+          "weight": -1
+        },
+        {
+          "text": "边做边改",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更喜欢的项目管理方式是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "节点清楚、进度可见",
+          "weight": 2
+        },
+        {
+          "text": "列个任务清单",
+          "weight": 1
+        },
+        {
+          "text": "记个大概进度",
+          "weight": -1
+        },
+        {
+          "text": "不太管理，差不多就行",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "换季时你会：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前把衣物整理好",
+          "weight": 2
+        },
+        {
+          "text": "有空就收拾",
+          "weight": 1
+        },
+        {
+          "text": "等冷了再说",
+          "weight": -1
+        },
+        {
+          "text": "从来不整理",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "朋友临时改约，你：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "有点不爽，希望守约",
+          "weight": 2
+        },
+        {
+          "text": "可以，重新约时间",
+          "weight": 1
+        },
+        {
+          "text": "都行",
+          "weight": -1
+        },
+        {
+          "text": "正好，我也不想去了",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你会把目标：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "写下来贴在眼前",
+          "weight": 2
+        },
+        {
+          "text": "记在备忘录",
+          "weight": 1
+        },
+        {
+          "text": "放在心里",
+          "weight": -1
+        },
+        {
+          "text": "不设目标",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "别人来你家，你更在意：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "家里是否整洁",
+          "weight": 2
+        },
+        {
+          "text": "东西是否归位",
+          "weight": 1
+        },
+        {
+          "text": "有没有地方坐",
+          "weight": -1
+        },
+        {
+          "text": "随便，能待就行",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更喜欢的出行方式是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "按时刻表走",
+          "weight": 2
+        },
+        {
+          "text": "查好路线再走",
+          "weight": 1
+        },
+        {
+          "text": "边走边看",
+          "weight": -1
+        },
+        {
+          "text": "随便上哪趟车",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "合同或协议你会：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "逐条看完再签",
+          "weight": 2
+        },
+        {
+          "text": "重点条款看清楚",
+          "weight": 1
+        },
+        {
+          "text": "大概扫一遍",
+          "weight": -1
+        },
+        {
+          "text": "别人看过就行",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样开始一天：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "按固定流程来",
+          "weight": 2
+        },
+        {
+          "text": "先做最重要的",
+          "weight": 1
+        },
+        {
+          "text": "看心情",
+          "weight": -1
+        },
+        {
+          "text": "醒了再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "别人交给你的事，你更常：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "记下来按时间完成",
+          "weight": 2
+        },
+        {
+          "text": "尽快做完",
+          "weight": 1
+        },
+        {
+          "text": "有空再做",
+          "weight": -1
+        },
+        {
+          "text": "常常忘记",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎么规划收入：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "每月做好预算",
+          "weight": 2
+        },
+        {
+          "text": "大致分配一下",
+          "weight": 1
+        },
+        {
+          "text": "花剩下的再存",
+          "weight": -1
+        },
+        {
+          "text": "从来不算",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更喜欢的约会方式是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前订好餐厅和时间",
+          "weight": 2
+        },
+        {
+          "text": "约好大致时间",
+          "weight": 1
+        },
+        {
+          "text": "碰头再说",
+          "weight": -1
+        },
+        {
+          "text": "随缘遇到",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样处理邮件：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "当天清空收件箱",
+          "weight": 2
+        },
+        {
+          "text": "重要的先回",
+          "weight": 1
+        },
+        {
+          "text": "攒着一起看",
+          "weight": -1
+        },
+        {
+          "text": "从不清理",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样开始一个新项目：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "先写详细计划",
+          "weight": 2
+        },
+        {
+          "text": "先定阶段目标",
+          "weight": 1
+        },
+        {
+          "text": "先做个小样",
+          "weight": -1
+        },
+        {
+          "text": "边做边想",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "别人做事慢吞吞，你：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "很急，想催",
+          "weight": 2
+        },
+        {
+          "text": "会提醒一下",
+          "weight": 1
+        },
+        {
+          "text": "能等",
+          "weight": -1
+        },
+        {
+          "text": "不太在意",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样安排一顿饭：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前想好菜单",
+          "weight": 2
+        },
+        {
+          "text": "大概想几个菜",
+          "weight": 1
+        },
+        {
+          "text": "打开冰箱看有什么",
+          "weight": -1
+        },
+        {
+          "text": "饿了再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样准备一次汇报：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前写好稿、练几遍",
+          "weight": 2
+        },
+        {
+          "text": "列好要点",
+          "weight": 1
+        },
+        {
+          "text": "临场组织语言",
+          "weight": -1
+        },
+        {
+          "text": "上去再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "别人请你帮忙改方案，你：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "先问清截止时间",
+          "weight": 2
+        },
+        {
+          "text": "排进自己的计划",
+          "weight": 1
+        },
+        {
+          "text": "有空就改",
+          "weight": -1
+        },
+        {
+          "text": "拖到最后一刻",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样处理账单：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "到期前就交",
+          "weight": 2
+        },
+        {
+          "text": "记着日子交",
+          "weight": 1
+        },
+        {
+          "text": "收到提醒才交",
+          "weight": -1
+        },
+        {
+          "text": "常常过期",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样学一门课：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "按课程表一节不落",
+          "weight": 2
+        },
+        {
+          "text": "有计划地跟完",
+          "weight": 1
+        },
+        {
+          "text": "挑感兴趣的看",
+          "weight": -1
+        },
+        {
+          "text": "想起来才看",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更喜欢的合作方式是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "分工明确、各自交付",
+          "weight": 2
+        },
+        {
+          "text": "定好节点再推进",
+          "weight": 1
+        },
+        {
+          "text": "边做边分工",
+          "weight": -1
+        },
+        {
+          "text": "谁有空谁做",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样处理突发任务：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "立刻调整计划",
+          "weight": 2
+        },
+        {
+          "text": "先做完手上的",
+          "weight": 1
+        },
+        {
+          "text": "看急不急",
+          "weight": -1
+        },
+        {
+          "text": "放一放再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样保存文件：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "统一命名规则",
+          "weight": 2
+        },
+        {
+          "text": "按项目分文件夹",
+          "weight": 1
+        },
+        {
+          "text": "随手存在桌面",
+          "weight": -1
+        },
+        {
+          "text": "不存，用完就删",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你对“提前量”的看法：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "越早越好",
+          "weight": 2
+        },
+        {
+          "text": "留出一点余量",
+          "weight": 1
+        },
+        {
+          "text": "卡点也没关系",
+          "weight": -1
+        },
+        {
+          "text": "越晚越有灵感",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样过一天假期：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前安排好活动",
+          "weight": 2
+        },
+        {
+          "text": "有几个想去的地方",
+          "weight": 1
+        },
+        {
+          "text": "临时决定",
+          "weight": -1
+        },
+        {
+          "text": "完全不动",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样处理承诺：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "答应就一定做到",
+          "weight": 2
+        },
+        {
+          "text": "尽量做到",
+          "weight": 1
+        },
+        {
+          "text": "看情况",
+          "weight": -1
+        },
+        {
+          "text": "不轻易答应",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你对“变通”的态度是：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "尽量不变，按原方案",
+          "weight": 2
+        },
+        {
+          "text": "必要时才变",
+          "weight": 1
+        },
+        {
+          "text": "随时可以变",
+          "weight": -1
+        },
+        {
+          "text": "变了更好玩",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样开始一件难事：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "先拆成小步骤",
+          "weight": 2
+        },
+        {
+          "text": "定好第一步",
+          "weight": 1
+        },
+        {
+          "text": "先试试看",
+          "weight": -1
+        },
+        {
+          "text": "等有状态再说",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样安排一次聚会：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前定时间地点",
+          "weight": 2
+        },
+        {
+          "text": "提前几天约",
+          "weight": 1
+        },
+        {
+          "text": "当天再说",
+          "weight": -1
+        },
+        {
+          "text": "碰上了就聚",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎么安排一日三餐：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前想好、按点吃",
+          "weight": 2
+        },
+        {
+          "text": "大致有规律",
+          "weight": 1
+        },
+        {
+          "text": "饿了再吃",
+          "weight": -1
+        },
+        {
+          "text": "想起才吃",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样处理旧物：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "定期清理",
+          "weight": 2
+        },
+        {
+          "text": "分类收好",
+          "weight": 1
+        },
+        {
+          "text": "堆着不管",
+          "weight": -1
+        },
+        {
+          "text": "越攒越多",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样记录灵感：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "分类记进笔记",
+          "weight": 2
+        },
+        {
+          "text": "随手记下来",
+          "weight": 1
+        },
+        {
+          "text": "靠脑子记",
+          "weight": -1
+        },
+        {
+          "text": "不记",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样使用日历：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "每件事都记进去",
+          "weight": 2
+        },
+        {
+          "text": "重要的才记",
+          "weight": 1
+        },
+        {
+          "text": "偶尔看看",
+          "weight": -1
+        },
+        {
+          "text": "从不用",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样迎接新年：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "提前定好计划",
+          "weight": 2
+        },
+        {
+          "text": "想几个目标",
+          "weight": 1
+        },
+        {
+          "text": "到时候再说",
+          "weight": -1
+        },
+        {
+          "text": "不设任何计划",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样处理单据：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "当天就整理好",
+          "weight": 2
+        },
+        {
+          "text": "攒一批再弄",
+          "weight": 1
+        },
+        {
+          "text": "拖到截止",
+          "weight": -1
+        },
+        {
+          "text": "经常忘",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "你更愿意怎样安排晚饭后的时间：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "固定做点事",
+          "weight": 2
+        },
+        {
+          "text": "列几件要做的事",
+          "weight": 1
+        },
+        {
+          "text": "看心情",
+          "weight": -1
+        },
+        {
+          "text": "躺平",
+          "weight": -2
+        }
+      ]
+    },
+    {
+      "dimension": "JP",
+      "text": "如果只能选一种节奏，你更想要：",
+      "leftChar": "J",
+      "rightChar": "P",
+      "options": [
+        {
+          "text": "一切按计划推进",
+          "weight": 2
+        },
+        {
+          "text": "大体有序",
+          "weight": 1
+        },
+        {
+          "text": "灵活机动",
+          "weight": -1
+        },
+        {
+          "text": "完全自由",
           "weight": -2
         }
       ]
