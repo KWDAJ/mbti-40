@@ -695,8 +695,6 @@ window.toggleMusic = function() {
     const C = dimScores.OCEAN_C || 0;
     const A = dimScores.OCEAN_A || 0;
     const N = dimScores.OCEAN_N || 0;
-    const Eextro = dimScores.OCEAN_E || 0;
-    const OC = dimScores.OCEAN_O_C || 0;
     // 九型（每道权重 ±2，范围 -8 ~ +8）
     const E7 = dimScores.ENMEA_7 || 0;
     const E8 = dimScores.ENMEA_8 || 0;
