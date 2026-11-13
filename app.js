@@ -8,19 +8,19 @@ const Music = (function() {
 
   // 人格→音乐文件映射（新生成的 13 个；还没生成的 11 个为空，用默认兜底）
   const BGM_MAP = {
-    INTJ: 'music/intj.wav',
-    INTP: 'music/intp.wav',
-    ENTP: 'music/entp.wav',
-    ESTP: 'music/estp.wav',
-    INFJ: 'music/infj.wav',
-    INFP: 'music/infp.wav',
-    ENFP: 'music/enfp.wav',
-    ENFJ: 'music/enfj.wav',
-    ISTJ: 'music/istj.wav',
-    ENTJ: 'music/entj.wav',
-    ISFJ: 'music/isfj.wav',
-    ESTJ: 'music/estj.wav',
-    HYBRID_SN_TF: 'music/hybrid_sn_tf.wav',
+    INTJ: 'music/intj.mp3',
+    INTP: 'music/intp.mp3',
+    ENTP: 'music/entp.mp3',
+    ESTP: 'music/estp.mp3',
+    INFJ: 'music/infj.mp3',
+    INFP: 'music/infp.mp3',
+    ENFP: 'music/enfp.mp3',
+    ENFJ: 'music/enfj.mp3',
+    ISTJ: 'music/istj.mp3',
+    ENTJ: 'music/entj.mp3',
+    ISFJ: 'music/isfj.mp3',
+    ESTJ: 'music/estj.mp3',
+    HYBRID_SN_TF: 'music/hybrid_sn_tf.mp3',
     // 以下 11 个还没生成，用默认
     ESFJ: null, ISTP: null, ISFP: null, ESFP: null,
     HYBRID_EI: null, HYBRID_SN: null, HYBRID_TF: null, HYBRID_JP: null,
@@ -34,7 +34,7 @@ const Music = (function() {
     ENMEA_7: null, ENMEA_8: null, ENMEA_9: null, ENMEA_4: null,
     INTJ_OCEAN_C_MINUS: null, ENFP_OCEAN_C_PLUS: null,
   };
-  const DEFAULT_BGM = 'bgm.wav?v=1';
+  const DEFAULT_BGM = 'bgm.mp3?v=1';
 
   function ensureAudio() {
     if (audio) return audio;
