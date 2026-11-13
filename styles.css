@@ -1346,3 +1346,115 @@ body.result-active .music-btn {
     to { transform: translateY(0) scale(1); opacity: 1; }
   }
 }
+
+/* ===== 动效增强 ===== */
+
+/* 1. 页面切换：淡入 + 轻微上浮，比纯淡入更有层次 */
+.page {
+  transform: translate3d(0, 14px, 0) scale(0.995);
+  transition: opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0.42s;
+}
+.page.active {
+  transform: none;
+}
+
+/* 2. 人格卡片入场：更快到位、带模糊收敛，40 张不会等太久 */
+.preview-item {
+  animation-name: previewInV2;
+  animation-delay: calc(var(--i, 0) * 0.022s + 0.28s);
+}
+@keyframes previewInV2 {
+  from { opacity: 0; transform: translateY(18px) scale(0.88); filter: blur(6px); }
+  60%  { filter: blur(0); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* 图标悬停轻弹 */
+.preview-item .icon {
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.preview-item:hover .icon {
+  transform: scale(1.22) rotate(-8deg);
+}
+
+/* 悬停光晕用卡片主色，按下有回弹 */
+.preview-item:hover {
+  box-shadow: 0 10px 26px -8px var(--hero, #667eea),
+              0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+.preview-item:active {
+  transform: scale(0.95);
+  transition-duration: 0.12s;
+}
+
+/* 3. 计数徽章：数值刷新时弹一下 */
+.preview-count.bump {
+  animation: countBump 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes countBump {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.28); background: rgba(130, 160, 255, 0.45); }
+  100% { transform: scale(1); }
+}
+
+/* 4. 模式卡片：图标悬停呼吸 */
+.mode-card .mode-icon {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mode-card:hover .mode-icon {
+  transform: scale(1.18) translateY(-2px);
+}
+
+/* 5. 按钮：悬停时一道高光扫过 */
+.btn-action {
+  position: relative;
+  overflow: hidden;
+}
+.btn-action::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.btn-action:hover::after {
+  left: 130%;
+}
+.btn-action:active {
+  transform: scale(0.97);
+}
+
+/* 6. 音乐按钮播放时向外扩散音波 */
+.music-btn.playing::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(102, 126, 234, 0.65);
+  animation: musicRing 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes musicRing {
+  0%   { transform: scale(0.9); opacity: 0.7; }
+  70%  { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* 7. 无障碍：系统开启「减少动态效果」时全部降级 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .page { transform: none; }
+}
