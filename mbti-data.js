@@ -1223,72 +1223,72 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "手机静音了一整天，晚上打开时你：",
+      "text": "要打电话预约，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "先翻一遍群消息，顺手回几句",
+          "text": "直接打，很快搞定",
           "weight": 2
         },
         {
-          "text": "看到有人找我就回",
+          "text": "先想好说什么",
           "weight": 1
         },
         {
-          "text": "只看重要的，其余略过",
+          "text": "拖一会儿再打",
           "weight": -1
         },
         {
-          "text": "觉得清净挺好，能拖就拖",
+          "text": "宁愿线上排队",
           "weight": -2
         }
       ]
     },
     {
       "dimension": "EI",
-      "text": "家里要来客人，你的心情是：",
+      "text": "新同事第一天来上班，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "有点期待，正好热闹一下",
+          "text": "主动带他认识一圈",
           "weight": 2
         },
         {
-          "text": "提前收拾好，挺欢迎",
+          "text": "会主动打个招呼",
           "weight": 1
         },
         {
-          "text": "有点麻烦，但能应付",
+          "text": "等他来问我",
           "weight": -1
         },
         {
-          "text": "希望他们改天再来",
+          "text": "各忙各的，不太搭理",
           "weight": -2
         }
       ]
     },
     {
       "dimension": "EI",
-      "text": "同事在群里发起下班活动，你：",
+      "text": "公司团建要玩真心话大冒险，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "马上接话，还能帮忙组局",
+          "text": "玩得最起劲",
           "weight": 2
         },
         {
-          "text": "感兴趣就参加",
+          "text": "能玩就玩",
           "weight": 1
         },
         {
-          "text": "看别人去不去",
+          "text": "尽量少参与",
           "weight": -1
         },
         {
-          "text": "一般不参加",
+          "text": "找理由不参加",
           "weight": -2
         }
       ]
@@ -1487,48 +1487,48 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "排队时你更常：",
+      "text": "坐高铁邻座跟你搭话，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "和旁边的人聊起来",
+          "text": "能聊一路",
           "weight": 2
         },
         {
-          "text": "偶尔搭两句",
+          "text": "聊几句",
           "weight": 1
         },
         {
-          "text": "安静等自己的",
+          "text": "应付两句",
           "weight": -1
         },
         {
-          "text": "希望没人跟我说话",
+          "text": "戴上耳机",
           "weight": -2
         }
       ]
     },
     {
       "dimension": "EI",
-      "text": "你更愿意坐哪种工位：",
+      "text": "轮到你主持周会，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "挨着大家，随时能说上话",
+          "text": "挺乐意，还能带节奏",
           "weight": 2
         },
         {
-          "text": "团队区里，稍有点间隔",
+          "text": "正常主持，不太紧张",
           "weight": 1
         },
         {
-          "text": "靠边安静一点",
+          "text": "想拉个人一起",
           "weight": -1
         },
         {
-          "text": "独立的隔间",
+          "text": "非常抗拒",
           "weight": -2
         }
       ]
@@ -1631,24 +1631,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "需要在一个大群里发言时，你：",
+      "text": "有人请你帮忙牵线认识朋友，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "很自然，还会接着说",
+          "text": "挺乐意，还能张罗",
           "weight": 2
         },
         {
-          "text": "想好就发",
+          "text": "可以介绍一下",
           "weight": 1
         },
         {
-          "text": "能不发就不发",
+          "text": "看情况",
           "weight": -1
         },
         {
-          "text": "很抗拒",
+          "text": "不想掺和",
           "weight": -2
         }
       ]
@@ -1679,24 +1679,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "别人临时来找你聊天，你：",
+      "text": "同事午休时凑过来聊天，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "正好，来聊",
+          "text": "正好，边吃边聊",
           "weight": 2
         },
         {
-          "text": "看手上忙不忙",
+          "text": "聊一会儿",
           "weight": 1
         },
         {
-          "text": "简单应付几句",
+          "text": "想自己待着",
           "weight": -1
         },
         {
-          "text": "心里希望他快点走",
+          "text": "希望他别来",
           "weight": -2
         }
       ]
@@ -1823,24 +1823,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "面对一个完全陌生的集体，你更像：",
+      "text": "被拉进一个陌生的群，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "先开口破冰的那个人",
+          "text": "先自我介绍，聊起来",
           "weight": 2
         },
         {
-          "text": "会主动认识几个人",
+          "text": "看大家在聊什么",
           "weight": 1
         },
         {
-          "text": "等别人来搭话",
+          "text": "基本潜水",
           "weight": -1
         },
         {
-          "text": "尽量不引人注意",
+          "text": "想直接退群",
           "weight": -2
         }
       ]
@@ -1967,24 +1967,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "你更愿意把烦恼：",
+      "text": "被人误会了，你更愿意：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "找人一顿倾诉",
+          "text": "当面解释清楚",
           "weight": 2
         },
         {
-          "text": "和信任的人聊聊",
+          "text": "找机会说明",
           "weight": 1
         },
         {
-          "text": "自己先消化",
+          "text": "先不解释",
           "weight": -1
         },
         {
-          "text": "谁都不说",
+          "text": "懒得解释",
           "weight": -2
         }
       ]
@@ -2039,24 +2039,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "你更愿意在哪儿工作：",
+      "text": "需要独自出差三天，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "咖啡馆、共享空间",
+          "text": "正好见见当地朋友",
           "weight": 2
         },
         {
-          "text": "团队办公室",
+          "text": "还行，能安排",
           "weight": 1
         },
         {
-          "text": "安静的独立办公室",
+          "text": "有点无聊",
           "weight": -1
         },
         {
-          "text": "家里，锁上门",
+          "text": "最好别去",
           "weight": -2
         }
       ]
@@ -2087,24 +2087,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "你更愿意参加哪种培训：",
+      "text": "公司组织分享会，你更愿意：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "分组讨论、上台演练",
+          "text": "上台讲一段",
           "weight": 2
         },
         {
-          "text": "有小互动的课",
+          "text": "多提问互动",
           "weight": 1
         },
         {
-          "text": "讲为主，少互动",
+          "text": "安静听着",
           "weight": -1
         },
         {
-          "text": "自己看录播",
+          "text": "能不去就不去",
           "weight": -2
         }
       ]
@@ -2135,24 +2135,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "你更喜欢的消息回复节奏是：",
+      "text": "收到一条语音消息，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "一来一回聊很久",
+          "text": "直接听，马上回",
           "weight": 2
         },
         {
-          "text": "有事就回",
+          "text": "转文字再看",
           "weight": 1
         },
         {
-          "text": "攒着一起回",
+          "text": "过会儿再听",
           "weight": -1
         },
         {
-          "text": "能不回就不回",
+          "text": "不想听，让他打字",
           "weight": -2
         }
       ]
@@ -2255,48 +2255,48 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "你更愿意把生日会办成：",
+      "text": "有好消息时，你更愿意：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "大型派对",
+          "text": "发朋友圈，让大家都知道",
           "weight": 2
         },
         {
-          "text": "朋友聚餐",
+          "text": "先告诉几个熟人",
           "weight": 1
         },
         {
-          "text": "小范围吃饭",
+          "text": "只告诉最亲的人",
           "weight": -1
         },
         {
-          "text": "不办，自己过",
+          "text": "不说，自己知道",
           "weight": -2
         }
       ]
     },
     {
       "dimension": "EI",
-      "text": "你在等电梯时更常：",
+      "text": "在楼下碰到邻居，你：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "和同事聊两句",
+          "text": "站着聊一会儿",
           "weight": 2
         },
         {
-          "text": "点头打招呼",
+          "text": "打个招呼",
           "weight": 1
         },
         {
-          "text": "看手机",
+          "text": "点头就走",
           "weight": -1
         },
         {
-          "text": "站远一点，不想说话",
+          "text": "尽量错开",
           "weight": -2
         }
       ]
@@ -2351,24 +2351,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "EI",
-      "text": "你更怕哪一种：",
+      "text": "如果一周不能出门，你会：",
       "leftChar": "E",
       "rightChar": "I",
       "options": [
         {
-          "text": "一整天没人说话",
+          "text": "憋得慌，想找人",
           "weight": 2
         },
         {
-          "text": "周末没人约",
+          "text": "有点闷",
           "weight": 1
         },
         {
-          "text": "被人一直拉着聊",
+          "text": "还行，能自己安排",
           "weight": -1
         },
         {
-          "text": "连续几天都在应酬",
+          "text": "求之不得",
           "weight": -2
         }
       ]
@@ -6287,24 +6287,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "TF",
-      "text": "你更愿意被人称为：",
+      "text": "同事更常说你：",
       "leftChar": "T",
       "rightChar": "F",
       "options": [
         {
-          "text": "有原则的人",
+          "text": "想得清楚",
           "weight": 2
         },
         {
-          "text": "靠得住的人",
+          "text": "办事靠谱",
           "weight": 1
         },
         {
-          "text": "好相处的人",
+          "text": "说话温和",
           "weight": -1
         },
         {
-          "text": "很温暖的人",
+          "text": "很会照顾人",
           "weight": -2
         }
       ]
@@ -6887,24 +6887,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "TF",
-      "text": "你更愿意被评价为：",
+      "text": "你希望领导怎么看你：",
       "leftChar": "T",
       "rightChar": "F",
       "options": [
         {
-          "text": "头脑清楚",
+          "text": "判断力强",
           "weight": 2
         },
         {
-          "text": "做事靠谱",
+          "text": "执行力强",
           "weight": 1
         },
         {
-          "text": "待人友善",
+          "text": "好相处",
           "weight": -1
         },
         {
-          "text": "很有人情味",
+          "text": "有温度",
           "weight": -2
         }
       ]
@@ -7127,24 +7127,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "TF",
-      "text": "你更希望朋友怎么跟你说话：",
+      "text": "朋友之间 AA 制，你怎么看：",
       "leftChar": "T",
       "rightChar": "F",
       "options": [
         {
-          "text": "有话直说",
+          "text": "该算清楚",
           "weight": 2
         },
         {
-          "text": "讲事实",
+          "text": "谁方便谁先付",
           "weight": 1
         },
         {
-          "text": "温和一点",
+          "text": "轮流请",
           "weight": -1
         },
         {
-          "text": "多体谅我",
+          "text": "不用算太细",
           "weight": -2
         }
       ]
@@ -7175,24 +7175,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "TF",
-      "text": "你最不想被人说成：",
+      "text": "朋友做了对不起你的事，你更：",
       "leftChar": "T",
       "rightChar": "F",
       "options": [
         {
-          "text": "太冷、不讲情面",
+          "text": "先把事情说清",
           "weight": 2
         },
         {
-          "text": "只认道理、不留余地",
+          "text": "看他还想不想处",
           "weight": 1
         },
         {
-          "text": "有点距离感、不好接近",
+          "text": "会难过很久",
           "weight": -1
         },
         {
-          "text": "不近人情、不顾别人",
+          "text": "舍不得翻脸",
           "weight": -2
         }
       ]
@@ -8423,24 +8423,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更喜欢的日程表是：",
+      "text": "你的钥匙和门卡通常：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
         {
-          "text": "每小时都有安排",
+          "text": "固定放在一处",
           "weight": 2
         },
         {
-          "text": "大致排好顺序",
+          "text": "在包里固定位置",
           "weight": 1
         },
         {
-          "text": "只记几个必须的",
+          "text": "随手一放",
           "weight": -1
         },
         {
-          "text": "基本不记",
+          "text": "常常找不到",
           "weight": -2
         }
       ]
@@ -8927,24 +8927,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样开始一天：",
+      "text": "你对重复的日常：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
         {
-          "text": "按固定流程来",
+          "text": "喜欢稳定，按部就班",
           "weight": 2
         },
         {
-          "text": "先做最重要的",
+          "text": "有固定节奏就好",
           "weight": 1
         },
         {
-          "text": "看心情",
+          "text": "容易腻",
           "weight": -1
         },
         {
-          "text": "醒了再说",
+          "text": "受不了，总想变",
           "weight": -2
         }
       ]
@@ -9023,7 +9023,7 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样处理邮件：",
+      "text": "你的收件箱通常：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
@@ -9047,24 +9047,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样开始一个新项目：",
+      "text": "你对“随性”这件事：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
         {
-          "text": "先写详细计划",
+          "text": "不太习惯，喜欢有谱",
           "weight": 2
         },
         {
-          "text": "先定阶段目标",
+          "text": "偶尔随性一下",
           "weight": 1
         },
         {
-          "text": "先做个小样",
+          "text": "挺喜欢",
           "weight": -1
         },
         {
-          "text": "边做边想",
+          "text": "越随性越好",
           "weight": -2
         }
       ]
@@ -9119,24 +9119,24 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样准备一次汇报：",
+      "text": "家里有东西坏了，你：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
         {
-          "text": "提前写好稿、练几遍",
+          "text": "马上找人修",
           "weight": 2
         },
         {
-          "text": "列好要点",
+          "text": "记下来找时间修",
           "weight": 1
         },
         {
-          "text": "临场组织语言",
+          "text": "先放着",
           "weight": -1
         },
         {
-          "text": "上去再说",
+          "text": "一直拖着",
           "weight": -2
         }
       ]
@@ -9167,7 +9167,7 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样处理账单：",
+      "text": "账单到期这件事，你：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
@@ -9239,48 +9239,48 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样处理突发任务：",
+      "text": "你对排队的忍耐度：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
         {
-          "text": "立刻调整计划",
+          "text": "提前预约，尽量不排",
           "weight": 2
         },
         {
-          "text": "先做完手上的",
+          "text": "能接受，会规划",
           "weight": 1
         },
         {
-          "text": "看急不急",
+          "text": "排就排",
           "weight": -1
         },
         {
-          "text": "放一放再说",
+          "text": "完全无所谓",
           "weight": -2
         }
       ]
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样保存文件：",
+      "text": "你的浏览器标签页通常：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
         {
-          "text": "统一命名规则",
+          "text": "开几个就关",
           "weight": 2
         },
         {
-          "text": "按项目分文件夹",
+          "text": "控制在几个以内",
           "weight": 1
         },
         {
-          "text": "随手存在桌面",
+          "text": "开一堆",
           "weight": -1
         },
         {
-          "text": "不存，用完就删",
+          "text": "几十个也不关",
           "weight": -2
         }
       ]
@@ -9335,7 +9335,7 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样处理承诺：",
+      "text": "答应别人的事，你：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
@@ -9455,7 +9455,7 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样处理旧物：",
+      "text": "家里的旧东西，你：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
@@ -9551,7 +9551,7 @@ const MBTI_DATA = {
     },
     {
       "dimension": "JP",
-      "text": "你更愿意怎样处理单据：",
+      "text": "报销单据你通常：",
       "leftChar": "J",
       "rightChar": "P",
       "options": [
