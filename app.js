@@ -987,6 +987,11 @@ window.toggleMusic = function() {
         if (!code) return;
         const cnt = counts[code] ?? 0;
         b.textContent = `🌐 ${cnt}`;
+        if (cnt > 0) {
+          b.classList.remove('bump');
+          void b.offsetWidth;   // 强制重排，让动画可以重复触发
+          b.classList.add('bump');
+        }
       });
     } catch(e) {
       console.warn('[Counter] refresh error:', e);
