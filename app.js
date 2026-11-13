@@ -1194,7 +1194,7 @@ window.toggleMusic = function() {
     ctx.fillText('kwdaj.github.io/mbti-40', W / 2, 1340);
     ctx.fillStyle = 'rgba(255,255,255,0.28)';
     ctx.font = `400 24px ${font}`;
-    ctx.fillText('40 种人格 · 200 道题库 · 三重测评体系', W / 2, 1388);
+    ctx.fillText('40 种人格 · 400 道题库 · 三重测评体系', W / 2, 1388);
 
     // 边框
     ctx.strokeStyle = 'rgba(255,255,255,0.1)';
