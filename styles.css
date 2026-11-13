@@ -1707,3 +1707,65 @@ body.result-active .music-btn {
   box-shadow: 0 0 20px rgba(var(--tag-glow), 0.46),
               inset 0 0 10px rgba(var(--tag-glow), 0.14);
 }
+
+/* ===== v30：首页人格格子 / 详情页顶部 chip / 模式卡片光效 ===== */
+
+/* 1. 首页 40 个人格格子：常驻柔光，悬停亮起该人格主色 */
+.preview-item {
+  box-shadow: 0 4px 14px -6px rgba(102, 126, 234, 0.45);
+}
+.preview-item:hover {
+  border-color: var(--hero, #667eea);
+  box-shadow: 0 0 18px -2px var(--hero, #667eea),
+              0 8px 22px -8px rgba(0, 0, 0, 0.65);
+}
+
+/* 2. 详情页顶部两个 chip：白色呼吸光，和核心特质标签呼应 */
+.pm-chip {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.16),
+              inset 0 0 8px rgba(255, 255, 255, 0.06);
+  animation: chipBreath 4.4s ease-in-out infinite;
+}
+.pm-chip:nth-child(2) { animation-delay: 0.8s; }
+
+@keyframes chipBreath {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.14),
+                inset 0 0 6px rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.36),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.42);
+  }
+}
+
+/* 3. 模式卡片：选中态外面套一层呼吸光晕（用伪元素，不影响入场动画） */
+.mode-card.selected::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow: 0 0 18px rgba(102, 126, 234, 0.55),
+              0 0 34px rgba(118, 75, 162, 0.32);
+  animation: cardHalo 3.8s ease-in-out infinite;
+}
+@keyframes cardHalo {
+  0%, 100% { opacity: 0.42; }
+  50%      { opacity: 1; }
+}
+.mode-card.selected { z-index: 1; }
+
+/* 推荐 / 最全面 徽章发光 */
+.mode-badge {
+  box-shadow: 0 0 12px rgba(118, 75, 162, 0.6),
+              0 2px 8px rgba(0, 0, 0, 0.35);
+  animation: badgeGlow 3.2s ease-in-out infinite;
+}
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(118, 75, 162, 0.45), 0 2px 8px rgba(0,0,0,.35); }
+  50%      { box-shadow: 0 0 18px rgba(150, 110, 220, 0.85), 0 2px 8px rgba(0,0,0,.35); }
+}
