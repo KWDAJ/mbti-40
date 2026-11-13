@@ -1,8 +1,6 @@
 // ===== BGM 模块（人格专属） =====
 const Music = (function() {
   let audio = null;
-  let _ready = false;
-  let _muted = false;
   let _userPaused = false;
   let _currentSrc = '';
 
@@ -42,7 +40,6 @@ const Music = (function() {
     audio.loop = true;
     audio.preload = 'none';          // 用户点播放前不下载，移动端首屏省流量
     audio.volume = 0.31;
-    audio.addEventListener('canplaythrough', () => { _ready = true; });
     audio.addEventListener('error', (e) => { console.warn('BGM 加载失败', e); });
     _currentSrc = _currentSrc || DEFAULT_BGM;
     return audio;
@@ -69,8 +66,7 @@ const Music = (function() {
     a.preload = 'auto';
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => { _muted = false; })
-       .catch(() => { a.muted = true; a.play().catch(() => {}); });
+      p.catch(() => { a.muted = true; a.play().catch(() => {}); });
     }
   }
 
