@@ -1,8 +1,10 @@
 // ===== BGM 模块（人格专属） =====
 const Music = (function() {
   let audio = null;
-  let _userPaused = false;
   let _currentSrc = '';
+  let _autoMutedPlay = false;   // 本次会话是"静音偷跑"状态，等首次用户手势时解封
+
+  const USER_PREF_KEY = 'mbti_music_pref_v1';   // { userPaused: bool, muted: bool }
 
   // 人格→音乐文件映射（新生成的 13 个；还没生成的 11 个为空，用默认兜底）
   const BGM_MAP = {
@@ -34,53 +36,126 @@ const Music = (function() {
   };
   const DEFAULT_BGM = 'bgm.mp3?v=1';
 
+  function _loadPref() {
+    try { return JSON.parse(localStorage.getItem(USER_PREF_KEY) || 'null') || {}; }
+    catch(e) { return {}; }
+  }
+  function _savePref(p) {
+    try { localStorage.setItem(USER_PREF_KEY, JSON.stringify(p)); } catch(e) {}
+  }
+
   function ensureAudio() {
     if (audio) return audio;
     audio = new Audio(_currentSrc || DEFAULT_BGM);
     audio.loop = true;
-    audio.preload = 'none';          // 用户点播放前不下载，移动端首屏省流量
+    audio.preload = 'auto';
     audio.volume = 0.31;
     audio.addEventListener('error', (e) => { console.warn('BGM 加载失败', e); });
+    audio.addEventListener('play',   syncUI);
+    audio.addEventListener('pause',  syncUI);
+    audio.addEventListener('volumechange', syncUI);
     _currentSrc = _currentSrc || DEFAULT_BGM;
     return audio;
   }
 
-  // 切换到指定人格的专属 BGM：只换 src，复用同一个实例，不加时间戳（否则每次都重新下载）
+  // 同步按钮状态 / 波动条 / _currentMode——统一以 audio 的真实状态为准
+  function syncUI() {
+    const btn = document.getElementById('musicBtn');
+    const bars = document.getElementById('musicBars');
+    if (!btn) return;
+    const playing = !!(audio && !audio.paused);
+    const muted   = !!(audio && audio.muted);
+    if (playing) { btn.classList.add('playing'); btn.classList.remove('muted'); bars?.classList.remove('hidden'); }
+    else         { btn.classList.remove('playing'); btn.classList.add('muted'); bars?.classList.add('hidden'); }
+    if (muted)   btn.classList.add('muted');   else btn.classList.remove('muted');
+    Music._currentMode = playing ? 'playing' : 'muted';
+  }
+
+  // 切换到指定人格的专属 BGM：只换 src，复用同一个实例，不加时间戳
   function switchTo(mbtiCode) {
     const src = BGM_MAP[mbtiCode] || DEFAULT_BGM;
     if (_currentSrc === src) return;
     _currentSrc = src;
-    if (!audio) return;              // 还没开音乐：只记住目标曲目，不发任何请求
-    const prevPlaying = !audio.paused && !_userPaused;
+    if (!audio) return;
+    const wasPlaying = !audio.paused;
     const prevVolume = audio.volume;
+    const prevMuted  = audio.muted;
     audio.pause();
     audio.src = src;
     audio.volume = prevVolume;
-    if (prevPlaying) audio.play().catch(() => {});
+    audio.muted  = prevMuted;
+    if (wasPlaying) audio.play().catch(() => {});
   }
 
+  // 用户意图：开始播放（不再管自动播放策略）
   function play() {
     const a = ensureAudio();
-    _userPaused = false;
-    _currentMode = 'playing';
+    _autoMutedPlay = false;
+    _savePref({ userPaused: false, muted: false });
+    a.muted = false;
+    a.volume = 0.31;
     a.preload = 'auto';
-    const p = a.play();
-    if (p && typeof p.then === 'function') {
-      p.catch(() => { a.muted = true; a.play().catch(() => {}); });
+    a.play().catch(() => {});
+  }
+
+  // 用户意图：暂停
+  function stop() {
+    if (audio) audio.pause();
+    _autoMutedPlay = false;
+    _savePref({ userPaused: true, muted: false });
+  }
+
+  // 把自动播放解封（首次用户交互时调用）
+  function _unmute() {
+    if (!audio || !audio.muted) return;
+    // 还在 _autoMutedPlay 状态下才解封：用户一旦手动静音过，就尊重他的选择
+    if (_autoMutedPlay) {
+      _autoMutedPlay = false;
+      audio.muted = false;
+      _savePref({ userPaused: false, muted: false });
     }
   }
 
-  function stop() {
-    _userPaused = true;
-    _currentMode = 'muted';
-    if (audio) audio.pause();
-  }
-
   function init() {
-    // 不自动播放、不预加载：移动端首屏省流量，也避免 938KB 的 bgm.mp3 拖慢加载
-    _currentMode = 'muted';
-    const btn = document.getElementById('musicBtn');
-    if (btn) btn.classList.add('muted');
+    const pref = _loadPref();
+    if (pref.userPaused) {
+      // 用户明确选过暂停：尊重他，不自动播
+      _currentMode = 'muted';
+      ensureAudio();    // 还是创建实例，让按钮能点开
+      audio.muted = true;
+      syncUI();
+      return;
+    }
+
+    // 1. 创建实例，preload=auto
+    ensureAudio();
+    _currentMode = 'playing';
+
+    // 2. 先静音偷跑（iOS/Safari 只允许 muted 自动播）
+    audio.muted = true;
+    _autoMutedPlay = true;
+    audio.play().catch(() => {
+      // 极少数浏览器连 muted 自动播都拦——按钮还是 playable，等用户手动点
+      _autoMutedPlay = false;
+      audio.muted = false;
+      _currentMode = 'muted';
+    }).then(() => {
+      syncUI();
+    });
+
+    // 3. 任意用户交互时解封静音（第一次就 fire 后移除，避免重复）
+    const unlock = () => {
+      _unmute();
+      document.removeEventListener('click', unlock, true);
+      document.removeEventListener('touchstart', unlock, true);
+      document.removeEventListener('keydown', unlock, true);
+    };
+    document.addEventListener('click', unlock, true);
+    document.addEventListener('touchstart', unlock, true);
+    document.addEventListener('keydown', unlock, true);
+
+    // 4. 音频事件也会触发 syncUI，确保按钮状态始终对得上
+    syncUI();
   }
 
   let _currentMode = 'muted';
@@ -92,26 +167,12 @@ const Music = (function() {
   };
 })();
 
-// 全局控制
+// 全局控制（按钮状态由 audio.play/pause 事件通过 syncUI 自动同步，这里只负责意图）
 window.toggleMusic = function() {
   try {
-    const btn = document.getElementById('musicBtn');
-    const bars = document.getElementById('musicBars');
-    if (!btn) return;
-
-    if (Music._currentMode === 'playing') {
-      Music.stop();
-      Music._currentMode = 'muted';
-      btn.classList.remove('playing');
-      btn.classList.add('muted');
-      bars?.classList.add('hidden');
-    } else {
-      Music.play();
-      Music._currentMode = 'playing';
-      btn.classList.add('playing');
-      btn.classList.remove('muted');
-      bars?.classList.remove('hidden');
-    }
+    if (Music._currentMode === 'playing') Music.stop();
+    else Music.play();
+    // syncUI 在 play/stop 内部通过 audio 事件自动跑，不用手动改 class
   } catch (e) {
     console.warn('toggleMusic error', e);
   }
