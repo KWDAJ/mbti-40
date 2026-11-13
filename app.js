@@ -395,7 +395,7 @@ window.toggleMusic = function() {
   };
 
   // ===== 断点续测 + 本地历史 =====
-  const PROGRESS_KEY = 'mbti_progress_v1';
+  const PROGRESS_KEY = 'mbti_progress_v2';   // v2：题库换代，旧进度作废，避免旧题串进新题
   const HISTORY_KEY = 'mbti_history_v1';
 
   function readProgress() {
