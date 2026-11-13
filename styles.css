@@ -1195,7 +1195,7 @@ body.result-active .music-btn {
   width: 100%;
   max-width: 520px;
   max-height: 92vh;
-  background: var(--bg-card);
+  background: #141422;
   border-radius: 20px 20px 0 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1768,4 +1768,66 @@ body.result-active .music-btn {
 @keyframes badgeGlow {
   0%, 100% { box-shadow: 0 0 10px rgba(118, 75, 162, 0.45), 0 2px 8px rgba(0,0,0,.35); }
   50%      { box-shadow: 0 0 18px rgba(150, 110, 220, 0.85), 0 2px 8px rgba(0,0,0,.35); }
+}
+
+/* ===== v31：详情弹层外框呼吸光 / 内部 chip 收光 / 移动端降载 ===== */
+
+/* 1. 详情弹层外框：一圈很淡的呼吸光，让卡片边缘"活"起来 */
+.pm-sheet {
+  position: relative;
+  border-top-color: rgba(255, 255, 255, 0.12);
+  animation: sheetUp 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+             sheetHalo 5.4s ease-in-out 1.2s infinite;
+}
+@keyframes sheetHalo {
+  0%, 100% {
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.07),
+                0 -4px 16px rgba(140, 150, 255, 0.12);
+  }
+  50% {
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.20),
+                0 -4px 26px rgba(140, 150, 255, 0.34);
+  }
+}
+
+/* 2. 顶部两个 chip：光效整体调低一档，不再抢视线 */
+.pm-chip {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.07),
+              inset 0 0 5px rgba(255, 255, 255, 0.03);
+  animation: chipBreathSoft 5.2s ease-in-out infinite;
+}
+@keyframes chipBreathSoft {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.07),
+                inset 0 0 5px rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 11px rgba(255, 255, 255, 0.16),
+                inset 0 0 6px rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+}
+
+/* 3. 移动端降载：全屏渐变漂移、logo 发光动画和毛玻璃最吃 GPU */
+@media (max-width: 768px) {
+  .bg-gradient { animation: none; }
+  .logo-icon svg { animation: logoSpin 12s linear infinite; }
+  .intro-card,
+  .test-header,
+  .result-header,
+  .resume-card,
+  .music-btn,
+  .personality-modal,
+  .share-modal {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-sheet { animation: sheetUp 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
 }
