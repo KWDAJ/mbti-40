@@ -38,95 +38,59 @@ const Music = (function() {
 
   function ensureAudio() {
     if (audio) return audio;
-    audio = new Audio(DEFAULT_BGM);
+    audio = new Audio(_currentSrc || DEFAULT_BGM);
     audio.loop = true;
-    audio.preload = 'auto';
+    audio.preload = 'none';          // 用户点播放前不下载，移动端首屏省流量
     audio.volume = 0.31;
     audio.addEventListener('canplaythrough', () => { _ready = true; });
     audio.addEventListener('error', (e) => { console.warn('BGM 加载失败', e); });
-    _currentSrc = DEFAULT_BGM;
+    _currentSrc = _currentSrc || DEFAULT_BGM;
     return audio;
   }
 
-  // 切换到指定人格的专属 BGM
+  // 切换到指定人格的专属 BGM：只换 src，复用同一个实例，不加时间戳（否则每次都重新下载）
   function switchTo(mbtiCode) {
-    const src = (BGM_MAP[mbtiCode] || DEFAULT_BGM) + '?v=' + Date.now().toString(36);
-    if (_currentSrc === src) return;  // 已经是这个了，不重复切
+    const src = BGM_MAP[mbtiCode] || DEFAULT_BGM;
+    if (_currentSrc === src) return;
     _currentSrc = src;
-
-    const prevPlaying = audio && !audio.paused;
-    const prevVolume = audio ? audio.volume : 0.31;
-
-    // 停掉旧的（不要设 src=''，某些浏览器会触发 error 事件造成假警告）
-    if (audio) {
-      audio.pause();
-      try { audio.removeAttribute('src'); audio.load(); } catch(e) {}
-      audio = null;
-    }
-
-    // 建新的
-    audio = new Audio(src);
-    audio.loop = true;
-    audio.preload = 'auto';
+    if (!audio) return;              // 还没开音乐：只记住目标曲目，不发任何请求
+    const prevPlaying = !audio.paused && !_userPaused;
+    const prevVolume = audio.volume;
+    audio.pause();
+    audio.src = src;
     audio.volume = prevVolume;
-    audio.addEventListener('canplaythrough', () => { _ready = true; });
-    audio.addEventListener('error', () => { console.warn('人格BGM加载失败，回退默认'); });
-
-    if (prevPlaying && !_userPaused) {
-      audio.play().catch(() => {
-        audio.muted = true; audio.play().catch(() => {}); audio.muted = false;
-      });
-    }
+    if (prevPlaying) audio.play().catch(() => {});
   }
 
   function play() {
     const a = ensureAudio();
     _userPaused = false;
-    a.muted = false;
+    _currentMode = 'playing';
+    a.preload = 'auto';
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => { _muted = false; _userPaused = false; })
-       .catch(() => { a.muted = true; _muted = true; a.play().catch(() => {}); });
+      p.then(() => { _muted = false; })
+       .catch(() => { a.muted = true; a.play().catch(() => {}); });
     }
   }
 
   function stop() {
-    if (!audio) ensureAudio();
     _userPaused = true;
-    audio.pause();
+    _currentMode = 'muted';
+    if (audio) audio.pause();
   }
-
-  // 兼容旧调用（返回值已被 switchTo 取代，这里只占位防止 ReferenceError）
-  function defaultStyle() { return null; }
-  function testStyle() { return null; }
-
-  function setStyle(code) { switchTo(code); }
-  function crossfadeTo(code) { switchTo(code); }
-  function styleFromMBTI(code) { return code; }
 
   function init() {
-    _currentMode = 'playing';
-    play();
-    const unlock = () => {
-      if (_muted && !_userPaused) {
-        const a = ensureAudio();
-        a.muted = false; _muted = false;
-        a.play().catch(() => {});
-      }
-      document.removeEventListener('click', unlock, true);
-      document.removeEventListener('touchstart', unlock, true);
-      document.removeEventListener('keydown', unlock, true);
-    };
-    document.addEventListener('click', unlock, true);
-    document.addEventListener('touchstart', unlock, true);
-    document.addEventListener('keydown', unlock, true);
+    // 不自动播放、不预加载：移动端首屏省流量，也避免 938KB 的 bgm.mp3 拖慢加载
+    _currentMode = 'muted';
+    const btn = document.getElementById('musicBtn');
+    if (btn) btn.classList.add('muted');
   }
 
-  let _currentMode = 'playing';
+  let _currentMode = 'muted';
 
   return {
-    init, play, stop, setStyle, crossfadeTo, switchTo,
-    styleFromMBTI, defaultStyle, testStyle,
+    init, play, stop, switchTo,
     get _currentMode() { return _currentMode; },
     set _currentMode(v) { _currentMode = v; }
   };
@@ -222,14 +186,10 @@ window.toggleMusic = function() {
     document.body.classList.remove('home-active', 'test-active', 'result-active');
     document.body.classList.add(id + '-active');
 
-    // 自动切换音乐风格（仅当当前在播放时）
+    // 自动切换音乐风格（仅当用户已经开着音乐）
     if (Music._currentMode === 'playing') {
-      if (id === 'home') {
-        Music.crossfadeTo(Music.defaultStyle());
-      } else if (id === 'test') {
-        Music.crossfadeTo(Music.testStyle());
-      }
-      // result 页的音乐在 showResult 里单独设置（需要人格）
+      if (id === 'home' || id === 'test') Music.switchTo(null);
+      // result 页的音乐在 showResult 里按人格单独设置
     }
   }
 
@@ -530,7 +490,7 @@ window.toggleMusic = function() {
     optionsArea.innerHTML = order.map((origIdx, i) => {
       const opt = q.options[origIdx];
       const isSelected = fromPrev && answerHistory[currentIndex] && answerHistory[currentIndex].weight === opt.weight;
-      return `<button class="option-btn${isSelected ? ' selected' : ''}" data-weight="${opt.weight}" onclick="selectOption(this)">
+      return `<button class="option-btn${isSelected ? ' selected' : ''}" data-weight="${opt.weight}" data-orig-idx="${origIdx}" onclick="selectOption(this)">
         <span class="option-label">${labels[i]}.</span>
         <span class="option-text">${opt.text}</span>
       </button>`;
@@ -544,7 +504,9 @@ window.toggleMusic = function() {
   }
 
   // ===== 选择选项 =====
+  let _advancing = false;   // 220ms 切题动画期间上锁，防止连点跳过题目
   window.selectOption = function(btn) {
+    if (_advancing) return;
     const weight = parseInt(btn.dataset.weight, 10);
     const q = testQuestions[currentIndex];
 
@@ -565,7 +527,9 @@ window.toggleMusic = function() {
     document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
 
+    _advancing = true;
     setTimeout(() => {
+      _advancing = false;
       currentIndex++;
       if (currentIndex < testQuestions.length) {
         saveProgress();
@@ -578,7 +542,7 @@ window.toggleMusic = function() {
 
   // ===== 返回上一题 =====
   window.prevQuestion = function() {
-    if (currentIndex === 0) return;
+    if (_advancing || currentIndex === 0) return;
     currentIndex--;
     saveProgress();
     renderQuestion(true);  // true 表示从返回进入
@@ -952,12 +916,8 @@ window.toggleMusic = function() {
       });
     });
 
-    // 根据人格切换专属音乐风格
-    if (Music._currentMode === 'playing') {
-      const targetCode = lookupCode; // 可能是 "INTJ" 或 "HYBRID_EI"
-      const style = Music.styleFromMBTI(targetCode);
-      Music.crossfadeTo(style, 400);
-    }
+    // 根据人格切换专属音乐（用户没开音乐时 switchTo 不会发请求）
+    if (Music._currentMode === 'playing') Music.switchTo(lookupCode);
 
     // ===== 测完 +1 计数 =====
     try { Counter.hit(lookupCode); } catch(e) {}
@@ -1287,8 +1247,8 @@ window.toggleMusic = function() {
   // ===== Counter 模块：Trae（服务端代理）/ GitHub Pages（静态）双模式 =====
   const Counter = (function() {
     const LS_KEY = 'mbti_site_counts_v1';
-    const CFG_KEY = 'mbti_counter_config_v1';
     const DELTA_CACHE_KEY = 'mbti_deltas_cache_v1';
+    const TOTALS_CACHE_KEY = 'mbti_totals_cache_v1';
     const PENDING_KEY = 'mbti_hit_pending_v1';
     const HIT_DAY_KEY = 'mbti_last_hit_day_v1';
 
@@ -1329,8 +1289,12 @@ window.toggleMusic = function() {
     async function _readDelta(code, attempts) {
       const tries = attempts || 3;
       for (let i = 0; i < tries; i++) {
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 4000);   // 移动网络卡住时 4 秒就放弃，不拖住整批
         try {
-          const r = await fetch(ABACUS + '/get/' + NS + '/' + encodeURIComponent(code), { cache: 'no-store' });
+          const r = await fetch(ABACUS + '/get/' + NS + '/' + encodeURIComponent(code), {
+            cache: 'no-store', signal: ctl.signal
+          });
           if (r.status === 404) return 0;          // key 未定义 = 还没人测过
           if (!r.ok) throw new Error('http ' + r.status);
           const j = await r.json();
@@ -1338,7 +1302,9 @@ window.toggleMusic = function() {
           return Number.isFinite(v) ? v : 0;
         } catch(e) {
           if (i === tries - 1) return null;
-          await sleep(180 * (i + 1) + Math.random() * 160);
+          await sleep(160 * (i + 1) + Math.random() * 140);
+        } finally {
+          clearTimeout(timer);
         }
       }
       return null;
@@ -1362,6 +1328,19 @@ window.toggleMusic = function() {
       } catch(e) {}
     }
 
+    // 上次算出来的总数（基线+增量），用来让首页先秒出数字，再去后台校正
+    function _loadTotalsCache() {
+      try {
+        const c = JSON.parse(localStorage.getItem(TOTALS_CACHE_KEY) || 'null');
+        if (c && c.totals && typeof c.totals === 'object') return c;
+      } catch(e) {}
+      return null;
+    }
+    function _saveTotalsCache(totals) {
+      try { localStorage.setItem(TOTALS_CACHE_KEY, JSON.stringify({ ts: Date.now(), totals })); } catch(e) {}
+    }
+    function cachedTotals() { return _loadTotalsCache(); }
+
     // 并发受限的 map
     async function _mapLimit(items, limit, fn) {
       const out = new Array(items.length);
@@ -1376,13 +1355,21 @@ window.toggleMusic = function() {
       return out;
     }
 
-    async function _readAllDeltas(force) {
+    async function _readAllDeltas(force, onDelta) {
       _loadDeltaCache();
-      if (!force && _deltas && Date.now() - _deltasAt < CACHE_TTL) return _deltas;
+      if (!force && _deltas && Date.now() - _deltasAt < CACHE_TTL) {
+        if (onDelta) Object.keys(_deltas).forEach(c => onDelta(c, _deltas[c]));
+        return _deltas;
+      }
 
       const codes = Object.keys(MBTI_DATA.personalities);
       const prev = _deltas || {};
-      const values = await _mapLimit(codes, MAX_CONCURRENCY, c => _readDelta(c));
+      // 批量读取只用 2 次尝试：40 个 key 的失败重试会把首屏拖到十几秒
+      const values = await _mapLimit(codes, MAX_CONCURRENCY, async c => {
+        const v = await _readDelta(c, 2);
+        if (v !== null && onDelta) onDelta(c, v);   // 谁先回来就先显示谁，不用等全部到齐
+        return v;
+      });
 
       const next = {};
       let okCount = 0;
@@ -1502,6 +1489,10 @@ window.toggleMusic = function() {
       if (STATIC_MODE) {
         const base = await _readBaseline();
         _loadDeltaCache();
+        // 5 分钟内刚拉过全部增量，直接复用，不再为一次弹窗多发请求
+        if (_deltas && Object.prototype.hasOwnProperty.call(_deltas, code) && Date.now() - _deltasAt < CACHE_TTL) {
+          return (Number(base[code]) || 0) + (Number(_deltas[code]) || 0);
+        }
         let delta = await _readDelta(code);
         if (delta === null) {
           delta = Number((_deltas && _deltas[code])) || 0;
@@ -1516,13 +1507,15 @@ window.toggleMusic = function() {
       return (readLocal()[code] || 0);
     }
 
-    async function getAll() {
+    async function getAll(onEach) {
       const codes = Object.keys(MBTI_DATA.personalities);
       const out = {};
       if (STATIC_MODE) {
         const base = await _readBaseline();
-        const deltas = await _readAllDeltas();
-        for (const c of codes) out[c] = (Number(base[c]) || 0) + (deltas[c] || 0);
+        const total = (c, delta) => (Number(base[c]) || 0) + (Number(delta) || 0);
+        const deltas = await _readAllDeltas(false, onEach ? (c, v) => onEach(c, total(c, v)) : null);
+        for (const c of codes) out[c] = total(c, deltas[c]);
+        _saveTotalsCache(out);
         return out;
       }
       const data = await _readCloud();
@@ -1537,58 +1530,64 @@ window.toggleMusic = function() {
     }
 
     async function resetLocal() { writeLocal({}); }
-    async function resetCloud() {
-      return false; // 云端重置仅能由服务端管理员操作
-    }
 
-    // 管理员面板用到的配置读写（存在 localStorage，仅影响本机）
-    function readConfig() {
-      const base = { mode: 'local', endpoint: '', getEndpoint: '', headers: '', method: 'POST' };
-      try { return Object.assign(base, JSON.parse(localStorage.getItem(CFG_KEY) || '{}')); }
-      catch(e) { return base; }
-    }
-    function writeConfig(cfg) {
-      localStorage.setItem(CFG_KEY, JSON.stringify(Object.assign(readConfig(), cfg)));
-    }
-
-    return { hit, get, getAll, flushPending, resetLocal, resetCloud, readConfig, writeConfig };
+    return { hit, get, getAll, flushPending, resetLocal, cachedTotals };
   })();
 
   // 刷新首页预览卡片上的计数
-  async function refreshPreviewCounts() {
+  function setCountText(el, cnt) {
+    if (!el) return;
+    const next = `🌐 ${cnt}`;
+    if (el.textContent !== next) el.textContent = next;
+  }
+
+  async function refreshPreviewCounts(isRetry) {
+    // 先把 code → 节点 建好，后面每条回来直接写，不做重复查询
+    const nodes = {};
+    document.querySelectorAll('.preview-count').forEach(b => {
+      const c = b.getAttribute('data-code');
+      if (c) nodes[c] = b;
+    });
+
+    // 1) 上次的总数先铺上，避免长时间停在「🌐 …」
+    const cached = Counter.cachedTotals();
+    if (cached && cached.totals) {
+      Object.keys(cached.totals).forEach(c => setCountText(nodes[c], cached.totals[c]));
+    }
+
+    try { Counter.flushPending(); } catch(e) {}
+
+    let filled = 0;
     try {
-      // 顺带补发上次失败的上报，不阻塞渲染
-      try { Counter.flushPending(); } catch(e) {}
-
-      let counts = null;
-      try {
-        const remote = await Counter.getAll();
-        if (remote && typeof remote === 'object' && Object.keys(remote).length) counts = remote;
-      } catch(e) {
-        console.info('[Counter] remote unreachable, keep current numbers');
-      }
-      // 拉取失败时保持原样，不要把已有数字刷成 0
-      if (!counts) {
-        document.querySelectorAll('.preview-count').forEach(b => {
-          if (!b.textContent || b.textContent === '🌐 0' || b.textContent === '🌐 …') b.textContent = '🌐 --';
-        });
-        return;
-      }
-
-      const items = document.querySelectorAll('.preview-count');
-      items.forEach(b => {
-        const code = b.getAttribute('data-code');
-        if (!code) return;
-        const cnt = counts[code] ?? 0;
-        b.textContent = `🌐 ${cnt}`;
-        if (cnt > 0) {
-          b.classList.remove('bump');
-          void b.offsetWidth;   // 强制重排，让动画可以重复触发
-          b.classList.add('bump');
-        }
+      // 2) 每拉到一个就立刻显示一个（onEach），最后再用完整结果兜底一次
+      const remote = await Counter.getAll((code, total) => {
+        if (!nodes[code]) return;
+        setCountText(nodes[code], total);
+        filled++;
       });
+      if (remote) {
+        Object.keys(nodes).forEach(c => {
+          if (typeof remote[c] === 'number') setCountText(nodes[c], remote[c]);
+        });
+      }
     } catch(e) {
-      console.warn('[Counter] refresh error:', e);
+      console.info('[Counter] remote unreachable, keep current numbers');
+    }
+
+    // 3) 一个都没拉到：标成 --，并延后重试一次（不阻塞首屏）
+    if (!filled) {
+      if (!isRetry) {
+        Object.keys(nodes).forEach(c => setCountText(nodes[c], '--'));
+        setTimeout(() => refreshPreviewCounts(true), 6000);
+      }
+    } else {
+      const missing = Object.keys(nodes).filter(c => /…|--/.test(nodes[c].textContent));
+      if (missing.length && !isRetry) {
+        Object.keys(nodes).forEach(c => {
+          if (/…/.test(nodes[c].textContent)) setCountText(nodes[c], '--');
+        });
+        setTimeout(() => refreshPreviewCounts(true), 6000);
+      }
     }
   }
 
@@ -1596,10 +1595,16 @@ window.toggleMusic = function() {
   const _origShowDetail = window.showPersonalityDetail;
   window.showPersonalityDetail = async function(code) {
     _origShowDetail(code);
+    const badge = document.getElementById('personalityCountBadge');
+    // 先显示缓存值，再让网络结果覆盖
+    const cached = Counter.cachedTotals();
+    if (badge && cached && cached.totals && typeof cached.totals[code] === 'number') {
+      badge.textContent = `🌐 本站已有 ${cached.totals[code]} 位访客测出`;
+    }
     try {
       const cnt = await Counter.get(code);
-      const badge = document.getElementById('personalityCountBadge');
-      if (badge) badge.textContent = `🌐 本站已有 ${cnt} 位访客测出`;
+      const el = document.getElementById('personalityCountBadge');
+      if (el) el.textContent = `🌐 本站已有 ${cnt} 位访客测出`;
     } catch(e) {}
   };
 
@@ -1653,7 +1658,6 @@ window.toggleMusic = function() {
   document.addEventListener('DOMContentLoaded', function() {
     initPreviewGrid();
     refreshPreviewCounts();
-    Music._currentMode = 'muted';
     Music.init();
     renderHomeState();
     bindShareButtons();
