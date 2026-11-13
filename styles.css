@@ -1379,9 +1379,9 @@ body.result-active .music-btn {
   transform: scale(1.22) rotate(-8deg);
 }
 
-/* 悬停光晕用卡片主色，按下有回弹 */
+/* 悬停光晕统一用品牌冷紫，不再跟随人格主色——否则暖色人格在黑底上发光显得格外猛，同组大小不一 */
 .preview-item:hover {
-  box-shadow: 0 10px 26px -8px var(--hero, #667eea),
+  box-shadow: 0 10px 26px -8px rgba(102, 126, 234, 0.55),
               0 0 0 1px rgba(255, 255, 255, 0.06) inset;
 }
 .preview-item:active {
@@ -1672,10 +1672,7 @@ body.result-active .music-btn {
 }
 .pm-tag.blue { --tag-glow: 52, 152, 219; }
 
-/* 错开相位，避免所有标签同时亮 */
-.pm-tag:nth-child(2n)   { animation-delay: 0.45s; }
-.pm-tag:nth-child(3n)   { animation-delay: 0.95s; }
-.pm-tag:nth-child(4n+1) { animation-delay: 1.45s; }
+/* 全部同相位呼吸，避免同一行里有的亮有的暗 */
 
 @keyframes tagBreath {
   0%, 100% {
@@ -1718,12 +1715,12 @@ body.result-active .music-btn {
   inset: -2px;
   border-radius: 18px;
   pointer-events: none;
-  box-shadow: 0 0 18px rgba(102, 126, 234, 0.55),
-              0 0 34px rgba(118, 75, 162, 0.32);
+  box-shadow: 0 0 14px rgba(102, 126, 234, 0.55),
+              0 0 22px rgba(118, 75, 162, 0.30);
   animation: cardHalo 3.8s ease-in-out infinite;
 }
 @keyframes cardHalo {
-  0%, 100% { opacity: 0.42; }
+  0%, 100% { opacity: 0.55; }
   50%      { opacity: 1; }
 }
 .mode-card.selected { z-index: 1; }
@@ -1735,8 +1732,8 @@ body.result-active .music-btn {
   animation: badgeGlow 3.2s ease-in-out infinite;
 }
 @keyframes badgeGlow {
-  0%, 100% { box-shadow: 0 0 10px rgba(118, 75, 162, 0.45), 0 2px 8px rgba(0,0,0,.35); }
-  50%      { box-shadow: 0 0 18px rgba(150, 110, 220, 0.85), 0 2px 8px rgba(0,0,0,.35); }
+  0%, 100% { box-shadow: 0 0 9px rgba(118, 75, 162, 0.40), 0 2px 8px rgba(0,0,0,.35); }
+  50%      { box-shadow: 0 0 13px rgba(150, 110, 220, 0.72), 0 2px 8px rgba(0,0,0,.35); }
 }
 
 /* ===== v31：详情弹层外框呼吸光 / 内部 chip 收光 / 移动端降载 ===== */
