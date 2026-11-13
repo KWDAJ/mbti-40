@@ -1671,3 +1671,39 @@ body.result-active .music-btn {
   padding: 0.7rem 0.4rem;
   border-radius: 12px;
 }
+
+/* ===== v29：标签边框呼吸光效 ===== */
+.pm-tag {
+  --tag-glow: 102, 126, 234;
+  position: relative;
+  box-shadow: 0 0 10px rgba(var(--tag-glow), 0.16),
+              inset 0 0 8px rgba(var(--tag-glow), 0.07);
+  animation: tagBreath 3.8s ease-in-out infinite;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.pm-tag.blue { --tag-glow: 52, 152, 219; }
+
+/* 错开相位，避免所有标签同时亮 */
+.pm-tag:nth-child(2n)   { animation-delay: 0.45s; }
+.pm-tag:nth-child(3n)   { animation-delay: 0.95s; }
+.pm-tag:nth-child(4n+1) { animation-delay: 1.45s; }
+
+@keyframes tagBreath {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(var(--tag-glow), 0.14),
+                inset 0 0 6px rgba(var(--tag-glow), 0.05);
+    border-color: rgba(var(--tag-glow), 0.28);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(var(--tag-glow), 0.38),
+                inset 0 0 10px rgba(var(--tag-glow), 0.12);
+    border-color: rgba(var(--tag-glow), 0.52);
+  }
+}
+
+.pm-tag:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--tag-glow), 0.62);
+  box-shadow: 0 0 20px rgba(var(--tag-glow), 0.46),
+              inset 0 0 10px rgba(var(--tag-glow), 0.14);
+}
