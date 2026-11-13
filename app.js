@@ -255,7 +255,7 @@ window.toggleMusic = function() {
         <span class="icon">${p.heroIcon || '✨'}</span>
         <span class="code">${code}</span>
         <span class="name">${p.name}</span>
-        <span class="preview-count" data-code="${code}">🌐 0</span>
+        <span class="preview-count" data-code="${code}">🌐 …</span>
       </div>`;
     }).join('');
   }
@@ -1298,7 +1298,7 @@ window.toggleMusic = function() {
     const NS = 'mbti40-live';
     const BASE_FILE = 'counts-baseline.json';
     const CACHE_TTL = 5 * 60 * 1000;   // 5 分钟内复用，避免频繁请求被限流
-    const MAX_CONCURRENCY = 3;         // 限并发，40 个 key 一次性打出去很容易失败
+    const MAX_CONCURRENCY = 6;         // 限并发，40 个 key 一次性打出去很容易失败
 
     let _baseline = null;
     let _deltas = null;
@@ -1570,7 +1570,7 @@ window.toggleMusic = function() {
       // 拉取失败时保持原样，不要把已有数字刷成 0
       if (!counts) {
         document.querySelectorAll('.preview-count').forEach(b => {
-          if (!b.textContent || b.textContent === '🌐 0') b.textContent = '🌐 --';
+          if (!b.textContent || b.textContent === '🌐 0' || b.textContent === '🌐 …') b.textContent = '🌐 --';
         });
         return;
       }
