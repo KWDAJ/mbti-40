@@ -585,6 +585,7 @@ window.toggleMusic = function() {
     if (_advancing || _finished) return;
     const q = testQuestions[currentIndex];
     if (!q) return;
+    const weight = parseInt(btn.dataset.weight, 10);
 
     // 如果这题之前已经选过（返回过），先撤掉旧答案
     if (answerHistory[currentIndex]) {
