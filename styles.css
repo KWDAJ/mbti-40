@@ -1199,7 +1199,6 @@ body.result-active .music-btn {
   border-radius: 20px 20px 0 0;
   overflow-y: auto;
   overflow-x: hidden;
-  animation: sheetUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
   border-top: 1px solid rgba(255,255,255,0.1);
 }
@@ -1388,16 +1387,6 @@ body.result-active .music-btn {
 .preview-item:active {
   transform: scale(0.95);
   transition-duration: 0.12s;
-}
-
-/* 3. 计数徽章：数值刷新时弹一下 */
-.preview-count.bump {
-  animation: countBump 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes countBump {
-  0%   { transform: scale(1); }
-  35%  { transform: scale(1.28); background: rgba(130, 160, 255, 0.45); }
-  100% { transform: scale(1); }
 }
 
 /* 4. 模式卡片：图标悬停呼吸 */
@@ -1720,27 +1709,7 @@ body.result-active .music-btn {
               0 8px 22px -8px rgba(0, 0, 0, 0.65);
 }
 
-/* 2. 详情页顶部两个 chip：白色呼吸光，和核心特质标签呼应 */
-.pm-chip {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.16),
-              inset 0 0 8px rgba(255, 255, 255, 0.06);
-  animation: chipBreath 4.4s ease-in-out infinite;
-}
-.pm-chip:nth-child(2) { animation-delay: 0.8s; }
-
-@keyframes chipBreath {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.14),
-                inset 0 0 6px rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 18px rgba(255, 255, 255, 0.36),
-                inset 0 0 10px rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.42);
-  }
-}
+/* 2. 详情页顶部 chip 的呼吸光已挪到文件末尾 v31 区块（统一调低亮度） */
 
 /* 3. 模式卡片：选中态外面套一层呼吸光晕（用伪元素，不影响入场动画） */
 .mode-card.selected::after {
@@ -1794,7 +1763,7 @@ body.result-active .music-btn {
 
 /* 2. 顶部两个 chip：光效整体调低一档，不再抢视线 */
 .pm-chip {
-  border-color: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.07),
               inset 0 0 5px rgba(255, 255, 255, 0.03);
   animation: chipBreathSoft 5.2s ease-in-out infinite;
