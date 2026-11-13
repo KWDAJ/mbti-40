@@ -36,10 +36,6 @@ const Music = (function() {
   };
   const DEFAULT_BGM = 'bgm.mp3?v=1';
 
-  function _loadPref() {
-    try { return JSON.parse(localStorage.getItem(USER_PREF_KEY) || 'null') || {}; }
-    catch(e) { return {}; }
-  }
   function _savePref(p) {
     try { localStorage.setItem(USER_PREF_KEY, JSON.stringify(p)); } catch(e) {}
   }
@@ -116,45 +112,44 @@ const Music = (function() {
     }
   }
 
-  function init() {
-    const pref = _loadPref();
-    if (pref.userPaused) {
-      // 用户明确选过暂停：尊重他，不自动播
-      _currentMode = 'muted';
-      ensureAudio();    // 还是创建实例，让按钮能点开
-      audio.muted = true;
-      syncUI();
-      return;
-    }
+  // 解封：任意用户手势（点击/触摸/按键/滚轮/滚动）都算
+  const UNLOCK_EVENTS = ['click','touchstart','touchend','pointerdown','mousedown','keydown','wheel','scroll','touchmove'];
+  function _bindUnlock() {
+    const unlock = () => {
+      _unmute();
+      UNLOCK_EVENTS.forEach(t => document.removeEventListener(t, unlock, true));
+    };
+    UNLOCK_EVENTS.forEach(t =>
+      document.addEventListener(t, unlock, { capture: true, passive: true })
+    );
+  }
 
-    // 1. 创建实例，preload=auto
+  function init() {
     ensureAudio();
     _currentMode = 'playing';
 
-    // 2. 先静音偷跑（iOS/Safari 只允许 muted 自动播）
-    audio.muted = true;
-    _autoMutedPlay = true;
-    audio.play().catch(() => {
-      // 极少数浏览器连 muted 自动播都拦——按钮还是 playable，等用户手动点
+    // 1. 先直接带声音自动播（浏览器若允许，一步到位）
+    audio.muted  = false;
+    audio.volume = 0.31;
+    audio.play().then(() => {
       _autoMutedPlay = false;
-      audio.muted = false;
-      _currentMode = 'muted';
-    }).then(() => {
       syncUI();
+    }).catch(() => {
+      // 2. 被浏览器拦截：静音偷跑，等首次用户手势立刻解封成有声
+      audio.muted = true;
+      _autoMutedPlay = true;
+      audio.play().then(() => {
+        syncUI();
+      }).catch(() => {
+        // 连静音播都被拦：保持实例可点，等用户点按钮
+        _autoMutedPlay = false;
+        audio.muted = false;
+        _currentMode = 'muted';
+        syncUI();
+      });
+      _bindUnlock();
     });
 
-    // 3. 任意用户交互时解封静音（第一次就 fire 后移除，避免重复）
-    const unlock = () => {
-      _unmute();
-      document.removeEventListener('click', unlock, true);
-      document.removeEventListener('touchstart', unlock, true);
-      document.removeEventListener('keydown', unlock, true);
-    };
-    document.addEventListener('click', unlock, true);
-    document.addEventListener('touchstart', unlock, true);
-    document.addEventListener('keydown', unlock, true);
-
-    // 4. 音频事件也会触发 syncUI，确保按钮状态始终对得上
     syncUI();
   }
 
