@@ -1067,7 +1067,7 @@ window.toggleMusic = function() {
     // 名称
     ctx.fillStyle = '#ffffff';
     ctx.font = `700 52px ${font}`;
-    ctx.fillText(p.name || '人格类型', W / 2, 480);
+    ctx.fillText(p.name || '人格类型', W / 2, 494);
 
     // 标语
     ctx.fillStyle = 'rgba(255,255,255,0.66)';
@@ -1114,7 +1114,7 @@ window.toggleMusic = function() {
       ctx.fillStyle = 'rgba(255,255,255,0.42)';
       ctx.fillText(d.r, W - 140, rowY + 26);
 
-      const barX = 200, barW = W - 400, barH = 16, barY = rowY + 10;
+      const barX = 200, barW = W - 420, barH = 16, barY = rowY + 10;
       ctx.fillStyle = 'rgba(255,255,255,0.1)';
       _roundRect(ctx, barX, barY, barW, barH, barH / 2);
       ctx.fill();
@@ -1130,8 +1130,8 @@ window.toggleMusic = function() {
       // 百分比
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
       ctx.font = `600 22px ${font}`;
-      ctx.textAlign = pct >= 50 ? 'right' : 'left';
-      ctx.fillText(pct + '%', barX + barW + 26, rowY + 26);
+      ctx.textAlign = 'right';
+      ctx.fillText(pct + '%', barX + barW + 22, rowY + 26);
 
       rowY += 82;
     });
