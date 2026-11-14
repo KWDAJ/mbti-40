@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="description" content="MBTI 40型人格测试 - 大五+九型+MBTI 三重人格体系">
 <meta name="theme-color" content="#0f0f1a">
-<title>MBTI 40型人格测试 · v39</title>
+<title>MBTI 40型人格测试 · v41</title>
 
 <!-- 社交分享预览（微信内需公众号 JS-SDK 才能定制，此处覆盖 QQ / 微博 / Telegram / Discord 等） -->
 <meta property="og:type" content="website">
@@ -25,7 +25,7 @@
 <meta name="twitter:image" content="https://kwdaj.github.io/mbti-40/og-cover.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="https://kwdaj.github.io/mbti-40/og-cover.png">
-<link rel="stylesheet" href="styles.css?v=28">
+<link rel="stylesheet" href="styles.css?v=30">
 </head>
 <body>
 <!-- 全局音乐控件 -->
@@ -64,6 +64,17 @@
       <div class="intro-card">
         <p>探索你的性格密码，发现真正的自己</p>
         <p class="intro-detail">四个维度各 100 道、共 400 道题库 · 三重体系：MBTI 16标准 + 大五 OCEAN + 九型人格</p>
+      </div>
+
+      <!-- 更新公告（内容由 app.js 渲染） -->
+      <div class="notice-board" id="noticeBoard" aria-expanded="false">
+        <button class="nb-head" onclick="toggleNotice()" aria-label="展开更新公告">
+          <span class="nb-icon">📢</span>
+          <span class="nb-title">更新公告</span>
+          <span class="nb-latest" id="nbLatest"></span>
+          <span class="nb-arrow">▾</span>
+        </button>
+        <div class="nb-body" id="nbBody"></div>
       </div>
 
       <!-- 继续上次测试（有未完成记录时由 JS 渲染） -->
@@ -173,7 +184,7 @@
   </div>
 </div>
 
-<script src="mbti-data.js?v=23"></script>
-<script src="app.js?v=35"></script>
+<script src="mbti-data.js?v=24"></script>
+<script src="app.js?v=37"></script>
 </body>
 </html>

@@ -606,8 +606,8 @@ body {
 
 @keyframes charInGlow {
   0%   { opacity: 0; transform: translateY(30px) scale(0.6); text-shadow: 0 0 0 rgba(255,255,255,0); }
-  50%  { opacity: 1; transform: translateY(-6px) scale(1.15); text-shadow: 0 0 30px rgba(102, 126, 234, 0.9), 0 0 60px rgba(118, 75, 162, 0.5); }
-  100% { opacity: 1; transform: translateY(0) scale(1); text-shadow: 0 0 15px rgba(102, 126, 234, 0.4); }
+  50%  { opacity: 1; transform: translateY(-6px) scale(1.15); text-shadow: 0 0 30px var(--char-glow, rgba(102, 126, 234, 0.9)), 0 0 60px var(--char-glow-soft, rgba(118, 75, 162, 0.5)); }
+  100% { opacity: 1; transform: translateY(0) scale(1); text-shadow: 0 0 15px var(--char-glow-soft, rgba(102, 126, 234, 0.4)); }
 }
 
 .result-name {
@@ -1175,21 +1175,17 @@ body.result-active .music-btn {
 /* ===== 人格详情模态框 ===== */
 .personality-modal {
   position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(9, 9, 16, 0.88);
   backdrop-filter: blur(6px);
   z-index: 2000;
   display: none;
   align-items: flex-end;
   justify-content: center;
-  animation: modalFade 0.2s ease;
 }
 .personality-modal.open {
   display: flex;
 }
-@keyframes modalFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+/* modalFade 已移除：整层 opacity 动画会让不透明卡片透出背景，观感是「闪一下」 */
 
 .pm-sheet {
   width: 100%;
@@ -1742,21 +1738,10 @@ body.result-active .music-btn {
 .pm-sheet {
   position: relative;
   border-top-color: rgba(255, 255, 255, 0.12);
-  animation: sheetUp 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-             sheetHalo 5.4s ease-in-out 1.2s infinite;
+  animation: sheetUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
-@keyframes sheetHalo {
-  0%, 100% {
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.07),
-                0 -4px 16px rgba(140, 150, 255, 0.12);
-  }
-  50% {
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.20),
-                0 -4px 26px rgba(140, 150, 255, 0.34);
-  }
-}
+/* sheetHalo 已移除：无限 box-shadow 动画会在手机上造成整块卡片明暗抖动 */
 
 /* 2. 顶部两个 chip：光效整体调低一档，不再抢视线 */
 .pm-chip {
@@ -1787,7 +1772,6 @@ body.result-active .music-btn {
   .result-header,
   .resume-card,
   .music-btn,
-  .personality-modal,
   .share-modal {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -1797,3 +1781,170 @@ body.result-active .music-btn {
 @media (prefers-reduced-motion: reduce) {
   .pm-sheet { animation: sheetUp 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
 }
+
+/* ===== 稀有型：隐藏维度强度（±4 分，中线中立）===== */
+.hidden-dims {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem 1.6rem;
+  margin-top: 0.4rem;
+}
+@media (max-width: 600px) {
+  .hidden-dims { grid-template-columns: 1fr; }
+}
+.hd-row { font-size: 0.75rem; color: var(--text-muted); }
+.hd-row.hd-hit { color: #f0b429; }
+.hd-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.hd-track {
+  position: relative;
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.hd-mid {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.28);
+}
+.hd-fill { position: absolute; top: 0; bottom: 0; border-radius: 5px; }
+.hd-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 0.6rem;
+}
+
+/* ===== 音乐按钮：结果页停靠到顶部标题栏右侧（不再压卡片），测试页降干扰 ===== */
+body.scrolling .music-btn {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+body.test-active .music-btn {
+  opacity: 0.34;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
+}
+body.test-active .music-btn:hover,
+body.test-active .music-btn.playing {
+  opacity: 0.95;
+}
+body.result-active .music-btn {
+  top: max(14px, env(safe-area-inset-top, 0px) + 14px) !important;
+  bottom: auto !important;
+  right: 12px !important;
+  width: 40px;
+  height: 40px;
+  opacity: 0.55;
+  z-index: 1010;
+}
+body.result-active .music-btn:hover,
+body.result-active .music-btn.playing {
+  opacity: 1;
+}
+body.result-active .music-btn svg { width: 18px; height: 18px; }
+@media (max-width: 600px) {
+  body.test-active .music-btn {
+    width: 38px;
+    height: 38px;
+    right: 10px !important;
+    bottom: max(10px, env(safe-area-inset-bottom, 0px) + 10px) !important;
+  }
+  body.test-active .music-btn svg { width: 17px; height: 17px; }
+  body.result-active .music-btn {
+    top: max(12px, env(safe-area-inset-top, 0px) + 12px) !important;
+    right: 10px !important;
+    width: 36px;
+    height: 36px;
+  }
+}
+/* ===== 弹层防闪：卡片内不再跑无限呼吸光，改为静态光（保留 hover 反馈）===== */
+.personality-modal .pm-tag,
+.personality-modal .pm-chip {
+  animation: none;
+}
+/* 手机端遮罩不用毛玻璃：地址栏收起/滚动会触发整层重新模糊，观感是整屏闪一下。
+   0.88 的实色遮罩已经够暗，不依赖模糊 */
+@media (max-width: 768px) {
+  .personality-modal,
+  .personality-modal.open {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ===== 首页更新公告栏 ===== */
+.notice-board {
+  margin: 1rem 0 0.2rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.10), rgba(118, 75, 162, 0.07));
+  border: 1px solid rgba(140, 150, 255, 0.22);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.nb-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 0.95rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #e8e8f0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: left;
+  font-family: inherit;
+}
+.nb-head:hover { background: rgba(255, 255, 255, 0.04); }
+.nb-icon { flex: 0 0 auto; font-size: 0.95rem; }
+.nb-title { flex: 0 0 auto; letter-spacing: 0.02em; }
+.nb-latest {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #9aa3d4;
+  font-weight: 500;
+  font-size: 0.73rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-arrow {
+  flex: 0 0 auto;
+  color: #9aa3d4;
+  font-size: 0.8rem;
+  transition: transform 0.25s ease;
+}
+.notice-board.open .nb-arrow { transform: rotate(180deg); }
+.nb-body { display: none; padding: 0 0.95rem 0.9rem; }
+.notice-board.open .nb-body { display: block; }
+.nb-ver { padding: 0.7rem 0; border-top: 1px dashed rgba(255, 255, 255, 0.09); }
+.nb-body .nb-ver:first-child { border-top: none; padding-top: 0.2rem; }
+.nb-ver-head { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem; }
+.nb-ver-no { font-size: 0.8rem; font-weight: 800; color: #c0c8ff; }
+.nb-ver-date { font-size: 0.68rem; color: #7d84a8; }
+.nb-li {
+  display: flex;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  line-height: 1.7;
+  color: #b9bfd6;
+  margin-bottom: 0.15rem;
+}
+.nb-tag {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin-top: 0.22rem;
+  font-size: 0.64rem;
+  line-height: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.3rem;
+  border-radius: 5px;
+  font-weight: 700;
+}
+.nb-tag.add { color: #7ee2b8; background: rgba(52, 199, 123, 0.14); }
+.nb-tag.fix { color: #ffb4a2; background: rgba(231, 76, 60, 0.16); }
+.nb-tag.opt { color: #9ec5ff; background: rgba(52, 152, 219, 0.16); }
+.nb-note { font-size: 0.68rem; color: #7d84a8; margin-top: 0.6rem; line-height: 1.6; }

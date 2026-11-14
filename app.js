@@ -265,6 +265,55 @@ window.toggleMusic = function() {
     }
   }
 
+  // ===== 更新公告 / 更新日志 =====
+  // 每次改完往数组最前面插一条（版本号与 index.html 标题保持一致）
+  const SITE_CHANGELOG = [
+    {
+      v: 41, date: '2026-11-14',
+      items: [
+        { t: '新增', k: 'add', x: '首页新增「更新公告」栏，可展开查看每个版本改了什么、修了什么' },
+        { t: '新增', k: 'add', x: '版本号自动同步：文件内容一变，?v= 与标题版本一起 +1' }
+      ]
+    },
+    {
+      v: 40, date: '2026-11-14',
+      items: [
+        { t: '修复', k: 'fix', x: '结果页大号人格代号不渲染（40 型通用），代号现在清晰可读' },
+        { t: '修复', k: 'fix', x: '6 个类型代号对比度低于 3:1（最低 1.74），全部提到 4.5:1 以上' },
+        { t: '修复', k: 'fix', x: '稀有型徽标与文字分析看起来不是同一个人：补上「底子代号 + 命中维度」说明' },
+        { t: '修复', k: 'fix', x: '稀有型结果页缺隐藏维度：新增大五 / 九型「隐藏维度强度」卡' },
+        { t: '修复', k: 'fix', x: '代号光晕写死蓝紫：改为跟随人格主色' },
+        { t: '修复', k: 'fix', x: '手机端音乐按钮压住卡片：停靠标题栏右侧，滚动时淡出' },
+        { t: '修复', k: 'fix', x: '点开人格详情时整屏闪一下：去掉整层淡入、卡片呼吸光与手机端毛玻璃' },
+        { t: '优化', k: 'opt', x: '文案 5 处：「内 Peace 者」→「无争调停者」、职业「哲学家用」→「哲学家」、三条标语英文引号改「」' },
+        { t: '优化', k: 'opt', x: '分享图：百分比移出条形、顶行补「底子 · 命中维度」，分享文案同步' }
+      ]
+    }
+  ];
+
+  function renderNoticeBoard() {
+    const body = document.getElementById('nbBody');
+    const latest = document.getElementById('nbLatest');
+    if (!body || !SITE_CHANGELOG.length) return;
+    const top = SITE_CHANGELOG[0];
+    if (latest) latest.textContent = `v${top.v} · ${top.items[0].x}`;
+    body.innerHTML = SITE_CHANGELOG.map(ver => `
+      <div class="nb-ver">
+        <div class="nb-ver-head">
+          <span class="nb-ver-no">v${ver.v}</span>
+          <span class="nb-ver-date">${ver.date}</span>
+        </div>
+        ${ver.items.map(it => `<div class="nb-li"><span class="nb-tag ${it.k}">${it.t}</span><span>${it.x}</span></div>`).join('')}
+      </div>
+    `).join('') + '<div class="nb-note">更早的版本（v1–v39）：本站自上线起持续迭代，历史细节未逐条留档。</div>';
+  }
+  window.toggleNotice = function() {
+    const board = document.getElementById('noticeBoard');
+    if (!board) return;
+    board.classList.toggle('open');
+    board.setAttribute('aria-expanded', board.classList.contains('open') ? 'true' : 'false');
+  };
+
   // ===== 初始化预览 =====
   function initPreviewGrid() {
     const grid = document.getElementById('previewGrid');
@@ -864,6 +913,106 @@ window.toggleMusic = function() {
   }
 
   // ===== 显示结果 =====
+  // 结果页大号人格代号配色：深色主色在深底上对比不足时逐级提亮，保证可读
+  function readableHeroColor(hex) {
+    const h = String(hex || '#667eea').replace('#', '');
+    const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+    const or = parseInt(full.slice(0, 2), 16);
+    const og = parseInt(full.slice(2, 4), 16);
+    const ob = parseInt(full.slice(4, 6), 16);
+    if (![or, og, ob].every(Number.isFinite)) return 'rgb(102,126,234)';
+    const rel = c => { const v = c / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    const lum = (r, g, b) => 0.2126 * rel(r) + 0.7152 * rel(g) + 0.0722 * rel(b);
+    const BG_LUM = 0.0075; // 结果页深底 rgb(15,15,26) 的相对亮度
+    const contrast = (r, g, b) => (lum(r, g, b) + 0.05) / (BG_LUM + 0.05);
+    let r = or, g = og, b = ob;
+    for (let i = 0; i < 24 && contrast(r, g, b) < 4.5; i++) {
+      r = Math.min(255, Math.round(r + (255 - r) * 0.12));
+      g = Math.min(255, Math.round(g + (255 - g) * 0.12));
+      b = Math.min(255, Math.round(b + (255 - b) * 0.12));
+    }
+    return `rgb(${r},${g},${b})`;
+  }
+
+  // ===== 稀有型：命中维度的人话标签（结果页徽标、说明行、分享图共用）=====
+  const RARE_HIT_LABEL = {
+    OCEAN_O_MAX: '大五 · 开放度极高',
+    OCEAN_O_MIN: '大五 · 开放度极低',
+    OCEAN_C_MAX: '大五 · 尽责性极高',
+    OCEAN_C_MIN: '大五 · 尽责性极低',
+    OCEAN_A_MAX: '大五 · 宜人性极高',
+    OCEAN_A_MIN: '大五 · 宜人性极低',
+    OCEAN_N_MAX: '大五 · 情绪敏感度极高',
+    OCEAN_N_MIN: '大五 · 情绪敏感度极低',
+    OCEAN_O_C_MAX: '大五 · 开放度与尽责性双高',
+    OCEAN_A_N_MAX: '大五 · 宜人性与情绪敏感度双高',
+    ENMEA_7: '九型 7 · 享乐型极端',
+    ENMEA_8: '九型 8 · 挑战型极端',
+    ENMEA_9: '九型 9 · 和平型极端',
+    ENMEA_4: '九型 4 · 独特型极端',
+    INTJ_OCEAN_C_MINUS: 'INTJ × 大五 · 尽责性极低',
+    ENFP_OCEAN_C_PLUS: 'ENFP × 大五 · 尽责性极高'
+  };
+  function rareHitLabel(code) {
+    return RARE_HIT_LABEL[code] || code;
+  }
+
+  // ===== 稀有型：隐藏维度强度（±4 分制，0 为中立）=====
+  const HIDDEN_DIM_DEFS = [
+    { code: 'OCEAN_O', name: '开放性', short: 'O' },
+    { code: 'OCEAN_C', name: '尽责性', short: 'C' },
+    { code: 'OCEAN_A', name: '宜人性', short: 'A' },
+    { code: 'OCEAN_N', name: '情绪敏感度', short: 'N' },
+    { code: 'ENMEA_7', name: '九型 7 · 享乐', short: '7' },
+    { code: 'ENMEA_8', name: '九型 8 · 挑战', short: '8' },
+    { code: 'ENMEA_9', name: '九型 9 · 和平', short: '9' },
+    { code: 'ENMEA_4', name: '九型 4 · 独特', short: '4' }
+  ];
+  function hiddenLevelText(score) {
+    if (score >= 3) return '极高';
+    if (score >= 1) return '偏高';
+    if (score <= -3) return '极低';
+    if (score <= -1) return '偏低';
+    return '中性';
+  }
+  function hiddenDimsHtml(hitCode) {
+    // 命中维度：OCEAN_O_MAX/ENMEA_4 等 → 对应到 HIDDEN_DIM_DEFS 的 code
+    const hitDims = [];
+    if (/^OCEAN_(O|C|A|N)_/.test(hitCode)) hitDims.push('OCEAN_' + hitCode.split('_')[1]);
+    if (hitCode === 'OCEAN_O_C_MAX') hitDims.push('OCEAN_O', 'OCEAN_C');
+    if (hitCode === 'OCEAN_A_N_MAX') hitDims.push('OCEAN_A', 'OCEAN_N');
+    if (/^ENMEA_/.test(hitCode)) hitDims.push(hitCode);
+    if (hitCode === 'INTJ_OCEAN_C_MINUS' || hitCode === 'ENFP_OCEAN_C_PLUS') hitDims.push('OCEAN_C');
+
+    const rows = HIDDEN_DIM_DEFS.map(function (d) {
+      const score = dimScores[d.code] || 0;
+      const pct = Math.max(0, Math.min(100, Math.round((score + 4) / 8 * 100)));
+      const hit = hitDims.indexOf(d.code) >= 0;
+      const pos = pct >= 50;
+      const left = pos ? 50 : pct;
+      const width = Math.abs(pct - 50);
+      const color = hit ? '#f0b429' : 'rgba(160,170,255,0.75)';
+      return `
+        <div class="hd-row${hit ? ' hd-hit' : ''}">
+          <div class="hd-head">
+            <span>${d.name}${hit ? ' · 命中' : ''}</span>
+            <span>${score > 0 ? '+' : ''}${score} · ${hiddenLevelText(score)}</span>
+          </div>
+          <div class="hd-track">
+            <div class="hd-mid"></div>
+            <div class="hd-fill" style="left:${left}%;width:${Math.max(width, 1)}%;background:${color};"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="result-section">
+        <h3>隐藏维度强度</h3>
+        <div class="hd-note">大五与九型各维度按 2 道隐藏题计分，范围 −4 ~ +4，中线为中立。金色为你本次命中的维度。</div>
+        <div class="hidden-dims">${rows}</div>
+      </div>`;
+  }
+
   function showResult() {
     const res = calculateResult();
     const { baseCode, isHybrid, hybridDim, lookupCode } = res;
@@ -871,17 +1020,28 @@ window.toggleMusic = function() {
       name: '探索者', tagline: '独特而复杂的个体', heroColor: '#888',
       strengths: [], weaknesses: [], description: '', careers: [], famous: ''
     };
+    const heroText = readableHeroColor(p.heroColor);
     const content = document.getElementById('resultContent');
 
     // 字母动画（只显示 4 个核心字母；混合型额外显示标签）
+    // 每个字母单独着色：.char 带 transform 会形成独立层叠上下文，
+    // 父容器上的 background-clip: text 裁不到子元素，字母本体反而不可见
+    // 入场后的发光颜色跟着主色走（CSS 里读 --char-glow），不再固定成蓝紫
+    const glowRgb = /^rgb/.test(heroText) ? heroText.replace(/[^0-9,]/g, '') : null;
+    const glowVars = glowRgb ? `--char-glow: rgba(${glowRgb}, 0.85); --char-glow-soft: rgba(${glowRgb}, 0.42);` : '';
     const codeHtml = baseCode.split('').map((c, i) =>
-      `<span class="char" style="animation-delay: ${i * 0.12}s">${c}</span>`
+      `<span class="char" style="animation-delay: ${i * 0.12}s; color: ${heroText}; -webkit-text-fill-color: ${heroText}; ${glowVars}">${c}</span>`
     ).join('');
     const hybridBadgeHtml = isHybrid
       ? `<div style="margin-top:0.5rem;font-size:0.75rem;color:#c792ea;background:rgba(199,146,234,0.15);padding:4px 12px;border-radius:12px;display:inline-block;">🎯 混合型人格 · 某维度接近中立</div>`
       : '';
     const rareBadgeHtml = (!isHybrid && lookupCode !== baseCode)
-      ? `<div style="margin-top:0.5rem;font-size:0.75rem;color:#f0b429;background:rgba(240,180,41,0.15);padding:4px 12px;border-radius:12px;display:inline-block;">✨ 稀有隐藏人格 · 大五 / 九型体系 · ${lookupCode}</div>`
+      ? `<div style="margin-top:0.5rem;font-size:0.75rem;color:#f0b429;background:rgba(240,180,41,0.15);padding:4px 12px;border-radius:12px;display:inline-block;">✨ 稀有隐藏人格 · ${baseCode} 底子 · ${rareHitLabel(lookupCode)}（${lookupCode}）</div>`
+      : '';
+    // 稀有型专属：在画像前说明「代号是哪个、命中的是什么维度」，
+    // 文中的其它类型名只是对照组，不是本人结果
+    const rareNoteHtml = (!isHybrid && lookupCode !== baseCode)
+      ? `<div style="font-size:0.75rem;line-height:1.7;color:#9aa0b5;border-left:2px solid rgba(240,180,41,0.45);padding-left:0.6rem;margin-bottom:0.8rem;">你的 MBTI 代号是 <b style="color:${heroText};">${baseCode}</b>，稀有维度命中 <b style="color:#f0b429;">${rareHitLabel(lookupCode)}</b>。下面是「${p.name}」的画像——文中出现的其它类型名只是对照坐标，不是你的结果。</div>`
       : '';
 
     // 维度进度条：preference 是左极占比
@@ -918,7 +1078,7 @@ window.toggleMusic = function() {
 
     content.innerHTML = `
       <div class="result-hero">
-        <div class="result-code" style="background: linear-gradient(135deg, ${p.heroColor}, ${p.heroColor}cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        <div class="result-code">
           ${codeHtml}
         </div>
         <div class="result-name">${p.name}${isHybrid ? '（混合型）' : ''}</div>
@@ -939,8 +1099,11 @@ window.toggleMusic = function() {
         <div class="dimension-bars">${dimBarsHtml}</div>
       </div>
 
+      ${(!isHybrid && lookupCode !== baseCode) ? hiddenDimsHtml(lookupCode) : ''}
+
       <div class="result-section">
         <h3>你的特质</h3>
+        ${rareNoteHtml}
         <p>${p.description}</p>
       </div>
 
@@ -970,7 +1133,7 @@ window.toggleMusic = function() {
 
       <div class="share-row">
         <button class="btn-action primary" onclick="window.startTest('${currentMode}')">🔄 再测一次</button>
-        <button class="btn-action" onclick="shareResult('${lookupCode}', '${p.name.replace(/'/g, "\\'")}')">📷 生成分享图</button>
+        <button class="btn-action" onclick="shareResult('${lookupCode}', '${p.name.replace(/'/g, "\\'")}', '${baseCode}')">📷 生成分享图</button>
       </div>
     `;
 
@@ -1006,6 +1169,7 @@ window.toggleMusic = function() {
   let _shareBlob = null;
   let _shareCode = '';
   let _shareName = '';
+  let _shareBase = '';
 
   function _hexAlpha(hex, a) {
     const h = String(hex || '#667eea').replace('#', '');
@@ -1048,7 +1212,7 @@ window.toggleMusic = function() {
     return lines;
   }
 
-  function buildShareCard(code) {
+  function buildShareCard(code, baseCode) {
     const p = MBTI_DATA.personalities[code] || {};
     const W = 1080, H = 1440;
     const cv = document.createElement('canvas');
@@ -1080,6 +1244,13 @@ window.toggleMusic = function() {
     ctx.fillStyle = 'rgba(255,255,255,0.45)';
     ctx.font = `500 28px ${font}`;
     ctx.fillText('MBTI 40 型人格测试', W / 2, 96);
+
+    // 稀有型：在代号上方注明「底子代号 + 命中维度」，和结果页口径一致
+    if (baseCode && baseCode !== code) {
+      ctx.fillStyle = 'rgba(240,180,41,0.92)';
+      ctx.font = `600 26px ${font}`;
+      ctx.fillText(`✨ ${baseCode} 底子 · ${rareHitLabel(code)}`, W / 2, 138);
+    }
 
     // 图标
     ctx.font = '92px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
@@ -1150,7 +1321,8 @@ window.toggleMusic = function() {
       ctx.fillStyle = 'rgba(255,255,255,0.42)';
       ctx.fillText(d.r, W - 140, rowY + 26);
 
-      const barX = 200, barW = W - 420, barH = 16, barY = rowY + 10;
+      // 条长右端预留百分比位置，避免 100% 数字压在填充条上
+      const barX = 200, barW = W - 500, barH = 16, barY = rowY + 10;
       ctx.fillStyle = 'rgba(255,255,255,0.1)';
       _roundRect(ctx, barX, barY, barW, barH, barH / 2);
       ctx.fill();
@@ -1163,11 +1335,11 @@ window.toggleMusic = function() {
       _roundRect(ctx, barX, barY, fillW, barH, barH / 2);
       ctx.fill();
 
-      // 百分比
+      // 百分比（画在条形右侧空白区，不与填充条重叠）
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
       ctx.font = `600 22px ${font}`;
       ctx.textAlign = 'right';
-      ctx.fillText(pct + '%', barX + barW + 22, rowY + 26);
+      ctx.fillText(pct + '%', W - 200, rowY + 26);
 
       rowY += 82;
     });
@@ -1225,9 +1397,10 @@ window.toggleMusic = function() {
   }
   window.closeShareCard = closeShareCard;
 
-  window.shareResult = function(code, name) {
+  window.shareResult = function(code, name, baseCode) {
     _shareCode = code;
     _shareName = name;
+    _shareBase = baseCode || '';
     _shareBlob = null;
 
     const modal = document.getElementById('shareModal');
@@ -1245,7 +1418,7 @@ window.toggleMusic = function() {
     const sysBtn = document.getElementById('shareSystemBtn');
     if (sysBtn) sysBtn.style.display = 'none';
 
-    const cv = buildShareCard(code);
+    const cv = buildShareCard(code, _shareBase);
     _canvasToBlob(cv).then(blob => {
       _shareBlob = blob;
       box.innerHTML = '';
@@ -1284,7 +1457,7 @@ window.toggleMusic = function() {
 
     const copyBtn = document.getElementById('shareCopyBtn');
     if (copyBtn) copyBtn.addEventListener('click', () => {
-      copyToClipboard(`我是 MBTI ${_shareCode} ${_shareName}！来测测你的人格类型吧！\n${location.origin}${location.pathname}`);
+      copyToClipboard(`${_shareIntroText()}\n${location.origin}${location.pathname}`);
     });
 
     const sysBtn = document.getElementById('shareSystemBtn');
@@ -1294,8 +1467,8 @@ window.toggleMusic = function() {
         const f = new File([_shareBlob], `MBTI-${_shareCode}.png`, { type: 'image/png' });
         await navigator.share({
           files: [f],
-          title: `MBTI ${_shareCode} ${_shareName}`,
-          text: `我是 MBTI ${_shareCode} ${_shareName}！来测测你的人格类型吧！`
+          title: _shareIntroText(),
+          text: _shareIntroText()
         });
       } catch(e) {}
     });
@@ -1303,6 +1476,14 @@ window.toggleMusic = function() {
     const modal = document.getElementById('shareModal');
     if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeShareCard(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeShareCard(); });
+  }
+
+  // 分享文案：稀有型用「底子代号 + 命中维度」，避免把全码当成 MBTI 类型
+  function _shareIntroText() {
+    if (_shareBase && _shareBase !== _shareCode) {
+      return `我是 MBTI ${_shareBase} 底子 · ${_shareName}（稀有维度命中 ${rareHitLabel(_shareCode)}）！来测测你的人格类型吧！`;
+    }
+    return `我是 MBTI ${_shareCode} ${_shareName}！来测测你的人格类型吧！`;
   }
 
   // 供本地校验分享图用（不影响正常流程）
@@ -1730,9 +1911,22 @@ window.toggleMusic = function() {
     });
   }
 
+  // ===== 音乐按钮：滚动时淡出，避免压住结果卡片 =====
+  (function initScrollFadeMusic() {
+    let timer = null;
+    window.addEventListener('scroll', function () {
+      document.body.classList.add('scrolling');
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        document.body.classList.remove('scrolling');
+      }, 700);
+    }, { passive: true });
+  })();
+
   // ===== 初始化 =====
   document.addEventListener('DOMContentLoaded', function() {
     initPreviewGrid();
+    renderNoticeBoard();
     refreshPreviewCounts();
     Music.init();
     renderHomeState();
