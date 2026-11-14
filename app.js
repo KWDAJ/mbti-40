@@ -2,6 +2,7 @@
 const Music = (function() {
   let audio = null;
   let _currentSrc = '';
+  let _failedSrc = '';          // 加载失败过的音源，避免来回重试
   let _autoMutedPlay = false;   // 本次会话是"静音偷跑"状态，等首次用户手势时解封
 
   const USER_PREF_KEY = 'mbti_music_pref_v1';   // { userPaused: bool, muted: bool }
@@ -59,7 +60,22 @@ const Music = (function() {
     audio.loop = true;
     audio.preload = 'auto';
     audio.volume = 0.31;
-    audio.addEventListener('error', (e) => { console.warn('BGM 加载失败', e); });
+    audio.addEventListener('error', () => {
+      // 专属曲加载失败（404 / 网络断）：退回主题曲，别让人以为"没声音"
+      console.warn('BGM 加载失败', _currentSrc);
+      if (_failedSrc === _currentSrc) return;   // 已经退过一次，别来回弹
+      _failedSrc = _currentSrc;
+      if (_currentSrc && _currentSrc !== DEFAULT_BGM) {
+        _currentSrc = DEFAULT_BGM;
+        audio.src = DEFAULT_BGM;
+        if (!_loadPref().userPaused) {
+          audio.muted = false;
+          audio.volume = 0.31;
+          audio.play().catch(() => {});
+        }
+      }
+      document.dispatchEvent(new CustomEvent('musicstate'));
+    });
     audio.addEventListener('play',   syncUI);
     audio.addEventListener('pause',  syncUI);
     audio.addEventListener('volumechange', syncUI);
@@ -78,6 +94,8 @@ const Music = (function() {
     else         { btn.classList.remove('playing'); btn.classList.add('muted'); bars?.classList.add('hidden'); }
     if (muted)   btn.classList.add('muted');   else btn.classList.remove('muted');
     Music._currentMode = playing ? 'playing' : 'muted';
+    // 结果页那行"正在播放…"跟着真实播放状态走
+    document.dispatchEvent(new CustomEvent('musicstate'));
   }
 
   // 切换到指定人格的专属 BGM：只换 src，复用同一个实例，不加时间戳
@@ -196,13 +214,18 @@ const Music = (function() {
 
   // 进结果页：切到该人格的专属曲，并确保真的在响（除非用户自己按过暂停）
   function hasTrack(mbtiCode) {
-    return !!(mbtiCode && BGM_MAP[mbtiCode]);
+    const src = mbtiCode && BGM_MAP[mbtiCode];
+    return !!src && src !== _failedSrc;   // 加载失败的不算"有专属曲"
+  }
+  function isPlaying() {
+    return !!(audio && !audio.paused && !audio.muted);
   }
   function enterResult(mbtiCode) {
     const src = BGM_MAP[mbtiCode] || DEFAULT_BGM;
     const a = ensureAudio();
     if (_currentSrc !== src) {
       _currentSrc = src;
+      if (_failedSrc && _failedSrc !== src) _failedSrc = '';   // 换曲了，重试一次
       a.pause();
       a.src = src;
       a.load();
@@ -213,12 +236,13 @@ const Music = (function() {
       a.play().catch(() => {});
     }
     syncUI();
+    document.dispatchEvent(new CustomEvent('musicstate'));
   }
 
   let _currentMode = 'muted';
 
   return {
-    init, play, stop, switchTo, enterResult, hasTrack,
+    init, play, stop, switchTo, enterResult, hasTrack, isPlaying,
     get _currentMode() { return _currentMode; },
     set _currentMode(v) { _currentMode = v; },
     get currentSrc() { return _currentSrc; }
@@ -319,12 +343,16 @@ window.toggleMusic = function() {
   // 每次改完往数组最前面插一条（版本号与 index.html 标题保持一致）
   const SITE_CHANGELOG = [
     {
-      v: 0, date: '2026-11-14', time: '19:06:28',
+      v: 0, date: '2026-11-14', time: '20:11:00',
       items: [
         { t: '新增', k: 'add', x: '新增「精简 22 题」模式：4 个大维各 4 题、大五 6 题，约 3 分钟出结果' },
         { t: '修复', k: 'fix', x: '测完进结果页常常听不到人格音乐：现在不论之前音乐开没开，进结果页直接换上这个型的专属曲并开始播' },
         { t: '新增', k: 'add', x: '结果页显示「正在播放 XX 的专属配乐」，没配乐的型会说明先放主题曲' },
-        { t: '新增', k: 'add', x: '补齐 13 首人格专属配乐（ESFJ/ISTP/ISFP/ESFP、7 个混合型、九型 4 和 9），有专属曲的型增至 26 个' }
+        { t: '新增', k: 'add', x: '补齐 13 首人格专属配乐（ESFJ/ISTP/ISFP/ESFP、7 个混合型、九型 4 和 9），有专属曲的型增至 26 个' },
+        { t: '修复', k: 'fix', x: '精简模式答到一半退出再「继续上次测试」，隐藏维度阈值会退回常规值，导致大五 4 个稀有型判不出来；已按已选题重算' },
+        { t: '优化', k: 'opt', x: '结果页那行音乐说明跟着真实播放状态走：暂停时不再写「正在播放」，改成提示点右上角播放' },
+        { t: '修复', k: 'fix', x: '专属曲加载失败（网络断/文件缺失）会自动退回主题曲，不会静静地没有声音' },
+        { t: '优化', k: 'opt', x: '手机端分享弹层不再叠毛玻璃，打开分享图不再整屏重算模糊' }
       ]
     },
     {
@@ -582,6 +610,13 @@ window.toggleMusic = function() {
 
     currentMode = d.mode;
     testQuestions = qs;
+    // 续答时按已选题重建"每个隐藏维度出了几道题"：不重建的话阈值会退回每维 2 道，
+    // 精简模式里只有 1 道题的 OCEAN_A / OCEAN_N 就永远够不到阈值（4 个大五稀有型+组合型判不出）
+    hiddenQCounts = {};
+    HIDDEN_DIMS.forEach(dim => { hiddenQCounts[dim] = 0; });
+    qs.forEach(q => {
+      if (Object.prototype.hasOwnProperty.call(hiddenQCounts, q.dimension)) hiddenQCounts[q.dimension] += 1;
+    });
     shuffledOptions = d.orders.map(o => (Array.isArray(o) && o.length === 4) ? o : [0, 1, 2, 3]);
     answerHistory = d.answers.map(a => (a && typeof a.weight === 'number')
       ? { weight: a.weight, dimension: a.dimension, origIdx: (a.origIdx === undefined ? null : a.origIdx) }
@@ -1184,10 +1219,10 @@ window.toggleMusic = function() {
         <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted);">
           测试模式：${modeLabel} · ${total} 题
         </div>
-        <div class="result-music" id="resultMusic">
+        <div class="result-music" id="resultMusic" data-code="${lookupCode}" data-name="${p.name}">
           ${Music.hasTrack(lookupCode)
-            ? `🎵 正在播放「${p.name}」专属配乐`
-            : `🎵 该型的专属配乐还在生成，先放主题曲`}
+            ? `<span class="rm-on">🎵 正在播放「${p.name}」专属配乐</span>`
+            : `<span class="rm-none">🎵 该型的专属配乐还在生成，先放主题曲</span>`}
         </div>
       </div>
 
@@ -1259,6 +1294,7 @@ window.toggleMusic = function() {
 
     // 结果页直接响起这个人格的专属配乐（不再依赖"音乐已经开着"这个前提）
     try { Music.enterResult(lookupCode); } catch (e) { console.warn('result bgm error', e); }
+    renderResultMusicLine();
 
     // ===== 测完 +1 计数 =====
     try { Counter.hit(lookupCode); } catch(e) {}
@@ -1267,6 +1303,22 @@ window.toggleMusic = function() {
     clearProgress();
     pushHistory(lookupCode, p.name);
   }
+
+  // 结果页那行音乐说明：跟着真实播放状态走，别在暂停时还说"正在播放"
+  function renderResultMusicLine() {
+    const el = document.getElementById('resultMusic');
+    if (!el) return;
+    const code = el.dataset.code || '';
+    const name = el.dataset.name || '';
+    if (!Music.hasTrack(code)) {
+      el.innerHTML = `<span class="rm-none">🎵 该型的专属配乐还在生成，先放主题曲</span>`;
+      return;
+    }
+    el.innerHTML = Music.isPlaying()
+      ? `<span class="rm-on">🎵 正在播放「${name}」专属配乐</span>`
+      : `<span class="rm-off">🎵 「${name}」专属配乐已就绪 · 点右上角音乐按钮播放</span>`;
+  }
+  document.addEventListener('musicstate', renderResultMusicLine);
   // ===== 结果分享图（Canvas 1080×1440）=====
   let _shareBlob = null;
   let _shareCode = '';
@@ -1590,6 +1642,8 @@ window.toggleMusic = function() {
 
   // 供本地校验分享图用（不影响正常流程）
   window.__buildShareCard = buildShareCard;
+  // 供本地校验"隐藏维度题量 / 阈值"用（只读）
+  window.__hiddenQCounts = () => Object.assign({}, hiddenQCounts);
 
   function copyToClipboard(text) {
     const ta = document.createElement('textarea');
