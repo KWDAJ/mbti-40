@@ -84,6 +84,7 @@ const Music = (function() {
   }
 
   // 同步按钮状态 / 波动条 / _currentMode——统一以 audio 的真实状态为准
+  let _uiState = '';
   function syncUI() {
     const btn = document.getElementById('musicBtn');
     const bars = document.getElementById('musicBars');
@@ -94,8 +95,31 @@ const Music = (function() {
     else         { btn.classList.remove('playing'); btn.classList.add('muted'); bars?.classList.add('hidden'); }
     if (muted)   btn.classList.add('muted');   else btn.classList.remove('muted');
     Music._currentMode = playing ? 'playing' : 'muted';
-    // 结果页那行"正在播放…"跟着真实播放状态走
-    document.dispatchEvent(new CustomEvent('musicstate'));
+    // 结果页那行"正在播放…"跟着真实播放状态走。
+    // 只有"在播/暂停"真的变了才派发，否则音量淡入时每 60ms 一次事件会把 DOM 刷成筛子
+    const st = playing ? (muted ? 'muted' : 'playing') : 'paused';
+    if (st !== _uiState) {
+      _uiState = st;
+      document.dispatchEvent(new CustomEvent('musicstate'));
+    }
+  }
+
+  // 从 0 音量淡到 0.31（1.5s），避免专属曲"啪"一下就满音量砸过来
+  const TARGET_VOLUME = 0.31;
+  let _fadeTimer = null;
+  function _fadeIn() {
+    if (!audio) return;
+    clearInterval(_fadeTimer);
+    audio.volume = 0;
+    const dur = 1500, step = 60;
+    let t = 0;
+    _fadeTimer = setInterval(() => {
+      if (!audio || audio.paused) { clearInterval(_fadeTimer); _fadeTimer = null; return; }
+      t += step;
+      const k = Math.min(1, t / dur);
+      audio.volume = +(TARGET_VOLUME * k).toFixed(3);
+      if (k >= 1) { clearInterval(_fadeTimer); _fadeTimer = null; audio.volume = TARGET_VOLUME; }
+    }, step);
   }
 
   // 切换到指定人格的专属 BGM：只换 src，复用同一个实例，不加时间戳
@@ -120,7 +144,8 @@ const Music = (function() {
     _autoMutedPlay = false;
     _savePref({ userPaused: false, muted: false });
     a.muted = false;
-    a.volume = 0.31;
+    if (_fadeTimer) { clearInterval(_fadeTimer); _fadeTimer = null; }   // 手动播放直接给满音量
+    a.volume = TARGET_VOLUME;
     a.preload = 'auto';
     a.play().catch(() => {});
   }
@@ -232,11 +257,12 @@ const Music = (function() {
     }
     if (!_loadPref().userPaused) {
       a.muted = false;
-      a.volume = 0.31;
-      a.play().catch(() => {});
+      a.volume = 0;             // 先静音起步，下面 1.5s 淡到 0.31
+      const p = a.play();
+      if (p && p.catch) p.catch(() => { audio && (audio.volume = TARGET_VOLUME); });
+      _fadeIn();
     }
     syncUI();
-    document.dispatchEvent(new CustomEvent('musicstate'));
   }
 
   let _currentMode = 'muted';
@@ -245,7 +271,8 @@ const Music = (function() {
     init, play, stop, switchTo, enterResult, hasTrack, isPlaying,
     get _currentMode() { return _currentMode; },
     set _currentMode(v) { _currentMode = v; },
-    get currentSrc() { return _currentSrc; }
+    get currentSrc() { return _currentSrc; },
+    get volume() { return audio ? audio.volume : null; },   // 只读：给本地探针验证淡入曲线
   };
 })();
 
@@ -266,7 +293,7 @@ window.toggleMusic = function() {
   const DIMS = ['EI', 'SN', 'TF', 'JP'];
   // 每个模式固定追加 16 道隐藏题（大五 4 维 × 2 + 九型 4 型 × 2）
   const MODE_CONFIG = {
-    lite:    { name: '精简',  total: 22, perDim: 4, hidden: { OCEAN_O: 2, OCEAN_C: 2, OCEAN_A: 1, OCEAN_N: 1 } },
+    lite:    { name: '精简',  total: 24, perDim: 4, hidden: { OCEAN_O: 1, OCEAN_C: 1, OCEAN_A: 1, OCEAN_N: 1, ENMEA_7: 1, ENMEA_8: 1, ENMEA_9: 1, ENMEA_4: 1 } },
     quick:   { name: '快速',  total: 36, perDim: 5  },
     normal:  { name: '进阶',  total: 52, perDim: 9  },
     precise: { name: '精准',  total: 68, perDim: 13 },
@@ -343,7 +370,15 @@ window.toggleMusic = function() {
   // 每次改完往数组最前面插一条（版本号与 index.html 标题保持一致）
   const SITE_CHANGELOG = [
     {
-      v: 0, date: '2026-11-14', time: '20:11:00',
+      v: 0, date: '2026-11-14', time: '20:37:00',
+      items: [
+        { t: '优化', k: 'opt', x: '精简模式从 22 题调整为 24 题：大五 4 维 + 九型 4 型各留 1 题，40 个人格在这个模式下全部可达（3 分钟出头出结果）' },
+        { t: '优化', k: 'opt', x: '进结果页时专属曲不再"啪"一下满音量，改成 1.5 秒淡入' },
+        { t: '优化', k: 'opt', x: '清掉三段点不到的旧代码（原来 5 连击页面底部开管理员面板，页面早没有 footer 了）' }
+      ]
+    },
+    {
+      v: 50, date: '2026-11-14', time: '20:11:00',
       items: [
         { t: '修复', k: 'fix', x: '精简模式答到一半退出再「继续上次测试」，隐藏维度阈值会退回常规值，导致大五 4 个稀有型判不出来；已按已选题重算' },
         { t: '优化', k: 'opt', x: '结果页那行音乐说明跟着真实播放状态走：暂停时不再写「正在播放」，改成提示点右上角播放' },
@@ -354,7 +389,7 @@ window.toggleMusic = function() {
     {
       v: 46, date: '2026-11-14', time: '19:06:28',
       items: [
-        { t: '新增', k: 'add', x: '新增「精简 22 题」模式：4 个大维各 4 题、大五 6 题，约 3 分钟出结果' },
+        { t: '新增', k: 'add', x: '新增「精简」模式：最初 22 题（4 个大维各 4 题 + 大五 6 题），后续补到 24 题并恢复九型' },
         { t: '修复', k: 'fix', x: '测完进结果页常常听不到人格音乐：现在不论之前音乐开没开，进结果页直接换上这个型的专属曲并开始播' },
         { t: '新增', k: 'add', x: '结果页显示「正在播放 XX 的专属配乐」，没配乐的型会说明先放主题曲' },
         { t: '新增', k: 'add', x: '补齐 13 首人格专属配乐（ESFJ/ISTP/ISFP/ESFP、7 个混合型、九型 4 和 9），有专属曲的型增至 26 个' }
@@ -578,6 +613,7 @@ window.toggleMusic = function() {
       const d = JSON.parse(localStorage.getItem(PROGRESS_KEY) || 'null');
       if (!d || !Array.isArray(d.ids) || !Array.isArray(d.orders) || !Array.isArray(d.answers)) return null;
       const total = (MODE_CONFIG[d.mode] && MODE_CONFIG[d.mode].total) || d.ids.length;
+      if (d.ids.length !== total) return null;   // 题量改过（精简 22→24），旧断点作废，别让"已答 22/24"这种错位出现
       const answered = d.answers.filter(Boolean).length;
       if (!(d.index > 0) || d.index >= total || answered < 1) return null;
       d.total = total;
@@ -1649,6 +1685,9 @@ window.toggleMusic = function() {
   window.__buildShareCard = buildShareCard;
   // 供本地校验"隐藏维度题量 / 阈值"用（只读）
   window.__hiddenQCounts = () => Object.assign({}, hiddenQCounts);
+  // 供本地校验"精简 24 题能不能摸到全部 40 型"用（只读，返回每题所属维度）
+  window.__qDims = () => testQuestions.map(q => q.dimension);
+  window.__dimScores = () => Object.assign({}, dimScores);
 
   function copyToClipboard(text) {
     const ta = document.createElement('textarea');
@@ -2026,51 +2065,8 @@ window.toggleMusic = function() {
     } catch(e) {}
   };
 
-  // ===== 管理员设置面板（5 连击 footer 打开）=====
-  document.addEventListener('click', function(e) {
-    const footer = document.getElementById('siteFooter');
-    if (!footer || !footer.contains(e.target)) return;
-    window._adminClicks = (window._adminClicks || 0) + 1;
-    clearTimeout(window._adminClickTimer);
-    window._adminClickTimer = setTimeout(() => window._adminClicks = 0, 1500);
-    if (window._adminClicks >= 5) { window._adminClicks = 0; openAdminPanel(); }
-  });
-
-  function openAdminPanel() {
-    const modal = document.createElement('div');
-    modal.className = 'personality-modal open';
-    modal.id = 'adminModal';
-    modal.innerHTML = `<div class="pm-sheet" style="border-radius:20px;max-width:460px;">
-      <div class="pm-body" style="padding:1.5rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-          <div style="font-size:1.1rem;font-weight:700;">⚙️ 管理员面板</div>
-          <button class="pm-close" onclick="document.getElementById('adminModal').remove()">✕</button>
-        </div>
-        <div style="font-size:0.75rem;color:#888;margin-bottom:1rem;">入口：连续点击网站底部 Footer 5 次</div>
-
-        <div class="pm-section">
-          <div class="pm-section-title">🗑️ 一键清除本地所有人格计数</div>
-          <button id="resetLocalBtn" class="pm-test-btn" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">⚠️ 清除本地计数</button>
-          <div style="font-size:0.72rem;color:#888;margin-top:0.5rem;">仅清除本浏览器 localStorage 里的数字，不影响云端</div>
-        </div>
-
-        <div class="pm-section" style="margin-top:1.2rem;">
-          <div class="pm-section-title">☁️ 全球同步（服务端内置）</div>
-          <div style="font-size:0.72rem;color:#888;">
-            计数由服务端代理写入云端，浏览器端不含任何 Token，无需配置。
-          </div>
-        </div>
-      </div>
-    </div>`;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', e => { if (e.target.id === 'adminModal') modal.remove(); });
-
-    document.getElementById('resetLocalBtn').addEventListener('click', () => {
-      if (confirm('确认清除本浏览器的所有人格计数？\n（只清你自己的本地数据，不影响云端）')) {
-        Counter.resetLocal(); alert('✅ 本地计数已清除'); modal.remove(); refreshPreviewCounts();
-      }
-    });
-  }
+  // 注：原来的「5 连击 footer 打开管理员面板」整段已删除——页面早就没有 footer，
+  // 这段既点不到（`siteFooter` 不存在），又在审计里报"引用不存在的 id"，属于纯死代码。
 
   // ===== 音乐按钮：滚动时淡出，避免压住结果卡片 =====
   (function initScrollFadeMusic() {
