@@ -1958,3 +1958,22 @@ body.result-active .music-btn svg { width: 18px; height: 18px; }
   from { opacity: 0; transform: translateY(14px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* ===== 新增「精简 22 题」后共有 5 个模式：宽屏一排 5 个，手机 3+2 折行 ===== */
+.mode-options { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 700px) {
+  .mode-options { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 380px) {
+  .mode-options { grid-template-columns: repeat(2, 1fr); }
+}
+.mode-options .mode-card { padding: 0.85rem 0.4rem; }
+.mode-options .mode-count { font-size: 0.78rem; }
+
+/* 结果页：正在播放的配乐提示 */
+.result-music {
+  margin-top: 0.5rem;
+  font-size: 0.76rem;
+  color: #9ec5ff;
+  letter-spacing: 0.2px;
+}

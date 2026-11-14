@@ -6,7 +6,7 @@ const Music = (function() {
 
   const USER_PREF_KEY = 'mbti_music_pref_v1';   // { userPaused: bool, muted: bool }
 
-  // 人格→音乐文件映射（新生成的 13 个；还没生成的 11 个为空，用默认兜底）
+  // 人格→音乐文件映射（26 个已有专属曲；剩下的 14 个还在生成，用默认曲兜底）
   const BGM_MAP = {
     INTJ: 'music/intj.mp3',
     INTP: 'music/intp.mp3',
@@ -21,17 +21,27 @@ const Music = (function() {
     ISFJ: 'music/isfj.mp3',
     ESTJ: 'music/estj.mp3',
     HYBRID_SN_TF: 'music/hybrid_sn_tf.mp3',
-    // 以下 11 个还没生成，用默认
-    ESFJ: null, ISTP: null, ISFP: null, ESFP: null,
-    HYBRID_EI: null, HYBRID_SN: null, HYBRID_TF: null, HYBRID_JP: null,
-    HYBRID_EI_SN: null, HYBRID_EI_TF: null, HYBRID_EI_JP: null,
-    // ===== 大五 OCEAN（10）+ 九型（4）+ 交叉（2）= 16 新人格 =====
+    // 11-14 这批补上的 13 首
+    ESFJ: 'music/esfj.mp3',
+    ISTP: 'music/istp.mp3',
+    ISFP: 'music/isfp.mp3',
+    ESFP: 'music/esfp.mp3',
+    HYBRID_EI: 'music/hybrid_ei.mp3',
+    HYBRID_SN: 'music/hybrid_sn.mp3',
+    HYBRID_TF: 'music/hybrid_tf.mp3',
+    HYBRID_JP: 'music/hybrid_jp.mp3',
+    HYBRID_EI_SN: 'music/hybrid_ei_sn.mp3',
+    HYBRID_EI_TF: 'music/hybrid_ei_tf.mp3',
+    HYBRID_EI_JP: 'music/hybrid_ei_jp.mp3',
+    ENMEA_4: 'music/enmea_4.mp3',
+    ENMEA_9: 'music/enmea_9.mp3',
+    // ===== 还没生成的 14 个：大五 OCEAN（10）+ 九型 7/8 + 交叉（2）=====
     OCEAN_O_MAX: null, OCEAN_O_MIN: null,
     OCEAN_C_MAX: null, OCEAN_C_MIN: null,
     OCEAN_A_MAX: null, OCEAN_A_MIN: null,
     OCEAN_N_MIN: null, OCEAN_N_MAX: null,
     OCEAN_O_C_MAX: null, OCEAN_A_N_MAX: null,
-    ENMEA_7: null, ENMEA_8: null, ENMEA_9: null, ENMEA_4: null,
+    ENMEA_7: null, ENMEA_8: null,
     INTJ_OCEAN_C_MINUS: null, ENFP_OCEAN_C_PLUS: null,
   };
   const DEFAULT_BGM = 'bgm.mp3?v=1';
@@ -184,12 +194,34 @@ const Music = (function() {
     syncUI();
   }
 
+  // 进结果页：切到该人格的专属曲，并确保真的在响（除非用户自己按过暂停）
+  function hasTrack(mbtiCode) {
+    return !!(mbtiCode && BGM_MAP[mbtiCode]);
+  }
+  function enterResult(mbtiCode) {
+    const src = BGM_MAP[mbtiCode] || DEFAULT_BGM;
+    const a = ensureAudio();
+    if (_currentSrc !== src) {
+      _currentSrc = src;
+      a.pause();
+      a.src = src;
+      a.load();
+    }
+    if (!_loadPref().userPaused) {
+      a.muted = false;
+      a.volume = 0.31;
+      a.play().catch(() => {});
+    }
+    syncUI();
+  }
+
   let _currentMode = 'muted';
 
   return {
-    init, play, stop, switchTo,
+    init, play, stop, switchTo, enterResult, hasTrack,
     get _currentMode() { return _currentMode; },
-    set _currentMode(v) { _currentMode = v; }
+    set _currentMode(v) { _currentMode = v; },
+    get currentSrc() { return _currentSrc; }
   };
 })();
 
@@ -210,12 +242,15 @@ window.toggleMusic = function() {
   const DIMS = ['EI', 'SN', 'TF', 'JP'];
   // 每个模式固定追加 16 道隐藏题（大五 4 维 × 2 + 九型 4 型 × 2）
   const MODE_CONFIG = {
+    lite:    { name: '精简',  total: 22, perDim: 4, hidden: { OCEAN_O: 2, OCEAN_C: 2, OCEAN_A: 1, OCEAN_N: 1 } },
     quick:   { name: '快速',  total: 36, perDim: 5  },
     normal:  { name: '进阶',  total: 52, perDim: 9  },
     precise: { name: '精准',  total: 68, perDim: 13 },
     supreme: { name: '至尊',  total: 96, perDim: 20 }
   };
   const HIDDEN_DIMS = ['OCEAN_O', 'OCEAN_C', 'OCEAN_A', 'OCEAN_N', 'ENMEA_7', 'ENMEA_8', 'ENMEA_9', 'ENMEA_4'];
+  // 本次测验里每个隐藏维度实际出了几道题（判定阈值按题量换算，精简模式只有 1 道）
+  let hiddenQCounts = {};
 
   let testQuestions = [];
   let shuffledOptions = [];   // 每题对应的打乱后的选项索引
@@ -240,10 +275,14 @@ window.toggleMusic = function() {
       picked.push(...pool.slice(0, cfg.perDim));
     });
 
-    // 追加隐藏题：每个大五/九型维度固定 2 道，累计分数 -4 ~ +4
+    // 追加隐藏题：默认每个大五/九型维度 2 道（-4 ~ +4）；精简模式按 cfg.hidden 分配
+    hiddenQCounts = {};
     HIDDEN_DIMS.forEach(d => {
+      const n = cfg.hidden ? (cfg.hidden[d] || 0) : 2;
+      hiddenQCounts[d] = n;            // 0 也记下来（表示这个模式不出这个维度的题）
+      if (!n) return;
       const pool = shuffle(ALL.filter(q => q.dimension === d));
-      picked.push(...pool.slice(0, 2));
+      picked.push(...pool.slice(0, n));
     });
 
     shuffle(picked);
@@ -279,6 +318,15 @@ window.toggleMusic = function() {
   // ===== 更新公告 / 更新日志 =====
   // 每次改完往数组最前面插一条（版本号与 index.html 标题保持一致）
   const SITE_CHANGELOG = [
+    {
+      v: 0, date: '2026-11-14', time: '19:06:28',
+      items: [
+        { t: '新增', k: 'add', x: '新增「精简 22 题」模式：4 个大维各 4 题、大五 6 题，约 3 分钟出结果' },
+        { t: '修复', k: 'fix', x: '测完进结果页常常听不到人格音乐：现在不论之前音乐开没开，进结果页直接换上这个型的专属曲并开始播' },
+        { t: '新增', k: 'add', x: '结果页显示「正在播放 XX 的专属配乐」，没配乐的型会说明先放主题曲' },
+        { t: '新增', k: 'add', x: '补齐 13 首人格专属配乐（ESFJ/ISTP/ISFP/ESFP、7 个混合型、九型 4 和 9），有专属曲的型增至 26 个' }
+      ]
+    },
     {
       v: 43, date: '2026-11-14', time: '18:43:05',
       items: [
@@ -321,11 +369,19 @@ window.toggleMusic = function() {
   // 公告栏最多留 4 个版本，更早的收成一行说明（避免越改越长）
   const NOTICE_MAX_VERSIONS = 4;
 
+  // 站点当前版本号（取自 <title>）：公告栏里 v:0 的条目表示「就是现在这一版」，
+  // 这样改完代码再升版，公告上的版本号会自动跟着标题走，不会出现标题 v46、公告写 v45
+  function siteVersion() {
+    const m = (document.title || '').match(/·\s*v(\d+)/);
+    return m ? Number(m[1]) : 0;
+  }
+
   function renderNoticeBoard() {
     const body = document.getElementById('nbBody');
     const latest = document.getElementById('nbLatest');
     if (!body || !SITE_CHANGELOG.length) return;
-    const shown = SITE_CHANGELOG.slice(0, NOTICE_MAX_VERSIONS);
+    const shown = SITE_CHANGELOG.slice(0, NOTICE_MAX_VERSIONS)
+      .map(it => (it.v ? it : Object.assign({}, it, { v: siteVersion() })));
     const top = shown[0];
     if (latest) latest.textContent = `v${top.v} · ${top.items[0].x}`;
     const oldestShown = shown[shown.length - 1].v;
@@ -774,50 +830,56 @@ window.toggleMusic = function() {
   // ===== 大五 + 九型 分数计算 & 优先级判定 =====
   // 返回新 code 或 null
   function checkOCEANAndEnneagram(baseCode) {
-    // OCEAN 维度分数（从隐藏题累计的 dimScores 里读）
-    // 每道隐藏题权重 ±2，每个维度 2 道题，所以极端分数范围 -4 ~ +4
+    // 隐藏题每道权重 ±2，所以某维度的极端阈值 = 2 × 该维度这次出的题量
+    // （常规模式每维 2 道 → 阈值 4；精简模式 OCEAN_O/C 2 道 → 4，A/N 1 道 → 2）
+    // 题量未知（例如从外部直接喂 dimScores）时按常规的每维 2 道算，保持旧版判定
+    const cnt = d => (hiddenQCounts[d] === undefined ? 2 : hiddenQCounts[d]);
+    const on  = d => cnt(d) > 0;
+    const th  = d => 2 * cnt(d);
+
     const O = dimScores.OCEAN_O || 0;
     const C = dimScores.OCEAN_C || 0;
     const A = dimScores.OCEAN_A || 0;
     const N = dimScores.OCEAN_N || 0;
-    // 九型（每道权重 ±2，范围 -8 ~ +8）
     const E7 = dimScores.ENMEA_7 || 0;
     const E8 = dimScores.ENMEA_8 || 0;
     const E9 = dimScores.ENMEA_9 || 0;
     const E4 = dimScores.ENMEA_4 || 0;
 
     // ===== 优先级 1：MBTI × 大五交叉混合（INTJ_C- / ENFP_C+）=====
-    if (baseCode === 'INTJ' && C <= -4) return 'INTJ_OCEAN_C_MINUS';
-    if (baseCode === 'ENFP' && C >= 4) return 'ENFP_OCEAN_C_PLUS';
+    if (on('OCEAN_C')) {
+      if (baseCode === 'INTJ' && C <= -th('OCEAN_C')) return 'INTJ_OCEAN_C_MINUS';
+      if (baseCode === 'ENFP' && C >= th('OCEAN_C')) return 'ENFP_OCEAN_C_PLUS';
+    }
 
     // ===== 优先级 2：交叉型 O+C 和 A+N =====
-    if (O >= 4 && C >= 4) return 'OCEAN_O_C_MAX';
-    if (A >= 4 && N >= 4) return 'OCEAN_A_N_MAX';
+    if (on('OCEAN_O') && on('OCEAN_C') && O >= th('OCEAN_O') && C >= th('OCEAN_C')) return 'OCEAN_O_C_MAX';
+    if (on('OCEAN_A') && on('OCEAN_N') && A >= th('OCEAN_A') && N >= th('OCEAN_N')) return 'OCEAN_A_N_MAX';
 
-    // ===== 优先级 3：九型极端 =====
-    const enneaScores = [
-      { code: 'ENMEA_7', s: E7 },
-      { code: 'ENMEA_8', s: E8 },
-      { code: 'ENMEA_9', s: E9 },
-      { code: 'ENMEA_4', s: E4 }
-    ].sort((a, b) => Math.abs(b.s) - Math.abs(a.s));
-    if (enneaScores[0].s >= 4) return enneaScores[0].code;
+    // ===== 优先级 3：九型极端（这个模式没出九型题就跳过）=====
+    let enneaScores = [
+      { code: 'ENMEA_7', s: E7, dim: 'ENMEA_7' },
+      { code: 'ENMEA_8', s: E8, dim: 'ENMEA_8' },
+      { code: 'ENMEA_9', s: E9, dim: 'ENMEA_9' },
+      { code: 'ENMEA_4', s: E4, dim: 'ENMEA_4' }
+    ].filter(x => on(x.dim)).sort((a, b) => Math.abs(b.s) - Math.abs(a.s));
+    if (enneaScores.length && enneaScores[0].s >= th(enneaScores[0].dim)) return enneaScores[0].code;
 
     // ===== 优先级 4：大五单一维度极端 =====
     const big5 = [
-      { code: 'OCEAN_O_MAX', s: O, posOnly: true },
-      { code: 'OCEAN_O_MIN', s: O, negOnly: true },
-      { code: 'OCEAN_C_MAX', s: C, posOnly: true },
-      { code: 'OCEAN_C_MIN', s: C, negOnly: true },
-      { code: 'OCEAN_A_MAX', s: A, posOnly: true },
-      { code: 'OCEAN_A_MIN', s: A, negOnly: true },
-      { code: 'OCEAN_N_MIN', s: N, negOnly: true },
-      { code: 'OCEAN_N_MAX', s: N, posOnly: true }
+      { code: 'OCEAN_O_MAX', dim: 'OCEAN_O', s: O, posOnly: true },
+      { code: 'OCEAN_O_MIN', dim: 'OCEAN_O', s: O, negOnly: true },
+      { code: 'OCEAN_C_MAX', dim: 'OCEAN_C', s: C, posOnly: true },
+      { code: 'OCEAN_C_MIN', dim: 'OCEAN_C', s: C, negOnly: true },
+      { code: 'OCEAN_A_MAX', dim: 'OCEAN_A', s: A, posOnly: true },
+      { code: 'OCEAN_A_MIN', dim: 'OCEAN_A', s: A, negOnly: true },
+      { code: 'OCEAN_N_MIN', dim: 'OCEAN_N', s: N, negOnly: true },
+      { code: 'OCEAN_N_MAX', dim: 'OCEAN_N', s: N, posOnly: true }
     ];
-    const BIG5_THRESHOLD = 4;
     for (const item of big5) {
-      if (item.posOnly && item.s >= BIG5_THRESHOLD) return item.code;
-      if (item.negOnly && item.s <= -BIG5_THRESHOLD) return item.code;
+      if (!on(item.dim)) continue;
+      if (item.posOnly && item.s >= th(item.dim)) return item.code;
+      if (item.negOnly && item.s <= -th(item.dim)) return item.code;
     }
 
     // 没命中任何大五/九型，返回 null 继续 MBTI 判定
@@ -1122,6 +1184,11 @@ window.toggleMusic = function() {
         <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted);">
           测试模式：${modeLabel} · ${total} 题
         </div>
+        <div class="result-music" id="resultMusic">
+          ${Music.hasTrack(lookupCode)
+            ? `🎵 正在播放「${p.name}」专属配乐`
+            : `🎵 该型的专属配乐还在生成，先放主题曲`}
+        </div>
       </div>
 
       <div class="result-section radar-section">
@@ -1190,8 +1257,8 @@ window.toggleMusic = function() {
       });
     });
 
-    // 根据人格切换专属音乐（用户没开音乐时 switchTo 不会发请求）
-    if (Music._currentMode === 'playing') Music.switchTo(lookupCode);
+    // 结果页直接响起这个人格的专属配乐（不再依赖"音乐已经开着"这个前提）
+    try { Music.enterResult(lookupCode); } catch (e) { console.warn('result bgm error', e); }
 
     // ===== 测完 +1 计数 =====
     try { Counter.hit(lookupCode); } catch(e) {}
