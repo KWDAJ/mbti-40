@@ -269,6 +269,14 @@ window.toggleMusic = function() {
   // 每次改完往数组最前面插一条（版本号与 index.html 标题保持一致）
   const SITE_CHANGELOG = [
     {
+      v: 42, date: '2026-11-14',
+      items: [
+        { t: '修复', k: 'fix', x: '分享弹层引用了已删除的动画名，打开时不再淡入；补回自己的动画（手机端也生效）' },
+        { t: '修复', k: 'fix', x: '「无争调停者」正文里还剩两处英文「peace」，改为「平静」' },
+        { t: '优化', k: 'opt', x: '公告栏按钮的读屏标签会跟着展开/收起状态变化' }
+      ]
+    },
+    {
       v: 41, date: '2026-11-14',
       items: [
         { t: '新增', k: 'add', x: '首页新增「更新公告」栏，可展开查看每个版本改了什么、修了什么' },
@@ -311,7 +319,10 @@ window.toggleMusic = function() {
     const board = document.getElementById('noticeBoard');
     if (!board) return;
     board.classList.toggle('open');
-    board.setAttribute('aria-expanded', board.classList.contains('open') ? 'true' : 'false');
+    const isOpen = board.classList.contains('open');
+    board.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    const head = board.querySelector('.nb-head');
+    if (head) head.setAttribute('aria-label', isOpen ? '收起更新公告' : '展开更新公告');
   };
 
   // ===== 初始化预览 =====

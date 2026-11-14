@@ -1590,7 +1590,7 @@ body.result-active .music-btn {
   background: rgba(0,0,0,0.78);
   backdrop-filter: blur(8px);
 }
-.share-modal.open { display: flex; animation: modalFade 0.24s ease; }
+.share-modal.open { display: flex; animation: shareFade 0.18s ease; }
 .share-sheet {
   position: relative;
   width: 100%;
@@ -1602,7 +1602,7 @@ body.result-active .music-btn {
   background: linear-gradient(180deg, #1d1d33, #14141f);
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-  animation: sheetPop 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: sharePop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .share-close {
   position: absolute;
@@ -1948,3 +1948,13 @@ body.result-active .music-btn svg { width: 18px; height: 18px; }
 .nb-tag.fix { color: #ffb4a2; background: rgba(231, 76, 60, 0.16); }
 .nb-tag.opt { color: #9ec5ff; background: rgba(52, 152, 219, 0.16); }
 .nb-note { font-size: 0.68rem; color: #7d84a8; margin-top: 0.6rem; line-height: 1.6; }
+
+/* ===== 分享弹层自己的关键帧（modalFade 已随弹层防闪一起删除）===== */
+@keyframes shareFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes sharePop {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
