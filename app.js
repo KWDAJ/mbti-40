@@ -39,6 +39,9 @@ const Music = (function() {
   function _savePref(p) {
     try { localStorage.setItem(USER_PREF_KEY, JSON.stringify(p)); } catch(e) {}
   }
+  function _loadPref() {
+    try { return JSON.parse(localStorage.getItem(USER_PREF_KEY) || '{}') || {}; } catch(e) { return {}; }
+  }
 
   function ensureAudio() {
     if (audio) return audio;
@@ -113,10 +116,17 @@ const Music = (function() {
   }
 
   // 解封：只绑"能授予用户手势权限"的事件（滚轮/滚动在 Chrome 里不算，绑了反而会让音乐被中途掐停）
+  // 点页面任何一个位置都算首手势，都会把音乐真正开起来
   const UNLOCK_EVENTS = ['click','touchend','pointerdown','mousedown','keydown'];
   function _bindUnlock() {
     const unlock = () => {
       _unmute();
+      // 连"静音偷跑"都被拦的情况：这次手势就是第一次真正的播放机会
+      if (audio && audio.paused && !_loadPref().userPaused) {
+        audio.muted = false;
+        audio.volume = 0.31;
+        audio.play().catch(() => {});
+      }
       const hint = document.getElementById('musicHint');
       if (hint) hint.remove();
       UNLOCK_EVENTS.forEach(t => document.removeEventListener(t, unlock, true));
@@ -158,16 +168,17 @@ const Music = (function() {
       // 2. 被浏览器拦截：静音偷跑，等首次用户手势立刻解封成有声
       audio.muted = true;
       _autoMutedPlay = true;
+      // 不管静音能不能跑，都先绑上"点任意位置即开播"；连静音都被拦时这一下就是唯一机会
+      _bindUnlock();
       audio.play().then(() => {
         syncUI();
       }).catch(() => {
-        // 连静音播都被拦：保持实例可点，等用户点按钮
+        // 连静音播都被拦：保持实例可点，手势一来就开播
         _autoMutedPlay = false;
         audio.muted = false;
         _currentMode = 'muted';
         syncUI();
       });
-      _bindUnlock();
     });
 
     syncUI();
@@ -269,7 +280,15 @@ window.toggleMusic = function() {
   // 每次改完往数组最前面插一条（版本号与 index.html 标题保持一致）
   const SITE_CHANGELOG = [
     {
-      v: 42, date: '2026-11-14',
+      v: 43, date: '2026-11-14', time: '18:43:05',
+      items: [
+        { t: '修复', k: 'fix', x: '进站后点页面任意位置就开始放音乐（原来只能点右上角音乐按钮，有的浏览器连静音偷跑都被拦）' },
+        { t: '优化', k: 'opt', x: '公告栏每个版本后面加上具体时间，精确到时分秒' },
+        { t: '优化', k: 'opt', x: '公告栏最多留 4 个版本，更早的收成一行说明，不再越拉越长' }
+      ]
+    },
+    {
+      v: 42, date: '2026-11-14', time: '18:23:57',
       items: [
         { t: '修复', k: 'fix', x: '分享弹层引用了已删除的动画名，打开时不再淡入；补回自己的动画（手机端也生效）' },
         { t: '修复', k: 'fix', x: '「无争调停者」正文里还剩两处英文「peace」，改为「平静」' },
@@ -277,14 +296,14 @@ window.toggleMusic = function() {
       ]
     },
     {
-      v: 41, date: '2026-11-14',
+      v: 41, date: '2026-11-14', time: '12:59:26',
       items: [
         { t: '新增', k: 'add', x: '首页新增「更新公告」栏，可展开查看每个版本改了什么、修了什么' },
         { t: '新增', k: 'add', x: '版本号自动同步：文件内容一变，?v= 与标题版本一起 +1' }
       ]
     },
     {
-      v: 40, date: '2026-11-14',
+      v: 40, date: '2026-11-14', time: '12:59:26',
       items: [
         { t: '修复', k: 'fix', x: '结果页大号人格代号不渲染（40 型通用），代号现在清晰可读' },
         { t: '修复', k: 'fix', x: '6 个类型代号对比度低于 3:1（最低 1.74），全部提到 4.5:1 以上' },
@@ -299,21 +318,26 @@ window.toggleMusic = function() {
     }
   ];
 
+  // 公告栏最多留 4 个版本，更早的收成一行说明（避免越改越长）
+  const NOTICE_MAX_VERSIONS = 4;
+
   function renderNoticeBoard() {
     const body = document.getElementById('nbBody');
     const latest = document.getElementById('nbLatest');
     if (!body || !SITE_CHANGELOG.length) return;
-    const top = SITE_CHANGELOG[0];
+    const shown = SITE_CHANGELOG.slice(0, NOTICE_MAX_VERSIONS);
+    const top = shown[0];
     if (latest) latest.textContent = `v${top.v} · ${top.items[0].x}`;
-    body.innerHTML = SITE_CHANGELOG.map(ver => `
+    const oldestShown = shown[shown.length - 1].v;
+    body.innerHTML = shown.map(ver => `
       <div class="nb-ver">
         <div class="nb-ver-head">
           <span class="nb-ver-no">v${ver.v}</span>
-          <span class="nb-ver-date">${ver.date}</span>
+          <span class="nb-ver-date">${ver.date}${ver.time ? ' ' + ver.time : ''}</span>
         </div>
         ${ver.items.map(it => `<div class="nb-li"><span class="nb-tag ${it.k}">${it.t}</span><span>${it.x}</span></div>`).join('')}
       </div>
-    `).join('') + '<div class="nb-note">更早的版本（v1–v39）：本站自上线起持续迭代，历史细节未逐条留档。</div>';
+    `).join('') + `<div class="nb-note">更早的版本（v1–v${oldestShown - 1}）：本站自上线起持续迭代，历史细节未逐条留档。</div>`;
   }
   window.toggleNotice = function() {
     const board = document.getElementById('noticeBoard');
