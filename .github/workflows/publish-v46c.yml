@@ -1,0 +1,61 @@
+name: publish-v46c
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: fetch
+        run: |
+          exec 2>> "$GITHUB_WORKSPACE/publish-diag.txt"
+          set -x
+          echo "start $(date -u)" > "$GITHUB_WORKSPACE/publish-diag.txt"
+          mkdir -p /tmp/dl
+          B=https://aka.doubaocdn.com/s
+          SPEC="index.html:8811:qafCHGMOWv styles.css:47207:g2tWWpXum4 app.js:81594:y1xvaXcYEm mbti-data.js:277294:KnwGUPkVfY esfj.mp3:960931:POZPBMwxYR esfp.mp3:960931:Qb7kgacD2L isfp.mp3:960931:uEzrT5VjZV istp.mp3:960931:S4zwrnOYmY hybrid_ei.mp3:960931:QSUVDkLm5r hybrid_sn.mp3:960931:4loTkgjEXV hybrid_tf.mp3:960931:zB349iMLbK hybrid_jp.mp3:960931:9bAgdMUngT hybrid_ei_sn.mp3:960931:FhLzIS8DHu hybrid_ei_tf.mp3:960931:V0ap4O9plA hybrid_ei_jp.mp3:960931:J7UVUGBSB0 enmea_4.mp3:960931:OBv2BU1ohu enmea_9.mp3:960931:cnA4pM8BYS"
+          err=0
+          for t in $SPEC; do
+            f=${t%%:*}
+            rest=${t#*:}
+            want=${rest%%:*}
+            code=${rest#*:}
+            curl -sSL --retry 2 -o "/tmp/dl/$f" "$B/$code"
+            got=$(wc -c < "/tmp/dl/$f" 2>/dev/null | tr -d ' \t\n')
+            echo "$f got=${got:-none} want=$want" >> "$GITHUB_WORKSPACE/publish-diag.txt"
+            if [ "${got:-0}" != "$want" ]; then err=1; fi
+          done
+          echo "ERR=$err" | tee -a "$GITHUB_WORKSPACE/publish-diag.txt"
+          echo "ERR=$err" >> "$GITHUB_ENV"
+          if [ "$err" = "0" ]; then
+            cp /tmp/dl/index.html index.html
+            cp /tmp/dl/styles.css styles.css
+            cp /tmp/dl/app.js app.js
+            cp /tmp/dl/mbti-data.js mbti-data.js
+            mkdir -p music
+            cp /tmp/dl/esfj.mp3 /tmp/dl/esfp.mp3 /tmp/dl/isfp.mp3 /tmp/dl/istp.mp3 music/
+            cp /tmp/dl/hybrid_ei.mp3 /tmp/dl/hybrid_sn.mp3 /tmp/dl/hybrid_tf.mp3 /tmp/dl/hybrid_jp.mp3 music/
+            cp /tmp/dl/hybrid_ei_sn.mp3 /tmp/dl/hybrid_ei_tf.mp3 /tmp/dl/hybrid_ei_jp.mp3 music/
+            cp /tmp/dl/enmea_4.mp3 /tmp/dl/enmea_9.mp3 music/
+            echo "copied" >> "$GITHUB_WORKSPACE/publish-diag.txt"
+            rm -f publish-diag.txt
+          fi
+
+      - name: commit
+        if: always()
+        run: |
+          git config user.name "doubao-bot"
+          git config user.email "doubao-bot@users.noreply.github.com"
+          git rm --quiet .github/workflows/publish-v46c.yml || true
+          if [ "${ERR:-1}" = "0" ] && [ ! -f publish-diag.txt ]; then
+            git add index.html styles.css app.js mbti-data.js music
+            git commit -m "v46：新增精简 22 题模式 + 结果页专属配乐 + 补齐 13 首人格独家配乐" || true
+          else
+            git add publish-diag.txt
+            git commit -m "diag: 发布诊断" || true
+          fi
+          git push
