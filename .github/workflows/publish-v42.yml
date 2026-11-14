@@ -1,0 +1,41 @@
+name: publish-v42
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-v42.yml'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch new site files
+        run: |
+          set -euo pipefail
+          curl -fsSL -o index.html "https://aka.doubaocdn.com/s/VsmW8n2iUY"
+          curl -fsSL -o styles.css "https://aka.doubaocdn.com/s/8ptdl3iVsY"
+          curl -fsSL -o app.js "https://aka.doubaocdn.com/s/6i6FUpVVzR"
+          curl -fsSL -o mbti-data.js "https://aka.doubaocdn.com/s/RPppXjLR9M"
+          test "$(wc -c < index.html)" -eq 8480
+          test "$(wc -c < styles.css)" -eq 46609
+          test "$(wc -c < app.js)" -eq 76662
+          test "$(wc -c < mbti-data.js)" -eq 277294
+          grep -q 'v42' index.html
+          grep -q 'styles.css?v=31' index.html
+          grep -q '@keyframes shareFade' styles.css
+          grep -q '@keyframes sharePop' styles.css
+          grep -q 'v: 42' app.js
+          grep -q 'shouQi' app.js || true
+          grep -q '收起更新公告' app.js
+          grep -q '内心平静最重要' mbti-data.js
+          ! grep -q '内心 peace 最重要' mbti-data.js
+      - name: Commit and remove helper
+        run: |
+          set -euo pipefail
+          git config user.name "kwdaj"
+          git config user.email "kwdaj@users.noreply.github.com"
+          git rm .github/workflows/publish-v42.yml
+          git add index.html styles.css app.js mbti-data.js
+          git commit -m "v42: 修分享弹层动画名失效、无争调停者残留英文、公告栏 aria 状态"
+          git push
